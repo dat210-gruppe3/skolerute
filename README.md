@@ -17,15 +17,18 @@ origin	https://github.com/dat210-gruppe3/skolerute (push)
 
 6. Hent vår repository ved å skrive "git pull origin master"
 
-7. Mens du nå er i din workspace i terminalen (sjekk ved "pwd"), gå til .git-mappa di ved å skrive "cd .git"
+7. Gå inn i fram .git-mappa ved å skru på "Vis skjulte filer"-innstillingen.  Åpne info-mappa. Åpne exclude-fila i en teksteditor.
+  
+  Alternativt, kan følgende steps 7a-7c følges istedenfor på Mac OSX. 
+  7a. Mens du nå er i din workspace i terminalen (sjekk ved "pwd"), gå til .git-mappa di ved å skrive "cd .git"
 
-8. Bla videre til info-mappen (cd info)
+  7b. Bla videre til info-mappen (cd info)
 
-9. Åpne exlude-fila som ligger inne i info-mappen i en teksteditor (på Mac brukte jeg kommandoen "open -a TextEdit exlclude")
+  7c. Åpne exlude-fila som ligger inne i info-mappen i en teksteditor (på Mac brukte jeg kommandoen "open -a TextEdit exlclude")
 
-10. I web-browseren din, gå til https://github.com/dat210-gruppe3/skolerute/blob/master/gitignore og kopier alt som står der (RAW -> Ctrl-A -> Ctrl-C)
+8. I web-browseren din, gå til https://github.com/dat210-gruppe3/skolerute/blob/master/gitignore og kopier alt som står der (RAW -> Ctrl-A -> Ctrl-C)
 
-11. Lim inn alt i teksteditoren din som har åpnet exclude-fila. Lagre og lukk
+9. Lim inn alt i teksteditoren din som har åpnet exclude-fila. Lagre og lukk
 
 
 
@@ -39,7 +42,7 @@ Nå skal vi sjekke om alt fungerer. Følg videre følgende steps:
 3. Sjekk at det vi har gjort fungerer ved å se på hva som skal bli committet. Skriv "git status".
 Det har skjedd noe feil dersom det er mange filer som vises nå. KONTAKT MAGNUS
 
-4. Nå kan vi commite ved å skrive "git commit -m "Liten forandring""
+4. Nå kan vi commite ved å skrive "git commit -m "<din melding>""
 
 5. Last opp ved å skrive "git push origin master"
 
