@@ -9,6 +9,6 @@ namespace skolerute.db
 {
     public interface ISQLite
     {
-        SQLiteConnection GetConnection(); 
+        SQLiteConnection GetConnection();
     }
 }

@@ -87,6 +87,6 @@ namespace skolerute.db
             {
                 return database.Delete<CalendarDay>(id);
             }
-        }
+        } 
     }
 }

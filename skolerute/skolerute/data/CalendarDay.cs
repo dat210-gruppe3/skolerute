@@ -14,5 +14,5 @@ namespace skolerute.data
         public bool isNotWorkDay { get; set; }
         public bool isSFODay { get; set; }
         public string comment { get; set; }
-    }
+    } 
 }

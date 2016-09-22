@@ -23,7 +23,7 @@ namespace skolerute.iOS.data
 
             // Create and return new SQLite connection
             var connection = new SQLiteConnection(path);
-            return connection;
+            return connection; 
         }
     }
 }

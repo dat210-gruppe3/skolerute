@@ -26,7 +26,7 @@ namespace skolerute.Droid.data
             var sqliteFilename = "skoleruteSQLite.db3";
             // Documents folder
             string documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
-            var path = Path.Combine(documentsPath, sqliteFilename);
+            var path = Path.Combine(documentsPath, sqliteFilename); 
 
             // Create and return a new database connection.
             var connection = new SQLite.SQLiteConnection(path);
