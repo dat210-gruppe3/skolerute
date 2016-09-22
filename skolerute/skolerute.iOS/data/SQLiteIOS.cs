@@ -22,8 +22,8 @@ namespace skolerute.iOS.data
             var path = Path.Combine(libraryPath, sqliteFilename);
 
             // Create and return new SQLite connection
-            var connection = new SQLite.SQLiteConnection(path);
-            return connection;
+            var connection = new SQLiteConnection(path);
+            return connection; 
         }
     }
 }

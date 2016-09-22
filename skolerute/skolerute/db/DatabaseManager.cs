@@ -21,7 +21,7 @@ namespace skolerute.db
 
         public void CreateNewDatabase()
         {
-            database.CreateTable<Calendar>();
+            database.CreateTable<CalendarDay>();
             database.CreateTable<School>();
         }
         
@@ -33,11 +33,11 @@ namespace skolerute.db
             }
         }
 
-        public IEnumerable<Calendar> GetCalendars()
+        public IEnumerable<CalendarDay> GetCalendarDays()
         {
             lock (locker)
             {
-                return database.Table<Calendar>();
+                return database.Table<CalendarDay>();
             }
         }
 
@@ -49,11 +49,11 @@ namespace skolerute.db
             }
         }
 
-        public Calendar GetCalendar(int id)
+        public CalendarDay GetCalendarDay(int id)
         {
             lock (locker)
             {
-                return database.Get<Calendar>(id);
+                return database.Get<CalendarDay>(id);
             }
         }
 
@@ -81,12 +81,12 @@ namespace skolerute.db
             }
         }
 
-        public int DeleteCalendar(int id)
+        public int DeleteCalendarDay(int id)
         {
             lock (locker)
             {
-                return database.Delete<Calendar>(id);
+                return database.Delete<CalendarDay>(id);
             }
-        }
+        } 
     }
 }
