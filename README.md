@@ -19,12 +19,13 @@ origin	https://github.com/dat210-gruppe3/skolerute (push)
 
 7. Gå inn i fram .git-mappa ved å skru på "Vis skjulte filer"-innstillingen.  Åpne info-mappa. Åpne exclude-fila i en teksteditor.
   
-  Alternativt, kan følgende steps 7a-7c følges istedenfor på Mac OSX. 
-  7a. Mens du nå er i din workspace i terminalen (sjekk ved "pwd"), gå til .git-mappa di ved å skrive "cd .git"
+  Alternativt, kan følgende steps a-c følges istedenfor på Mac OSX. 
 
-  7b. Bla videre til info-mappen (cd info)
+  a. Mens du nå er i din workspace i terminalen (sjekk ved "pwd"), gå til .git-mappa di ved å skrive "cd .git"
 
-  7c. Åpne exlude-fila som ligger inne i info-mappen i en teksteditor (på Mac brukte jeg kommandoen "open -a TextEdit exlclude")
+  b. Bla videre til info-mappen (cd info)
+
+  c. Åpne exlude-fila som ligger inne i info-mappen i en teksteditor (på Mac brukte jeg kommandoen "open -a TextEdit exlclude")
 
 8. I web-browseren din, gå til https://github.com/dat210-gruppe3/skolerute/blob/master/gitignore og kopier alt som står der (RAW -> Ctrl-A -> Ctrl-C)
 
