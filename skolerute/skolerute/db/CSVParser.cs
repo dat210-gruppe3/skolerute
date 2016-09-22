@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+//using PrjTest;
 namespace skolerute
 {
 	public class CSVParser
@@ -26,7 +27,7 @@ namespace skolerute
 
 
 
-		string csvLine = "2016-08-01,Auglend skole, Nei, Nei, Ja,\n2016-08-02,Auglend skole,Nei,Nei,Ja,";
+
 
 		//Console.WriteLine("hei");
 
@@ -58,17 +59,22 @@ namespace skolerute
 			char delimiter = ',';
 			string[] parameters = csv.Split(delimiter);
 			
-			for (int i; i < parameters; i++) {
+			for (int i = 0; i < parameters.Length; i++) {
 				day = Convert.ToDateTime(parameters[i]);
 				school = parameters[i];
-				pupilDay = WordsToBool() parameters[i];
-				teacherDay = parameters[i];
-				SFODay = parameters[i];
+				pupilDay = WordsToBool(parameters[i]);
+				teacherDay = WordsToBool(parameters[i]);
+				SFODay = WordsToBool(parameters[i]);
 				comment = parameters[i];
 
 			}
 		}
+		public static void Main()
+		{
+			string csvLine = "2016-08-01,Auglend skole, Nei, Nei, Ja,\n2016-08-02,Auglend skole,Nei,Nei,Ja,";
+			StringParser(csvLine);
 
+		}
 
 
 	}
