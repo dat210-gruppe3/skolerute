@@ -72,7 +72,7 @@ namespace skolerute
 
 			int j = 0;
 
-			while (j <= parameters.Length)
+			while (j < parameters.Length)
 			{
 				tuple = Splitter(parameters[j]);
 				string sch = tuple[1];
@@ -80,16 +80,24 @@ namespace skolerute
 
 				//TODO: fjern HasSchoolBeenBefore
 				schoolObjs.Add(new data.School(
-					HasSchoolBeenBefore(tuple[1]), tuple[1], new List<data.CalendarDay>() ));
+					j, tuple[1], new List<data.CalendarDay>() ));
 
 
 				while (tuple[1] == sch)
 				{
-					int da = schoolObjs.Count;
-					schoolObjs[schoolObjs.Count].calendar.Add(
-						new data.CalendarDay(1, Convert.ToDateTime("2011-01-01"), false, true, false, "yahoo.xom"));
+					data.CalendarDay calTemp = new data.CalendarDay(
+						j, Convert.ToDateTime(tuple[0]), WordsToBool(tuple[2]), WordsToBool(tuple[3]), WordsToBool(tuple[4]), tuple[5]);
+
+					schoolObjs[schoolObjs.Count - 1].calendar.Add(calTemp);
 					j++;
+
+					if (j >= parameters.Length)
+					{
+						break;
+					}
+
 					tuple = Splitter(parameters[j]);
+
 				}
 
 			}
