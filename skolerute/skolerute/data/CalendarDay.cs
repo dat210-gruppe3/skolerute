@@ -14,5 +14,25 @@ namespace skolerute.data
         public bool isNotWorkDay { get; set; }
         public bool isSFODay { get; set; }
         public string comment { get; set; }
+
+		public CalendarDay(int ID, DateTime date, bool isFreeDay, bool isNotWorkDay, bool isSFODay, string comment)
+		{
+			this.ID = ID;
+			this.date = date;
+			this.isFreeDay = isFreeDay;
+			this.isNotWorkDay = isNotWorkDay;
+			this.isSFODay = isSFODay;
+			this.comment = comment;
+		}
+			
+		public CalendarDay()
+		{
+			this.ID = 0;
+			this.date = Convert.ToDateTime("2001-01-01");
+			this.isFreeDay = false;
+			this.isNotWorkDay = false;
+			this.isSFODay = false;
+			this.comment = "";
+		}
     } 
 }

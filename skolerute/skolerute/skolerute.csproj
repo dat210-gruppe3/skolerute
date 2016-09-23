@@ -36,15 +36,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
-    <Compile Include="data\Calendar.cs" />
     <Compile Include="data\School.cs" />
     <Compile Include="db\DatabaseManager.cs" />
     <Compile Include="db\ISQLite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-<<<<<<< HEAD
     <Compile Include="db\CSVParser.cs" />
-=======
->>>>>>> 7ed013d95292b8211b4802b5ffcf5b0c71b79728
+    <Compile Include="data\CalendarDay.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="GettingStarted.Xamarin" />
