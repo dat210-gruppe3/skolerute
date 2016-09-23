@@ -2,6 +2,8 @@
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Net;
 
 namespace skolerute
 {
@@ -119,7 +121,29 @@ namespace skolerute
 
 			//Console.WriteLine(day + school + pupilDay + teacherDay + SFODay + comment);
 		}
-		public static void Main()
+
+        public async Task<String> GetContent(String url)
+        {
+            //Console.Write("Started");
+            WebRequest request = WebRequest.Create(url);
+            HttpWebResponse response = await request.GetResponseAsync() as HttpWebResponse;
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                StreamReader stream = new StreamReader(response.GetResponseStream());
+                //String csvfile = await stream.ReadToEndAsync();
+                //Console.Write(csvfile);
+                return stream.ReadToEnd();
+            }
+            else
+            {
+                //TODO something went wrong!
+                return null;
+            }
+            //Console.Write("Ended");
+        }
+
+        public static void Main()
 		{
 			string csvLine = "2016-08-01,Auglend skole, Nei, Nei, Ja,\n2016-08-02,Auglend skole,Nei,Nei,Ja,";
 			StringParser(csvLine);
