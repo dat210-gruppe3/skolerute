@@ -8,7 +8,7 @@ namespace skolerute
 	public class CSVParser
 	{
 		private static string[] schools;
-		private static int[] id;
+		//private static int[] id;
 
 		// FIXME: Lag metode som laster inn CSV-fila og lagrer den som en streng. Kall på StringParser()
 		//public static void LoadIntoDB(string filename)
