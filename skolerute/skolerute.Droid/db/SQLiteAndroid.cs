@@ -14,8 +14,8 @@ using skolerute.db;
 using System.IO;
 using SQLite;
 
-[assembly: Dependency (typeof (skolerute.Droid.data.SQLiteAndroid))]
-namespace skolerute.Droid.data
+[assembly: Dependency (typeof (skolerute.Droid.db.SQLiteAndroid))]
+namespace skolerute.Droid.db
 {
     class SQLiteAndroid : ISQLite
     {

@@ -24,7 +24,7 @@ namespace skolerute.db
             database.CreateTable<CalendarDay>();
             database.CreateTable<School>();
         }
-        
+
         public IEnumerable<School> GetSchools()
         {
             lock (locker)

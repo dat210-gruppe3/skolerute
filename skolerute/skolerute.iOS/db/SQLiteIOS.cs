@@ -6,8 +6,8 @@ using Xamarin.Forms;
 using SQLite;
 using skolerute.db;
 
-[assembly: Dependency(typeof(skolerute.iOS.data.SQLiteIOS))]
-namespace skolerute.iOS.data
+[assembly: Dependency(typeof(skolerute.iOS.db.SQLiteIOS))]
+namespace skolerute.iOS.db
 {
     class SQLiteIOS : ISQLite
     {
