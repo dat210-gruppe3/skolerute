@@ -12,7 +12,7 @@ using Android.Widget;
 using Xamarin.Forms;
 using skolerute.db;
 using System.IO;
-using SQLite;
+using SQLite.Net;
 
 [assembly: Dependency (typeof (skolerute.Droid.db.SQLiteAndroid))]
 namespace skolerute.Droid.db
@@ -29,7 +29,7 @@ namespace skolerute.Droid.db
             var path = Path.Combine(documentsPath, sqliteFilename); 
 
             // Create and return a new database connection.
-            var connection = new SQLite.SQLiteConnection(path);
+            var connection = new SQLiteConnection(new SQLite.Net.Platform.XamarinAndroid.SQLitePlatformAndroid(), path);
             return connection;
         }
     }
