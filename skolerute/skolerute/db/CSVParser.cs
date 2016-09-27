@@ -4,11 +4,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net;
+using System.Linq;
 
 namespace skolerute
 {
 	public class CSVParser
 	{
+		private static db.DatabaseManager database = new db.DatabaseManager();
+
+
+
 		private static string[] schools;
 		//private static int[] id;
 
@@ -48,23 +53,11 @@ namespace skolerute
 			return parameters;
 		}
 
-		private static int HasSchoolBeenBefore(string school)
-		{
-
-			for (int i = 0; i < school.Length; i++)
-			{
-				if (schools[i] == school)
-				{
-					return i;
-				}
-			}
-			schools[schools.Length + 1] = school;
-			return (schools.Length + 1);
-		}
 
 
 		public static void StringParser(string csv)
 		{
+			database.CreateNewDatabase();
 			char delimiter = '\n';
 			string[] parameters = csv.Split(delimiter);
 
@@ -79,8 +72,6 @@ namespace skolerute
 				tuple = Splitter(parameters[j]);
 				string sch = tuple[1];
 
-
-				//TODO: fjern HasSchoolBeenBefore
 				schoolObjs.Add(new data.School(
 					j, tuple[1], new List<data.CalendarDay>() ));
 
@@ -102,24 +93,16 @@ namespace skolerute
 
 				}
 
+
+
 			}
 
+			database.InsertList(schoolObjs);
+
+			List<data.School> testschool = database.GetSchools().ToList();
 
 
-			/*for (int i = 0; i <= parameters.Length; i++)
-			{
-				tuple = (string[])Splitter(parameters[i]);
-
-				//data.CalendarDay cal = new data.CalendarDay(
-				//	i, Convert.ToDateTime(tuple[0]), WordsToBool(tuple[2]), WordsToBool(tuple[3]), WordsToBool(tuple[4]), tuple[5]);
-
-				//data.School school = new data.School(
-				//	HasSchoolBeenBefore(tuple[1]), tuple[1], cal);
-
-
-			}*/
-
-			//Console.WriteLine(day + school + pupilDay + teacherDay + SFODay + comment);
+			List<data.School> gc = new List<data.School>();
 		}
 
         public async Task<String> GetContent(String url)

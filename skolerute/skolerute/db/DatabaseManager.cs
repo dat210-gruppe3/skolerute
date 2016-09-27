@@ -65,7 +65,7 @@ namespace skolerute.db
             }
         }
 
-        public int InsertList(List<object> objList)
+        public int InsertList<T>(List<T> objList)
         {
             lock (locker)
             {
