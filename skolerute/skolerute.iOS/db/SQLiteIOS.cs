@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using Xamarin.Forms;
-using SQLite;
+using SQLite.Net;
 using skolerute.db;
 
 [assembly: Dependency(typeof(skolerute.iOS.db.SQLiteIOS))]
@@ -22,7 +22,7 @@ namespace skolerute.iOS.db
             var path = Path.Combine(libraryPath, sqliteFilename);
 
             // Create and return new SQLite connection
-            var connection = new SQLiteConnection(path);
+            var connection = new SQLiteConnection(new SQLite.Net.Platform.XamarinIOS.SQLitePlatformIOS(), path);
             return connection; 
         }
     }

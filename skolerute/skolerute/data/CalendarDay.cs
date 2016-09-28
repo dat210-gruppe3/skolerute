@@ -3,21 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SQLite.Net.Attributes;
+using SQLiteNetExtensions.Attributes;
 
 namespace skolerute.data
 {
-    class CalendarDay
+    public class CalendarDay
     {
+        [PrimaryKey, AutoIncrement]
         public int ID { get; set; }
+
         public DateTime date { get; set; }
         public bool isFreeDay { get; set; }
         public bool isNotWorkDay { get; set; }
         public bool isSFODay { get; set; }
         public string comment { get; set; }
 
-		public CalendarDay(int ID, DateTime date, bool isFreeDay, bool isNotWorkDay, bool isSFODay, string comment)
+        [ForeignKey(typeof(School))]
+        public int schoolID { get; set; }
+
+		public CalendarDay(DateTime date, bool isFreeDay, bool isNotWorkDay, bool isSFODay, string comment)
 		{
-			this.ID = ID;
 			this.date = date;
 			this.isFreeDay = isFreeDay;
 			this.isNotWorkDay = isNotWorkDay;
@@ -27,7 +33,6 @@ namespace skolerute.data
 			
 		public CalendarDay()
 		{
-			this.ID = 0;
 			this.date = Convert.ToDateTime("2001-01-01");
 			this.isFreeDay = false;
 			this.isNotWorkDay = false;
