@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using SQLite.Net;
 using Xamarin.Forms;
 using skolerute.data;
+using System.IO;
 
 namespace skolerute.db
 {
-    class DatabaseManager
+    class DatabaseManager : IDatabaseManager
     {
         private SQLiteConnection database;
         object locker = new object();
@@ -87,6 +88,14 @@ namespace skolerute.db
             {
                 return database.Delete<CalendarDay>(id);
             }
-        } 
+        }
+
+        public void DeleteDatabase()
+        {
+            database.DropTable<CalendarDay>();
+            database.DropTable<School>();
+            database.Close();
+            database.Dispose();
+        }
     }
 }

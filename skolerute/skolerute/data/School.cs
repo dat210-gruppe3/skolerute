@@ -10,7 +10,7 @@ using SQLiteNetExtensions;
 
 namespace skolerute.data
 {
-	class School
+	public class School
 	{
 		[PrimaryKey, AutoIncrement]
 		public int ID { get; set; }

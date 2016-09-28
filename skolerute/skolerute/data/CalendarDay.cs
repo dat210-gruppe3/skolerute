@@ -8,7 +8,7 @@ using SQLiteNetExtensions.Attributes;
 
 namespace skolerute.data
 {
-    class CalendarDay
+    public class CalendarDay
     {
         [PrimaryKey, AutoIncrement]
         public int ID { get; set; }
