@@ -11,7 +11,7 @@ namespace skolerute
     {
         public App()
         {
-			string csvLine = "2016-08-01,Auglend skole,Nei,Nei,Ja,\n2016-08-02,Auglend skole,Nei,Nei,Ja,";
+			string csvLine = "2016-08-01,Auglend skole,Nei,Nei,Ja,\n2016-08-02,Auglend skole,Nei,Nei,Ja,\n\n";
 			CSVParser.StringParser(csvLine);
 
             // The root page of your application

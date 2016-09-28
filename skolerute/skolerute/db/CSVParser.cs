@@ -10,7 +10,7 @@ namespace skolerute
 {
 	public class CSVParser
 	{
-		private static db.DatabaseManager database = new db.DatabaseManager();
+		//private static db.DatabaseManager database = new db.DatabaseManager();
 
 
 
@@ -55,18 +55,26 @@ namespace skolerute
 
 
 
-		public static void StringParser(string csv)
+		public static async void StringParser(string csv)
 		{
-			database.CreateNewDatabase();
-			char delimiter = '\n';
-			string[] parameters = csv.Split(delimiter);
+			//database.CreateNewDatabase();
+			//StreamReader sr = new StreamReader("/../data/skolerute-2016-17.csv");
+			csv = await GetContent("http://open.stavanger.kommune.no/dataset/86d3fe44-111e-4d82-be5a-67a9dbfbfcbb/resource/32d52130-ce7c-4282-9d37-3c68c7cdba92/download/skolerute-2016-17.csv");
 
+
+			char[] delimiter = new char[] { '\r', '\n' };
+			string[] parameters = csv.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+
+
+			//char delimiter = '\n';
+			//string[] parameters = csv.Split(delimiter);
 			string[] tuple = new string[5];
 
 			List<data.School> schoolObjs = new List<data.School>();
 
-			int j = 0;
+			int j = 1;
 
+			//while (j < parameters.Length)
 			while (j < parameters.Length)
 			{
 				tuple = Splitter(parameters[j]);
@@ -84,6 +92,7 @@ namespace skolerute
 					schoolObjs[schoolObjs.Count - 1].calendar.Add(calTemp);
 					j++;
 
+					//if (j >= parameters.Length)
 					if (j >= parameters.Length)
 					{
 						break;
@@ -97,15 +106,15 @@ namespace skolerute
 
 			}
 
-			database.InsertList(schoolObjs);
+			//database.InsertList(schoolObjs);
 
-			List<data.School> testschool = database.GetSchools().ToList();
+			//List<data.School> testschool = database.GetSchools().ToList();
 
 
-			List<data.School> gc = new List<data.School>();
+			//List<data.School> gc = new List<data.School>();
 		}
 
-        public async Task<String> GetContent(String url)
+        public static async Task<String> GetContent(String url)
         {
             //Console.Write("Started");
             WebRequest request = WebRequest.Create(url);
