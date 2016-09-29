@@ -11,23 +11,14 @@ namespace skolerute
     {
         public App()
         {
-			string csvLine = "2016-08-01,Auglend skole,Nei,Nei,Ja,\n2016-08-02,Auglend skole,Nei,Nei,Ja,\n\n";
-			CSVParser.StringParser(csvLine);
 
-            // The root page of your application
-            MainPage = new ContentPage
-            {
-                Content = new StackLayout
-                {
-                    VerticalOptions = LayoutOptions.Center,
-                    Children = {
-                        new Label {
-                            HorizontalTextAlignment = TextAlignment.Center,
-                            Text = "Welcome to Xamarin Forms! \n We break shit."
-                        }
-                    }
-                }
-            };
+
+
+			//List<data.School> SKOLENE = database.GetSchools().ToList();
+
+
+			// The root page of your application
+			MainPage = new MainPage();
         }
 
         protected override void OnStart()

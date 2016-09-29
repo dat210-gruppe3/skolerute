@@ -94,8 +94,8 @@ namespace skolerute.db
         {
             database.DropTable<CalendarDay>();
             database.DropTable<School>();
-            database.Close();
-            database.Dispose();
+            //database.Close();
+            //database.Dispose();
         }
     }
 }
