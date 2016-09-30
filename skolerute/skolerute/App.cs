@@ -18,7 +18,7 @@ namespace skolerute
 
 
 			// The root page of your application
-			MainPage = new Views.StartUpPage();
+			MainPage = new Views.TabPage();
 
 			//MainPage = new MainPage();
 			//MainPage = new ContentPage

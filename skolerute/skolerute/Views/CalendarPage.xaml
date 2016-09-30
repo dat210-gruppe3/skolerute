@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="skolerute.Views.CalendarPage"
+             xmlns:cv="clr-namespace:Xamarin.Forms;assembly=Xamarin.Forms.CarouselView"
+             Title="Kalender">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <Style x:Key="days" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="#ddd"/>
+        <Setter Property="TextColor" Value="Black" />
+        <Setter Property="BorderRadius" Value="0"/>
+        <Setter Property="FontSize" Value="20" />
+      </Style>
+    </ResourceDictionary>
+  </ContentPage.Resources>
+  <ContentPage.Content>
+    <StackLayout Padding="20,20,20,20" Spacing="0">
+      <Picker x:Name="SchoolPicker" Title="Velg skole">
+        <Picker.Items>
+          <x:String>Alle</x:String>
+          <x:String>Sandnes</x:String>
+          <x:String>Kongsgård</x:String>
+          <x:String>Kannik</x:String>
+        </Picker.Items>
+      </Picker>
+      <Label Text="Mars" FontSize="Large" HorizontalOptions="Center" VerticalTextAlignment="End" VerticalOptions="FillAndExpand"/>
+      <Grid RowSpacing="-8" ColumnSpacing="-5" VerticalOptions="FillAndExpand">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="*" />
+          <RowDefinition Height="*" />
+          <RowDefinition Height="*" />
+          <RowDefinition Height="*" />
+          <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Button Text = "1" Grid.Row="1" Grid.Column="0"
+    Style="{StaticResource days}" />
+        <Button Text = "2" Grid.Row="1" Grid.Column="1"
+    Style="{StaticResource days}" />
+        <Button Text = "3" Grid.Row="1" Grid.Column="2"
+    Style="{StaticResource days}" />
+        <Button Text = "4" Grid.Row="1" Grid.Column="3"
+    Style="{StaticResource days}" />
+        <Button Text = "5" Grid.Row="1" Grid.Column="4"
+    Style="{StaticResource days}" />
+        <Button Text = "6" Grid.Row="1" Grid.Column="5"
+    Style="{StaticResource days}" />
+        <Button Text = "7" Grid.Row="1" Grid.Column="6"
+    Style="{StaticResource days}" />
+        <Button Text = "8" Grid.Row="2" Grid.Column="0"
+    Style="{StaticResource days}" />
+        <Button Text = "9" Grid.Row="2" Grid.Column="1"
+    Style="{StaticResource days}" />
+        <Button Text = "10" Grid.Row="2" Grid.Column="2"
+    Style="{StaticResource days}" />
+        <Button Text = "11" Grid.Row="2" Grid.Column="3"
+    Style="{StaticResource days}" />
+        <Button Text = "12" Grid.Row="2" Grid.Column="4"
+    Style="{StaticResource days}" />
+        <Button Text = "13" Grid.Row="2" Grid.Column="5"
+    Style="{StaticResource days}" />
+        <Button Text = "14" Grid.Row="2" Grid.Column="6"
+    Style="{StaticResource days}" />
+        <Button Text = "15" Grid.Row="3" Grid.Column="0"
+    Style="{StaticResource days}" />
+        <Button Text = "16" Grid.Row="3" Grid.Column="1"
+    Style="{StaticResource days}" />
+        <Button Text = "17" Grid.Row="3" Grid.Column="2"
+    Style="{StaticResource days}" />
+        <Button Text = "18" Grid.Row="3" Grid.Column="3"
+    Style="{StaticResource days}" />
+        <Button Text = "19" Grid.Row="3" Grid.Column="4"
+    Style="{StaticResource days}" />
+        <Button Text = "20" Grid.Row="3" Grid.Column="5"
+    Style="{StaticResource days}" />
+        <Button Text = "21" Grid.Row="3" Grid.Column="6"
+    Style="{StaticResource days}" />
+        <Button Text = "22" Grid.Row="4" Grid.Column="0"
+    Style="{StaticResource days}" />
+        <Button Text = "23" Grid.Row="4" Grid.Column="1"
+    Style="{StaticResource days}" />
+        <Button Text = "24" Grid.Row="4" Grid.Column="2"
+    Style="{StaticResource days}" />
+        <Button Text = "25" Grid.Row="4" Grid.Column="3"
+    Style="{StaticResource days}" />
+        <Button Text = "26" Grid.Row="4" Grid.Column="4"
+    Style="{StaticResource days}" />
+        <Button Text = "27" Grid.Row="4" Grid.Column="5"
+    Style="{StaticResource days}" />
+        <Button Text = "28" Grid.Row="4" Grid.Column="6"
+      Style="{StaticResource days}" />
+        <Button Text = "29" Grid.Row="5" Grid.Column="0"
+    Style="{StaticResource days}" />
+        <Button Text = "30" Grid.Row="5" Grid.Column="1"
+    Style="{StaticResource days}" />
+        <Button Text = "31" Grid.Row="5" Grid.Column="2"
+    Style="{StaticResource days}" />
+      </Grid>
+    </StackLayout>
+  </ContentPage.Content>
+</ContentPage>

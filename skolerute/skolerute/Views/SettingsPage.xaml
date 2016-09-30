@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="skolerute.Views.SettingsPage"
+             Title="Innstillinger">
+  <StackLayout>
+    <TableView Intent="Settings">
+      <TableRoot>
+        <TableSection>
+          <SwitchCell x:Name="varseltoggle" Text="Varsling av" On="false" OnChanged="varseltoggler"/>
+        </TableSection>
+      </TableRoot>
+    </TableView>
+  </StackLayout>
+</ContentPage>
