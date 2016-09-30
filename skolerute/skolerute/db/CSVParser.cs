@@ -5,16 +5,26 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net;
 using System.Linq;
+using skolerute.db;
 
 namespace skolerute
 {
 	public class CSVParser
 	{
-		private static db.DatabaseManager database = new db.DatabaseManager();
+		//private static db.DatabaseManager database = new db.DatabaseManager();
+		public string url;
+		private IDatabaseManager database;
+
+		public CSVParser(string url, IDatabaseManager database)
+		{
+			this.url = url;
+			this.database = database;
+			this.database.DeleteDatabase();
+			this.database.CreateNewDatabase();
+		}
 
 
-
-		private static string[] schools;
+		private string[] schools;
 		//private static int[] id;
 
 		// FIXME: Lag metode som laster inn CSV-fila og lagrer den som en streng. Kall på StringParser()
@@ -31,7 +41,7 @@ namespace skolerute
 		/// <summary>This method is to be used in </summary>
 		/// <returns><c>true</c>, if string is 'Ja', <c>false</c> otherwise.</returns>
 		/// <param name="">.</param>
-		private static bool WordsToBool(string s)
+		private bool WordsToBool(string s)
 		{
 			if (s == "Ja")
 			{
@@ -44,7 +54,7 @@ namespace skolerute
 		/// <summary>
 		/// This method takes in a line (tuple) from StringParser() and returns an array of the columns
 		/// </summary>
-		private static string[] Splitter(string s)
+		private string[] Splitter(string s)
 		{
 			char delimiter = ',';
 			string[] parameters = s.Split(delimiter);
@@ -55,35 +65,44 @@ namespace skolerute
 
 
 
-		public static void StringParser(string csv)
+		public async void StringParser(string csv)
 		{
-			database.CreateNewDatabase();
-			char delimiter = '\n';
-			string[] parameters = csv.Split(delimiter);
+			//database.CreateNewDatabase();
+			//StreamReader sr = new StreamReader("/../data/skolerute-2016-17.csv");
+			csv = await GetContent("http://open.stavanger.kommune.no/dataset/86d3fe44-111e-4d82-be5a-67a9dbfbfcbb/resource/32d52130-ce7c-4282-9d37-3c68c7cdba92/download/skolerute-2016-17.csv");
 
+
+			char[] delimiter = new char[] { '\r', '\n' };
+			string[] parameters = csv.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+
+
+			//char delimiter = '\n';
+			//string[] parameters = csv.Split(delimiter);
 			string[] tuple = new string[5];
 
 			List<data.School> schoolObjs = new List<data.School>();
 
-			int j = 0;
+			int j = 1;
 
+			//while (j < parameters.Length)
 			while (j < parameters.Length)
 			{
 				tuple = Splitter(parameters[j]);
 				string sch = tuple[1];
 
 				schoolObjs.Add(new data.School(
-					j, tuple[1], new List<data.CalendarDay>() ));
+					tuple[1], new List<data.CalendarDay>() ));
 
 
 				while (tuple[1] == sch)
 				{
 					data.CalendarDay calTemp = new data.CalendarDay(
-						j, Convert.ToDateTime(tuple[0]), WordsToBool(tuple[2]), WordsToBool(tuple[3]), WordsToBool(tuple[4]), tuple[5]);
+						Convert.ToDateTime(tuple[0]), WordsToBool(tuple[2]), WordsToBool(tuple[3]), WordsToBool(tuple[4]), tuple[5]);
 
 					schoolObjs[schoolObjs.Count - 1].calendar.Add(calTemp);
 					j++;
 
+					//if (j >= parameters.Length)
 					if (j >= parameters.Length)
 					{
 						break;
@@ -99,10 +118,11 @@ namespace skolerute
 
 			database.InsertList(schoolObjs);
 
-			List<data.School> testschool = database.GetSchools().ToList();
+			List<data.School> SKOLENE = database.GetSchools().ToList();
 
-
-			List<data.School> gc = new List<data.School>();
+			string hei = "";
+			//List<data.School> testschool = database.GetSchools().ToList();
+			//List<data.School> gc = new List<data.School>();
 		}
 
         public async Task<String> GetContent(String url)
@@ -126,12 +146,12 @@ namespace skolerute
             //Console.Write("Ended");
         }
 
-        public static void Main()
+        /*public static void Main()
 		{
 			string csvLine = "2016-08-01,Auglend skole, Nei, Nei, Ja,\n2016-08-02,Auglend skole,Nei,Nei,Ja,";
 			StringParser(csvLine);
 
-		}
+		}*/
 
 
 	}

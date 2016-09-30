@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="skolerute.MainPage">
+	<ContentPage.Content>
+		<StackLayout x:Name="stack">
+			<Label Text="Hei, Verden!"/>
+			<Label x:Name="t" Text="{Binding text}"/>
+		</StackLayout>
+	</ContentPage.Content>
+</ContentPage>
