@@ -22,8 +22,10 @@ namespace skolerute.db
 
         public void CreateNewDatabase()
         {
-            database.CreateTable<CalendarDay>();
-            database.CreateTable<School>();
+            lock(locker) {
+                database.CreateTable<CalendarDay>();
+                database.CreateTable<School>();
+            }
         }
 
         public IEnumerable<School> GetSchools()

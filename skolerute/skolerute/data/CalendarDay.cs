@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SQLite.Net.Attributes;
+using SQLite.Net.Interop;
 using SQLiteNetExtensions.Attributes;
 
 namespace skolerute.data
@@ -12,7 +13,7 @@ namespace skolerute.data
     {
         [PrimaryKey, AutoIncrement]
         public int ID { get; set; }
-
+        
         public DateTime date { get; set; }
         public bool isFreeDay { get; set; }
         public bool isNotWorkDay { get; set; }

@@ -8,21 +8,90 @@ using Windows.Storage;
 using Xamarin.Forms;
 using SQLite;
 using skolerute.db;
+using SQLite.Net;
+using SQLite.Net.Async;
 
 [assembly: Dependency(typeof(skolerute.WinPhone.db.SQLiteWinP))]
 namespace skolerute.WinPhone.db
 {
     class SQLiteWinP : ISQLite
     {
-        public SQLiteWinP() {}
+        private SQLiteConnectionWithLock _conn;
+
+        public SQLiteWinP()
+        {
+
+        }
+
+        private static string GetDatabasePath()
+        {
+            var sqliteFilename = "skoleruteSQLite.db3";
+            return Path.Combine(ApplicationData.Current.LocalFolder.Path, sqliteFilename);
+        }
+
+        public void CloseConnection()
+        {
+            if (_conn != null)
+            {
+                _conn.Close();
+                _conn.Dispose();
+                _conn = null;
+
+                // Connection is not disposed of until garbage collector cleans up
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
+        }
+
+        public void DeleteDatabase()
+        {
+            //TODO: Find a way to delete files in windows phone 8.1, this storage thing is dumb...
+
+            /*var path = GetDatabasePath();
+
+            try
+            {
+                if (_conn == null)
+                {
+                    _conn.Close();
+                }
+            }
+            catch
+            {
+
+            }
+
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            } */
+        }
 
         public SQLiteConnection GetConnection()
         {
-            string sqliteFilename = "skoleruteSQLite.db3";
-            string path = Path.Combine(ApplicationData.Current.LocalFolder.Path, sqliteFilename);
+            var dbPath = GetDatabasePath();
 
-            SQLiteConnection connection = new SQLiteConnection(path);
-            return connection;
+            return new SQLiteConnection(new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(), dbPath);
+        }
+
+        public SQLiteAsyncConnection GetAsyncConnection()
+        {
+            var dbPath = GetDatabasePath();
+
+            var platform = new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT();
+
+            var connectionFactory = new Func<SQLiteConnectionWithLock>(
+                () =>
+                {
+                    if (_conn == null)
+                    {
+                        _conn = new SQLiteConnectionWithLock(platform,
+                            new SQLiteConnectionString(dbPath, storeDateTimeAsTicks: true));
+                    }
+                    return _conn;
+                });
+
+            return new SQLiteAsyncConnection(connectionFactory);
         }
     }
 }
