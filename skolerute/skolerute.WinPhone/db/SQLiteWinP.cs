@@ -45,9 +45,7 @@ namespace skolerute.WinPhone.db
 
         public void DeleteDatabase()
         {
-            //TODO: Find a way to delete files in windows phone 8.1, this storage thing is dumb...
-
-            /*var path = GetDatabasePath();
+            var path = GetDatabasePath();
 
             try
             {
@@ -61,10 +59,11 @@ namespace skolerute.WinPhone.db
 
             }
 
-            if (File.Exists(path))
+            StorageFile file = StorageFile.GetFileFromPathAsync(path).GetResults();
+            if (file != null)
             {
-                File.Delete(path);
-            } */
+                file.DeleteAsync().GetResults();
+            }
         }
 
         public SQLiteConnection GetConnection()

@@ -46,7 +46,7 @@ namespace skolerute.Windows.db
         {
             //TODO: Find a way to delete files in windows 8.1, this storage thing is dumb...
 
-            /*var path = GetDatabasePath();
+            var path = GetDatabasePath();
 
             try
             {
@@ -60,10 +60,11 @@ namespace skolerute.Windows.db
 
             }
 
-            if (File.Exists(path))
+            StorageFile file = StorageFile.GetFileFromPathAsync(path).GetResults();
+            if(file != null)
             {
-                File.Delete(path);
-            } */
+                file.DeleteAsync().GetResults();
+            }
         }
 
         public SQLiteConnection GetConnection()
