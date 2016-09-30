@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="skolerute.Views.StartUpPage"
+             Title="Hovedside">
+  <StackLayout Spacing="10">
+    <Label Text="Legg til skole" VerticalOptions="Center" HorizontalOptions="Center" FontSize="Large" />
+    <SearchBar x:Name="searchbar" Placeholder="Søk" Text="{Binding Path=SearchText}"/>
+    <Label BindingContext="{x:Reference searchbar}" Text="{Binding Text,StringFormat='Du valgte {0}'}" VerticalOptions="Center" HorizontalOptions="Center" />
+	<ListView x:Name="skoler">
+		<ListView.ItemTemplate>
+			<DataTemplate>
+				<TextCell Text="{Binding name}" />
+			</DataTemplate>
+		</ListView.ItemTemplate>
+	</ListView>
+	</StackLayout>
+</ContentPage>
