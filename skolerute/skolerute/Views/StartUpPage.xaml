@@ -9,7 +9,7 @@
     <Label BindingContext="{x:Reference searchbar}" Text="{Binding Text,StringFormat='Du valgte {0}'}" VerticalOptions="Center" HorizontalOptions="Center" />
 
 	<!--DANIEL TESTER MED EN NY SØKEBAR-->
-    <!--<SearchBar x:Name="searchSchool" Placeholder="searchSchool" Text="{Binding SearchText}" SearchCommand="{Binding SearchCommand}"/>-->
+    <SearchBar x:Name="searchSchool" Placeholder="searchSchool" Text="{Binding SearchText}" SearchCommand="{Binding SearchCommand}"/>
 
 		
 	<ListView x:Name="skoler">

@@ -24,32 +24,28 @@ namespace skolerute.Views
 			List<data.School> debugskoler = database.GetSchools().ToList();
 			skoler.ItemsSource = debugskoler;
 
-
-
 			//Dette krasjer programmet totalt.
 			//if (searchSchool.IsFocused)
 			//{
 			//	skoler.ItemsSource = debugskoler;
 			//}
 
-
-			//Dette krasjer programmet når du skriver noe inn i søkebaren
-			//----TESTER NY SØKEBAR
-			//List<data.School> newSchList = new List<data.School>();
-
-			//searchSchool.SearchButtonPressed += (s, e) => {
-			//	var sValue = sedarchSchool.Text;
-			//	for (int i = 0; i < debugskoler.Count; i++) 
-			//	{
-			//		if (sValue[1] == debugskoler[i].name[1])
-			//		{
-			//			newSchList.Add(debugskoler[i]);
-			//		}
-					                                 
-
-			//	}
-			//	skoler.ItemsSource = newSchList;
-			//};
+			searchSchool.SearchButtonPressed += (s, e) => {
+                List<data.School> newSchList = new List<data.School>();
+                var sValue = searchSchool.Text;
+				for (int i = 0; i < debugskoler.Count; i++) 
+				{
+                    if (debugskoler[i].name.StartsWith(sValue))
+					{
+						newSchList.Add(debugskoler[i]);
+	        		}
+                    else if (debugskoler[i].name.Contains(sValue))
+                    {
+                        newSchList.Add(debugskoler[i]);
+                    }
+                }
+				skoler.ItemsSource = newSchList;
+			};
 
 
 
