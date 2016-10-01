@@ -7,7 +7,7 @@ using System.Net;
 using System.Linq;
 using skolerute.db;
 
-namespace skolerute
+namespace skolerute.db
 {
 	public class CSVParser
 	{
@@ -65,7 +65,7 @@ namespace skolerute
 
 
 
-		public async void StringParser(string csv)
+		public async Task StringParser(string csv)
 		{
 			//database.CreateNewDatabase();
 			//StreamReader sr = new StreamReader("/../data/skolerute-2016-17.csv");
@@ -113,14 +113,13 @@ namespace skolerute
 				}
 
 
-
 			}
 
 			database.InsertList(schoolObjs);
 
-			List<data.School> SKOLENE = database.GetSchools().ToList();
+			//List<data.School> SKOLENE = database.GetSchools().ToList();
 
-			string hei = "";
+			//string hei = "";
 			//List<data.School> testschool = database.GetSchools().ToList();
 			//List<data.School> gc = new List<data.School>();
 		}
