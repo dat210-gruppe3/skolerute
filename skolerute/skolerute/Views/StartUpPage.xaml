@@ -5,11 +5,11 @@
              Title="Hovedside">
 	<StackLayout Spacing="10">
     <Label Text="Legg til skole" VerticalOptions="Center" HorizontalOptions="Center" FontSize="Large" />
-    <SearchBar x:Name="searchbar" Placeholder="Søk" Text="{Binding Path=SearchText}"/>
-    <Label BindingContext="{x:Reference searchbar}" Text="{Binding Text,StringFormat='Du valgte {0}'}" VerticalOptions="Center" HorizontalOptions="Center" />
+    <!--<SearchBar x:Name="searchbar" Placeholder="Søk" Text="{Binding Path=SearchText}"/>
+    <Label BindingContext="{x:Reference searchbar}" Text="{Binding Text,StringFormat='Du valgte {0}'}" VerticalOptions="Center" HorizontalOptions="Center" />-->
 
 	<!--DANIEL TESTER MED EN NY SØKEBAR-->
-    <SearchBar x:Name="searchSchool" Placeholder="searchSchool" Text="{Binding SearchText}" SearchCommand="{Binding SearchCommand}"/>
+    <SearchBar x:Name="searchSchool" Placeholder="Søk etter skoler" Text="{Binding SearchText}" SearchCommand="{Binding SearchCommand}"/>
 
 		
 	<ListView x:Name="skoler">
