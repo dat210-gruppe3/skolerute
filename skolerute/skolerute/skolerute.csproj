@@ -59,6 +59,7 @@
     <Compile Include="Views\TabPage.xaml.cs">
       <DependentUpon>TabPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="data\Constants.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

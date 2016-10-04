@@ -4,7 +4,7 @@
              x:Class="skolerute.Views.StartUpPage"
              Title="Hovedside">
 	<StackLayout Spacing="10">
-    <Label Text="Legg til skole" VerticalOptions="Center" HorizontalOptions="Center" FontSize="Large" />
+    <Label Text="Legg til skole" VerticalOptions="Center" HorizontalOptions="Center" FontSize="Large" Margin="0, 20, 0, 0" />
     <!--<SearchBar x:Name="searchbar" Placeholder="Søk" Text="{Binding Path=SearchText}"/>
     <Label BindingContext="{x:Reference searchbar}" Text="{Binding Text,StringFormat='Du valgte {0}'}" VerticalOptions="Center" HorizontalOptions="Center" />-->
 
