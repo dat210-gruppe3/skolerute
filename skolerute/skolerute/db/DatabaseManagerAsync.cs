@@ -17,7 +17,16 @@ namespace skolerute.db
         public DatabaseManagerAsync()
         {
             database = DependencyService.Get<ISQLite>().GetAsyncConnection();
-            CreateNewDatabase();
+            if (TableExists<School>(database) || TableExists<CalendarDay>(database))
+            {
+                CreateNewDatabase();
+            }
+        }
+
+        public static bool TableExists<T>(SQLiteAsyncConnection connection)
+        {
+            string query = "SELECT * FROM sqlite_master WHERE type = 'table' AND name = ?";
+            return (connection.ExecuteScalarAsync<string>(query, typeof(T).Name) != null);
         }
 
         public void CreateNewDatabase()

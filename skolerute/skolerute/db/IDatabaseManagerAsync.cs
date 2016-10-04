@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using skolerute.data;
+using SQLite.Net.Async;
 
 namespace skolerute.db
 {

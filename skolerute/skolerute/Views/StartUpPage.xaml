@@ -4,6 +4,7 @@
              x:Class="skolerute.Views.StartUpPage"
              Title="Hovedside">
 	<StackLayout Spacing="10">
+    <ProgressBar x:Name="progressBar" Progress="0" />
     <Label Text="Legg til skole" VerticalOptions="Center" HorizontalOptions="Center" FontSize="Large" />
     <!--<SearchBar x:Name="searchbar" Placeholder="Søk" Text="{Binding Path=SearchText}"/>
     <Label BindingContext="{x:Reference searchbar}" Text="{Binding Text,StringFormat='Du valgte {0}'}" VerticalOptions="Center" HorizontalOptions="Center" />-->
