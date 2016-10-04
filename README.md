@@ -1,4 +1,9 @@
-# skolerute
+# Skolerute
+
+Logo? http://aakashlabs.org/ac/project/69/media/project_logo/schoolbag_icon.png
+
+
+
 For å ikke laste opp alle packages når hver av oss pusher, følg følgende steps:
 
 0. Sikkerhetskopier arbeidet du har gjort
