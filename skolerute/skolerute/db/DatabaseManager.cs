@@ -18,6 +18,17 @@ namespace skolerute.db
         public DatabaseManager()
         {
             database = DependencyService.Get<ISQLite>().GetConnection();
+            if(TableExists<School>(database) || TableExists<CalendarDay>(database))
+            {
+                CreateNewDatabase();
+            }
+        }
+
+        public static bool TableExists<T>(SQLiteConnection connection)
+        {
+            string query = "SELECT * FROM sqlite_master WHERE type = 'table' AND name = ?";
+            SQLiteCommand cmd = connection.CreateCommand(query, typeof(T).Name);
+            return (cmd.ExecuteScalar<string>() != null);
         }
 
         public void CreateNewDatabase()
@@ -92,12 +103,21 @@ namespace skolerute.db
             }
         }
 
+        public void DropTables()
+        {
+            lock (locker)
+            {
+                if(database != null)
+                {
+                    database.DropTable<School>();
+                    database.DropTable<CalendarDay>();
+                }
+            }
+        }
+
         public void DeleteDatabase()
         {
-            database.DropTable<CalendarDay>();
-            database.DropTable<School>();
-            //database.Close();
-            //database.Dispose();
+            DependencyService.Get<ISQLite>().DeleteDatabase();
         }
     }
 }

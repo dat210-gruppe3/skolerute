@@ -18,6 +18,7 @@ namespace skolerute.db
         int InsertList<T>(List<T> objList);
         int DeleteSchool(int id);
         int DeleteCalendarDay(int id);
+        void DropTables();
         void DeleteDatabase();
     }
 }

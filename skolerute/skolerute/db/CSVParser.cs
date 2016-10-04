@@ -13,18 +13,25 @@ namespace skolerute.db
 	{
 		//private static db.DatabaseManager database = new db.DatabaseManager();
 		public string url;
-		private IDatabaseManager database;
+		private IDatabaseManagerAsync database;
 
-		public CSVParser(string url, IDatabaseManager database)
+		public CSVParser(string url, DatabaseManagerAsync database)
 		{
 			this.url = url;
 			this.database = database;
-			this.database.DeleteDatabase();
-			this.database.CreateNewDatabase();
+			//this.database.DeleteDatabase();
+			//this.database.CreateNewDatabase();
 		}
 
+        public CSVParser(string url)
+        {
+            this.url = url;
+            this.database = new DatabaseManagerAsync();
+            //this.database.DeleteDatabase();
+            //this.database.CreateNewDatabase();
+        }
 
-		private string[] schools;
+        private string[] schools;
 		//private static int[] id;
 
 		// FIXME: Lag metode som laster inn CSV-fila og lagrer den som en streng. Kall på StringParser()
@@ -115,7 +122,14 @@ namespace skolerute.db
 
 			}
 
-			database.InsertList(schoolObjs);
+            try
+            {
+                await database.InsertList(schoolObjs);
+            }
+            catch (SQLite.Net.SQLiteException)
+            {
+                // Do something cool
+            }
 
 			//List<data.School> SKOLENE = database.GetSchools().ToList();
 
