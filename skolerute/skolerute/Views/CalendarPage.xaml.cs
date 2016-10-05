@@ -13,6 +13,11 @@ namespace skolerute.Views
         public CalendarPage()
         {
             InitializeComponent();
+
+            // Placeholder liste over favoritt-skoler
+            List<string> favorites = new List<string> { "skole1", "skole2", "skole3" };
+            SchoolPicker.ItemsSource = favorites;
+
         }
     }
 }

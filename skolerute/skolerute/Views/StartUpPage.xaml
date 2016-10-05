@@ -19,7 +19,7 @@
     <SearchBar x:Name="searchSchool" Placeholder="Søk etter skoler" Text="{Binding SearchText}" SearchCommand="{Binding SearchCommand}"/>
 
 		
-	<ListView x:Name="skoler">
+	<ListView x:Name="skoler" ItemSelected="OnSelection">
 		<ListView.ItemTemplate>
 			<DataTemplate>
 				<TextCell Text="{Binding name}" />

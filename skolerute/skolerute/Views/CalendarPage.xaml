@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="skolerute.Views.CalendarPage"
              xmlns:cv="clr-namespace:Xamarin.Forms;assembly=Xamarin.Forms.CarouselView"
+             xmlns:local="clr-namespace:skolerute.utils;assembly=skolerute"
              Title="Kalender">
   <ContentPage.Resources>
     <ResourceDictionary>
@@ -16,14 +17,7 @@
   </ContentPage.Resources>
   <ContentPage.Content>
     <StackLayout Padding="20,20,20,20" Spacing="0">
-      <Picker x:Name="SchoolPicker" Title="Velg skole">
-        <Picker.Items>
-          <x:String>Alle</x:String>
-          <x:String>Sandnes</x:String>
-          <x:String>Kongsgård</x:String>
-          <x:String>Kannik</x:String>
-        </Picker.Items>
-      </Picker>
+      <local:BindablePicker x:Name="SchoolPicker"/>
       <Label Text="Mars" FontSize="Large" HorizontalOptions="Center" VerticalTextAlignment="End" VerticalOptions="FillAndExpand"/>
       <Grid RowSpacing="-8" ColumnSpacing="-5" VerticalOptions="FillAndExpand">
         <Grid.RowDefinitions>
