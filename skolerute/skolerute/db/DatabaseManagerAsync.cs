@@ -12,67 +12,63 @@ namespace skolerute.db
 {
     public class DatabaseManagerAsync : IDatabaseManagerAsync
     {
-        private SQLiteAsyncConnection database;
+        public SQLiteAsyncConnection connection { get; }
 
         public DatabaseManagerAsync()
         {
-            database = DependencyService.Get<ISQLite>().GetAsyncConnection();
-            if (TableExists<School>(database) || TableExists<CalendarDay>(database))
-            {
-                CreateNewDatabase();
-            }
+            connection = DependencyService.Get<ISQLite>().GetAsyncConnection();
         }
 
-        public static bool TableExists<T>(SQLiteAsyncConnection connection)
+        public static async Task<bool> TableExists<T>(SQLiteAsyncConnection connection)
         {
-            string query = "SELECT * FROM sqlite_master WHERE type = 'table' AND name = ?";
-            return (connection.ExecuteScalarAsync<string>(query, typeof(T).Name) != null);
+            string query = "SELECT name FROM sqlite_master WHERE type='table' AND name=?";
+            return (await connection.ExecuteScalarAsync<string>(query, typeof(T).Name) != null);
         }
 
         public void CreateNewDatabase()
         {
-            database.CreateTableAsync<School>();
-            database.CreateTableAsync<CalendarDay>();
+            connection.CreateTableAsync<School>();
+            connection.CreateTableAsync<CalendarDay>();
         }
 
         public async Task<int> DeleteCalendarDay(int id)
         {
-            return await database.DeleteAsync<CalendarDay>(id as object);
+            return await connection.DeleteAsync<CalendarDay>(id as object);
         }
 
         public async Task<int> DeleteSchool(int id)
         {
-            return await database.DeleteAsync<School>(id as object);
+            return await connection.DeleteAsync<School>(id as object);
         }
 
         public async Task<CalendarDay> GetCalendarDay(int id)
         {
-            return await database.GetAsync<CalendarDay>(id as object);
+            return await connection.GetAsync<CalendarDay>(id as object);
         }
 
         public async Task<List<CalendarDay>> GetCalendarDays()
         {
-            return await database.Table<CalendarDay>().ToListAsync();
+            return await connection.Table<CalendarDay>().ToListAsync();
         }
 
         public async Task<School> GetSchool(int id)
         {
-            return await database.GetAsync<School>(id as object);
+            return await connection.GetAsync<School>(id as object);
         }
 
         public async Task<List<School>> GetSchools()
         {
-            return await database.Table<School>().ToListAsync();
+            return await connection.Table<School>().ToListAsync();
         }
 
         public async Task<int> InsertList<T>(List<T> objList)
         {
-            return await database.InsertAllAsync(objList);
+            return await connection.InsertAllAsync(objList);
         }
 
         public async Task<int> InsertSingle(object obj)
         {
-            return await database.InsertAsync(obj);
+            return await connection.InsertAsync(obj);
         }
     }
 }

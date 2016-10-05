@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="data\CalendarDay.cs" />
+    <Compile Include="data\CalendarModel.cs" />
     <Compile Include="data\School.cs" />
     <Compile Include="db\DatabaseManager.cs" />
     <Compile Include="db\DatabaseManagerAsync.cs" />

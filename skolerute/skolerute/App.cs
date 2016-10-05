@@ -16,7 +16,7 @@ namespace skolerute
 			MainPage = new Views.TabPage();	
         }
 
-        protected override async void OnStart()
+        protected override void OnStart()
         {
             // Handle when your app starts
         }
