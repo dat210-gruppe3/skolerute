@@ -92,7 +92,17 @@ namespace skolerute.Views
             //List<data.School> SKOLENE = database.GetSchools().ToList();
             skolerute.db.CSVParser parser = new db.CSVParser(url);
             await progressBar.ProgressTo(0.3, 100, Easing.Linear);
-            await parser.StringParser(url);
+			try
+			{
+				await parser.StringParser();
+			}
+			catch (Exception ex)
+			{
+				List<School> lista = new List<School>();
+				lista.Add(new School("Net error.", null));
+				skoler.ItemsSource = lista;
+				return lista;
+			}
             await progressBar.ProgressTo(0.7, 250, Easing.Linear);
             List<School> debugskoler = new List<School>();
 

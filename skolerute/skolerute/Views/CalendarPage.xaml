@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="skolerute.Views.CalendarPage"
@@ -7,7 +7,7 @@
   <ContentPage.Resources>
     <ResourceDictionary>
       <Style x:Key="days" TargetType="Button">
-        <Setter Property="BackgroundColor" Value="#ddd"/>
+
         <Setter Property="TextColor" Value="Black" />
         <Setter Property="BorderRadius" Value="0"/>
         <Setter Property="FontSize" Value="20" />

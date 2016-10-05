@@ -3,6 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="skolerute.Views.StartUpPage"
              Title="Hovedside">
+	<ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness"
+                    iOS="0, 20, 0, 0" />
+     </ContentPage.Padding>
 	<StackLayout Spacing="10">
 		
     <ProgressBar x:Name="progressBar" Progress="0" />
