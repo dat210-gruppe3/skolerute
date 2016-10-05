@@ -1,6 +1,7 @@
 ﻿using skolerute.data;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,8 +18,7 @@ namespace skolerute.Views
 		{
 			//http://blog.alectucker.com/post/2015/08/10/xamarinforms-searchbar-with-mvvm.aspx
 
-			SchoolList skolelisten = Init();
-			BindingContext = skolelisten;
+			
 			InitializeComponent();
 
 			searchSchool.SearchButtonPressed += (s, e) => {
@@ -71,10 +71,6 @@ namespace skolerute.Views
 
         }
 
-        private SchoolList Init()
-		{
-			return new data.SchoolList { liste = new List<string>() { "Kannik", "Sandnes", "Kongsgård" } };
-		}
 
         protected override async void OnAppearing()
         {
@@ -113,5 +109,26 @@ namespace skolerute.Views
                 return lista;
             }
         }
-	}
+
+
+        // Event som blir trigga når man trykker på en skole i lista
+        public async void OnSelection(object sender, SelectedItemChangedEventArgs e)
+        {
+            if (e.SelectedItem == null)
+            {
+                return; //ItemSelected is called on deselection, which results in SelectedItem being set to null
+            }
+
+            School skole = (School)e.SelectedItem;
+            string skolenavn = skole.name;
+
+            var action = await DisplayActionSheet("Du valgte:","Legg til","Avbryt", skolenavn);
+
+            // Henter ut navnet på action (Legg til/Avbryt)
+            string actionNavn = action.ToString();
+            
+            // Tenker her å kjøre en metode som sjekker actionNavn og hvis "Legg til" går inn i databasen
+            // og setter True på den valgte skolens IsFavorite-atributt i databasen.
+        }
+    }
 }
