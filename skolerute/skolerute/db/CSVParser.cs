@@ -21,6 +21,14 @@ namespace skolerute.db
             this.database = new DatabaseManagerAsync();
         }
 
+		public CSVParser(string url, DatabaseManagerAsync database)		
+ 		{		
+ 			this.url = url;		
+ 			this.database = database;		
+ 			//this.database.DeleteDatabase();		
+ 			//this.database.CreateNewDatabase();		
+ 		}
+
 		//public static void LoadIntoDB(string filename)
 		//{
 
