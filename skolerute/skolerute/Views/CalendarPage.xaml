@@ -13,10 +13,13 @@
         <Setter Property="BorderRadius" Value="0"/>
         <Setter Property="FontSize" Value="20" />
       </Style>
+      <Style x:Key="calcell" TargetType="Frame">
+      </Style>
+      
     </ResourceDictionary>
   </ContentPage.Resources>
   <ContentPage.Content>
-    <StackLayout Padding="20,20,20,20" Spacing="0">
+    <StackLayout Padding="0" Spacing="0">
       <local:BindablePicker x:Name="SchoolPicker"/>
 
       <Label Text="Mars" FontSize="Large" HorizontalOptions="Center" VerticalTextAlignment="End" VerticalOptions="FillAndExpand"/>
