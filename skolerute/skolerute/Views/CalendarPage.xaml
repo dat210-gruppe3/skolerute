@@ -13,14 +13,19 @@
         <Setter Property="BorderRadius" Value="0"/>
         <Setter Property="FontSize" Value="20" />
       </Style>
+      <Style x:Key="calcell" TargetType="Frame">
+      </Style>
+      
     </ResourceDictionary>
   </ContentPage.Resources>
   <ContentPage.Content>
-    <StackLayout Padding="20,20,20,20" Spacing="0">
+    <StackLayout Padding="0" Spacing="0">
       <local:BindablePicker x:Name="SchoolPicker"/>
+
       <Label Text="Mars" FontSize="Large" HorizontalOptions="Center" VerticalTextAlignment="End" VerticalOptions="FillAndExpand"/>
-      <Grid RowSpacing="-8" ColumnSpacing="-5" VerticalOptions="FillAndExpand">
+      <Grid Margin="0" Padding="0" RowSpacing="0" ColumnSpacing="0" HorizontalOptions="CenterAndExpand" VerticalOptions="FillAndExpand">
         <Grid.RowDefinitions>
+          <RowDefinition Height="35" />
           <RowDefinition Height="*" />
           <RowDefinition Height="*" />
           <RowDefinition Height="*" />
@@ -28,76 +33,146 @@
           <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="*" />
-          <ColumnDefinition Width="*" />
-          <ColumnDefinition Width="*" />
-          <ColumnDefinition Width="*" />
-          <ColumnDefinition Width="*" />
-          <ColumnDefinition Width="*" />
-          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="35" />
+          <ColumnDefinition Width="35" />
+          <ColumnDefinition Width="35" />
+          <ColumnDefinition Width="35" />
+          <ColumnDefinition Width="35" />
+          <ColumnDefinition Width="35" />
+          <ColumnDefinition Width="35" />
         </Grid.ColumnDefinitions>
-        <Button Text = "1" Grid.Row="1" Grid.Column="0"
-    Style="{StaticResource days}" />
-        <Button Text = "2" Grid.Row="1" Grid.Column="1"
-    Style="{StaticResource days}" />
-        <Button Text = "3" Grid.Row="1" Grid.Column="2"
-    Style="{StaticResource days}" />
-        <Button Text = "4" Grid.Row="1" Grid.Column="3"
-    Style="{StaticResource days}" />
-        <Button Text = "5" Grid.Row="1" Grid.Column="4"
-    Style="{StaticResource days}" />
-        <Button Text = "6" Grid.Row="1" Grid.Column="5"
-    Style="{StaticResource days}" />
-        <Button Text = "7" Grid.Row="1" Grid.Column="6"
-    Style="{StaticResource days}" />
-        <Button Text = "8" Grid.Row="2" Grid.Column="0"
-    Style="{StaticResource days}" />
-        <Button Text = "9" Grid.Row="2" Grid.Column="1"
-    Style="{StaticResource days}" />
-        <Button Text = "10" Grid.Row="2" Grid.Column="2"
-    Style="{StaticResource days}" />
-        <Button Text = "11" Grid.Row="2" Grid.Column="3"
-    Style="{StaticResource days}" />
-        <Button Text = "12" Grid.Row="2" Grid.Column="4"
-    Style="{StaticResource days}" />
-        <Button Text = "13" Grid.Row="2" Grid.Column="5"
-    Style="{StaticResource days}" />
-        <Button Text = "14" Grid.Row="2" Grid.Column="6"
-    Style="{StaticResource days}" />
-        <Button Text = "15" Grid.Row="3" Grid.Column="0"
-    Style="{StaticResource days}" />
-        <Button Text = "16" Grid.Row="3" Grid.Column="1"
-    Style="{StaticResource days}" />
-        <Button Text = "17" Grid.Row="3" Grid.Column="2"
-    Style="{StaticResource days}" />
-        <Button Text = "18" Grid.Row="3" Grid.Column="3"
-    Style="{StaticResource days}" />
-        <Button Text = "19" Grid.Row="3" Grid.Column="4"
-    Style="{StaticResource days}" />
-        <Button Text = "20" Grid.Row="3" Grid.Column="5"
-    Style="{StaticResource days}" />
-        <Button Text = "21" Grid.Row="3" Grid.Column="6"
-    Style="{StaticResource days}" />
-        <Button Text = "22" Grid.Row="4" Grid.Column="0"
-    Style="{StaticResource days}" />
-        <Button Text = "23" Grid.Row="4" Grid.Column="1"
-    Style="{StaticResource days}" />
-        <Button Text = "24" Grid.Row="4" Grid.Column="2"
-    Style="{StaticResource days}" />
-        <Button Text = "25" Grid.Row="4" Grid.Column="3"
-    Style="{StaticResource days}" />
-        <Button Text = "26" Grid.Row="4" Grid.Column="4"
-    Style="{StaticResource days}" />
-        <Button Text = "27" Grid.Row="4" Grid.Column="5"
-    Style="{StaticResource days}" />
-        <Button Text = "28" Grid.Row="4" Grid.Column="6"
-      Style="{StaticResource days}" />
-        <Button Text = "29" Grid.Row="5" Grid.Column="0"
-    Style="{StaticResource days}" />
-        <Button Text = "30" Grid.Row="5" Grid.Column="1"
-    Style="{StaticResource days}" />
-        <Button Text = "31" Grid.Row="5" Grid.Column="2"
-    Style="{StaticResource days}" />
+
+        <!-- Week1 -->
+        <Frame Grid.Row="1" Grid.Column="0" Style="{StaticResource calcell}">
+          <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+            <Label Text="1"/>
+          </StackLayout>
+        </Frame>
+        <Frame Grid.Row="1" Grid.Column="1" Style="{StaticResource calcell}">
+          <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+            <Label Text="2"/>
+          </StackLayout>
+        </Frame>
+        <Frame Grid.Row="1" Grid.Column="2" Style="{StaticResource calcell}">
+          <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+            <Label Text="3"/>
+          </StackLayout>
+        </Frame>
+        <Frame Grid.Row="1" Grid.Column="3" Style="{StaticResource calcell}">
+          <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+            <Label Text="4"/>
+          </StackLayout>
+        </Frame>
+        <Frame Grid.Row="1" Grid.Column="4" Style="{StaticResource calcell}">
+          <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+            <Label Text="5"/>
+          </StackLayout>
+        </Frame>
+        <Frame Grid.Row="1" Grid.Column="5" Style="{StaticResource calcell}">
+          <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+            <Label Text="6"/>
+          </StackLayout>
+        </Frame>
+        <Frame Grid.Row="1" Grid.Column="6" Style="{StaticResource calcell}">
+          <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+            <Label Text="7"/>
+          </StackLayout>
+        </Frame>
+        <!-- Week1 -->
+        <StackLayout Grid.Row="2" Grid.Column="0">
+          <Label Text="8"/>
+          <Label Text="test"/>
+        </StackLayout>
+        <StackLayout Grid.Row="2" Grid.Column="1">
+          <Label Text="9"/>
+        </StackLayout>
+        <StackLayout Grid.Row="2" Grid.Column="2">
+          <Label Text="10"/>
+        </StackLayout>
+        <StackLayout Grid.Row="2" Grid.Column="3">
+          <Label Text="11"/>
+        </StackLayout>
+        <StackLayout Grid.Row="2" Grid.Column="4">
+          <Label Text="12"/>
+        </StackLayout>
+        <StackLayout Grid.Row="2" Grid.Column="5">
+          <Label Text="13"/>
+        </StackLayout>
+        <StackLayout Grid.Row="2" Grid.Column="6">
+          <Label Text="14"/>
+        </StackLayout>
+
+        <!-- Week1 -->
+        <StackLayout Grid.Row="3" Grid.Column="0">
+          <Label Text="15"/>
+          <Label Text="test"/>
+        </StackLayout>
+        <StackLayout Grid.Row="3" Grid.Column="1">
+          <Label Text="16"/>
+        </StackLayout>
+        <StackLayout Grid.Row="3" Grid.Column="2">
+          <Label Text="17"/>
+        </StackLayout>
+        <StackLayout Grid.Row="3" Grid.Column="3">
+          <Label Text="18"/>
+        </StackLayout>
+        <StackLayout Grid.Row="3" Grid.Column="4">
+          <Label Text="19"/>
+        </StackLayout>
+        <StackLayout Grid.Row="3" Grid.Column="5">
+          <Label Text="20"/>
+        </StackLayout>
+        <StackLayout Grid.Row="3" Grid.Column="6">
+          <Label Text="21"/>
+        </StackLayout>
+
+        <!-- Week1 -->
+        <StackLayout Grid.Row="4" Grid.Column="0">
+          <Label Text="22"/>
+          <Label Text="test"/>
+        </StackLayout>
+        <StackLayout Grid.Row="4" Grid.Column="1">
+          <Label Text="23"/>
+        </StackLayout>
+        <StackLayout Grid.Row="4" Grid.Column="2">
+          <Label Text="24"/>
+        </StackLayout>
+        <StackLayout Grid.Row="4" Grid.Column="3">
+          <Label Text="25"/>
+        </StackLayout>
+        <StackLayout Grid.Row="4" Grid.Column="4">
+          <Label Text="26"/>
+        </StackLayout>
+        <StackLayout Grid.Row="4" Grid.Column="5">
+          <Label Text="27"/>
+        </StackLayout>
+        <StackLayout Grid.Row="4" Grid.Column="6">
+          <Label Text="28"/>
+        </StackLayout>
+
+        <!-- Week1 -->
+        <StackLayout Grid.Row="5" Grid.Column="0">
+          <Label Text="29"/>
+          <Label Text="test"/>
+        </StackLayout>
+        <StackLayout Grid.Row="5" Grid.Column="1">
+          <Label Text="30"/>
+        </StackLayout>
+        <StackLayout Grid.Row="5" Grid.Column="2">
+          <Label Text="31"/>
+        </StackLayout>
+        <StackLayout Grid.Row="5" Grid.Column="3">
+          <Label Text="32"/>
+        </StackLayout>
+        <StackLayout Grid.Row="5" Grid.Column="4">
+          <Label Text="33"/>
+        </StackLayout>
+        <StackLayout Grid.Row="5" Grid.Column="5">
+          <Label Text="34"/>
+        </StackLayout>
+        <StackLayout Grid.Row="5" Grid.Column="6">
+          <Label Text="35"/>
+        </StackLayout>
       </Grid>
     </StackLayout>
   </ContentPage.Content>
