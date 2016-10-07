@@ -1,5 +1,8 @@
 ﻿using System;
-namespace skolerute
+using System.Collections.Generic;
+using System.Linq;
+
+namespace skolerute.data
 {
 	public class Calendar
 	{
@@ -97,5 +100,32 @@ namespace skolerute
 				}
 			}
 		}
+
+        public static bool[] GetFreeDays(School school, int month)
+        {
+            List<CalendarDay> daysInSelectedMonth = FindCurrentMonth(school, month);
+            bool[] freeDays = new bool[daysInSelectedMonth.Count];
+
+            for(int i = 0; i < daysInSelectedMonth.Count; i++)
+            {
+                freeDays[i] = daysInSelectedMonth.ElementAt<CalendarDay>(i).isFreeDay;
+            }
+            return freeDays;
+        }
+
+        private static List<CalendarDay> FindCurrentMonth(School school, int month)
+        {
+            List<CalendarDay> allDays = school.calendar;
+            List<CalendarDay> selectedDays = new List<CalendarDay>();
+
+            foreach (CalendarDay day in allDays)
+            {
+                if(day.date.Month == month)
+                {
+                    selectedDays.Add(day);
+                }
+            }
+            return selectedDays;   
+        }
 	}
 }

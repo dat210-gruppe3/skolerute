@@ -88,17 +88,15 @@ namespace skolerute.Views
             var progressBar = this.FindByName<ProgressBar>("progressBar");
             progressBar.IsVisible = true;
 
-            await progressBar.ProgressTo(0.3, 100, Easing.Linear);
-
-
             if (! await db.DatabaseManagerAsync.TableExists<School>(database.connection) || ! await db.DatabaseManagerAsync.TableExists<CalendarDay>(database.connection))
             {
+                await progressBar.ProgressTo(0.3, 100, Easing.Linear);
                 database.CreateNewDatabase();
                 skolerute.db.CSVParser parser = new db.CSVParser(url, database);
                 await parser.StringParser();
+                await progressBar.ProgressTo(0.7, 250, Easing.Linear);
             }
 
-            await progressBar.ProgressTo(0.7, 250, Easing.Linear);
             List<School> debugskoler = new List<School>();
 
             try

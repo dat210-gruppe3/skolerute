@@ -55,7 +55,7 @@ namespace skolerute.db
 		public void InsertToCalAndSch(string[] cols, List<data.School> schoolList)
 		{
 			data.CalendarDay calTemp = new data.CalendarDay(
-						Convert.ToDateTime(cols[0]), WordsToBool(cols[2]), WordsToBool(cols[3]), WordsToBool(cols[4]), cols[5]);
+						Convert.ToDateTime(cols[0]), !WordsToBool(cols[2]), WordsToBool(cols[3]), WordsToBool(cols[4]), cols[5]);
 
 			schoolList[schoolList.Count - 1].calendar.Add(calTemp);
 		}
