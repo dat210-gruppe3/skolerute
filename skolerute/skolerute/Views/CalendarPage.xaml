@@ -14,6 +14,20 @@
         <Setter Property="FontSize" Value="20" />
       </Style>
       <Style x:Key="calcell" TargetType="Frame">
+				<!--<Setter Property="HasShadow" Value="false"></Setter>-->
+				<!--<Setter Property="OutlineColor" Value="Black"></Setter>-->
+				<Setter Property="Margin" Value="0"></Setter>
+				<Setter Property="Padding" Value="0"></Setter>
+				<Setter Property="VerticalOptions" Value="Center"></Setter>
+				<Setter Property="HorizontalOptions" Value="Center"></Setter>
+      </Style>
+      <Style x:Key="calcell2" TargetType="StackLayout">
+				<!--<Setter Property="HasShadow" Value="false"></Setter>-->
+				<!--<Setter Property="OutlineColor" Value="Black"></Setter>-->
+				<Setter Property="Margin" Value="0"></Setter>
+				<Setter Property="Padding" Value="0"></Setter>
+				<Setter Property="VerticalOptions" Value="Center"></Setter>
+				<Setter Property="HorizontalOptions" Value="Center"></Setter>
       </Style>
       
     </ResourceDictionary>
@@ -22,10 +36,10 @@
     <StackLayout Padding="0" Spacing="0">
       <local:BindablePicker x:Name="SchoolPicker"/>
 
-      <Label Text="Mars" FontSize="Large" HorizontalOptions="Center" VerticalTextAlignment="End" VerticalOptions="FillAndExpand"/>
-      <Grid Margin="0" Padding="0" RowSpacing="0" ColumnSpacing="0" HorizontalOptions="CenterAndExpand" VerticalOptions="FillAndExpand">
+      <Label x:Name="monthName" Font="5" Text="Mars" FontSize="Large" HorizontalOptions="Center" VerticalTextAlignment="End" VerticalOptions="FillAndExpand"/>
+      <Grid x:Name="calendar" Margin="0" Padding="0" RowSpacing="0" ColumnSpacing="0" HorizontalOptions="CenterAndExpand" VerticalOptions="FillAndExpand">
         <Grid.RowDefinitions>
-          <RowDefinition Height="35" />
+          <RowDefinition Height="*" />
           <RowDefinition Height="*" />
           <RowDefinition Height="*" />
           <RowDefinition Height="*" />
@@ -33,55 +47,43 @@
           <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="35" />
-          <ColumnDefinition Width="35" />
-          <ColumnDefinition Width="35" />
-          <ColumnDefinition Width="35" />
-          <ColumnDefinition Width="35" />
-          <ColumnDefinition Width="35" />
-          <ColumnDefinition Width="35" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <!-- Week1 -->
-        <Frame Grid.Row="1" Grid.Column="0" Style="{StaticResource calcell}">
-          <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
-            <Label Text="1"/>
-          </StackLayout>
-        </Frame>
-        <Frame Grid.Row="1" Grid.Column="1" Style="{StaticResource calcell}">
-          <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
-            <Label Text="2"/>
-          </StackLayout>
-        </Frame>
-        <Frame Grid.Row="1" Grid.Column="2" Style="{StaticResource calcell}">
-          <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
-            <Label Text="3"/>
-          </StackLayout>
-        </Frame>
-        <Frame Grid.Row="1" Grid.Column="3" Style="{StaticResource calcell}">
-          <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
-            <Label Text="4"/>
-          </StackLayout>
-        </Frame>
-        <Frame Grid.Row="1" Grid.Column="4" Style="{StaticResource calcell}">
-          <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
-            <Label Text="5"/>
-          </StackLayout>
-        </Frame>
-        <Frame Grid.Row="1" Grid.Column="5" Style="{StaticResource calcell}">
-          <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
-            <Label Text="6"/>
-          </StackLayout>
-        </Frame>
-        <Frame Grid.Row="1" Grid.Column="6" Style="{StaticResource calcell}">
-          <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
-            <Label Text="7"/>
-          </StackLayout>
-        </Frame>
+		<StackLayout Grid.Row="1" Grid.Column="0">
+          <Label Text="1"/>
+
+        </StackLayout>
+        <StackLayout Grid.Row="1" Grid.Column="1">
+          <Label Text="2"/>
+        </StackLayout>
+        <StackLayout Grid.Row="1" Grid.Column="2">
+          <Label Text="3"/>
+        </StackLayout>
+        <StackLayout Grid.Row="1" Grid.Column="3">
+          <Label Text="4"/>
+        </StackLayout>
+        <StackLayout Grid.Row="1" Grid.Column="4">
+          <Label Text="5"/>
+        </StackLayout>
+        <StackLayout Grid.Row="1" Grid.Column="5">
+          <Label Text="6"/>
+        </StackLayout>
+        <StackLayout Grid.Row="1" Grid.Column="6">
+          <Label Text="7"/>
+        </StackLayout>
+				
         <!-- Week1 -->
         <StackLayout Grid.Row="2" Grid.Column="0">
           <Label Text="8"/>
-          <Label Text="test"/>
+
         </StackLayout>
         <StackLayout Grid.Row="2" Grid.Column="1">
           <Label Text="9"/>
@@ -105,7 +107,7 @@
         <!-- Week1 -->
         <StackLayout Grid.Row="3" Grid.Column="0">
           <Label Text="15"/>
-          <Label Text="test"/>
+
         </StackLayout>
         <StackLayout Grid.Row="3" Grid.Column="1">
           <Label Text="16"/>
@@ -129,7 +131,7 @@
         <!-- Week1 -->
         <StackLayout Grid.Row="4" Grid.Column="0">
           <Label Text="22"/>
-          <Label Text="test"/>
+
         </StackLayout>
         <StackLayout Grid.Row="4" Grid.Column="1">
           <Label Text="23"/>
@@ -153,7 +155,7 @@
         <!-- Week1 -->
         <StackLayout Grid.Row="5" Grid.Column="0">
           <Label Text="29"/>
-          <Label Text="test"/>
+
         </StackLayout>
         <StackLayout Grid.Row="5" Grid.Column="1">
           <Label Text="30"/>

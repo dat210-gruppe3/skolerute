@@ -42,8 +42,9 @@ namespace skolerute.data
 		/// </summary>
 		/// <param name="year">Year.</param>
 		/// <param name="month">Month.</param>
-		public static void displayCal(int year, int month)
+		public static List<int> displayCal(int year, int month)
 		{
+			List<int> calendarArr = new List<int>();
 
 			//insert heading (week days)
 			string[] days = { "M", "T", "O", "T", "F", "L", "S" };
@@ -71,6 +72,7 @@ namespace skolerute.data
 			{
 				//TODO: render calendar-day-object with value "i"
 				//Console.Write(i + "\t");
+				calendarArr.Add(i);
 			}
 
 
@@ -80,6 +82,7 @@ namespace skolerute.data
 			{
 				//TODO: render calendar-day-object with value "i"
 				//Console.Write(i + "\t");
+				calendarArr.Add(i);
 				dt = new DateTime(year, month, i);
 				if (dayOfWeek(dt) == 6)
 				{
@@ -97,8 +100,10 @@ namespace skolerute.data
 				{
 					//TODO: render calendar-day-object with value "i"
 					//Console.Write(i + "\t");
+					calendarArr.Add(i);
 				}
 			}
+			return calendarArr;
 		}
 
         public static bool[] GetFreeDays(School school, int month)
