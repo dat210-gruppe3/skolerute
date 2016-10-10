@@ -10,16 +10,9 @@
 	<StackLayout Spacing="10">
 		
     <ProgressBar x:Name="progressBar" Progress="0" />
-    <Label Text="Legg til skole" VerticalOptions="Center" HorizontalOptions="Center" FontSize="Large" />
-
-    <!--<SearchBar x:Name="searchbar" Placeholder="Søk" Text="{Binding Path=SearchText}"/>
-    <Label BindingContext="{x:Reference searchbar}" Text="{Binding Text,StringFormat='Du valgte {0}'}" VerticalOptions="Center" HorizontalOptions="Center" />-->
-
-	<!--DANIEL TESTER MED EN NY SØKEBAR-->
-    <SearchBar x:Name="searchSchool" Placeholder="Søk etter skoler" Text="{Binding SearchText}" SearchCommand="{Binding SearchCommand}"/>
-
-		
-	<ListView x:Name="skoler" ItemSelected="OnSelection">
+        <Label Text="Legg til skole" VerticalOptions="Center" HorizontalOptions="Center" FontSize="Large" />
+        <SearchBar x:Name="searchSchool" Placeholder="Søk etter skoler" Text="{Binding SearchText}" SearchCommand="{Binding SearchCommand}"/>
+        <ListView x:Name="skoler" ItemSelected="OnSelection">
 		<ListView.ItemTemplate>
 			<DataTemplate>
 				<TextCell Text="{Binding name}" />

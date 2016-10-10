@@ -19,30 +19,13 @@ namespace skolerute.Views
             //http://blog.alectucker.com/post/2015/08/10/xamarinforms-searchbar-with-mvvm.aspx
 			
 			InitializeComponent();
+        }
 
-            searchSchool.SearchButtonPressed += (s, e) =>
-            {
-                List<School> newSchList = new List<School>();
-                var sValue = searchSchool.Text.Trim();
-                if (sValue == "")
-                {
-                    skoler.ItemsSource = debugskoler;
-                }
-                else
-                {
-                    for (int i = 0; i < debugskoler.Count; i++)
-                    {
-                        if (debugskoler[i].name.Contains(sValue))
-                        {
-                            newSchList.Add(debugskoler[i]);
-                        }
-                    }
-                    skoler.ItemsSource = newSchList;
-                }
-            };
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            debugskoler = await GetListContent();
 
-
-            //Prøver en liten 'autocomplete' basert på samme konsept
             searchSchool.TextChanged += (s, e) =>
             {
                 List<data.School> newSchList = new List<data.School>();
@@ -55,28 +38,16 @@ namespace skolerute.Views
                 {
                     for (int i = 0; i < debugskoler.Count; i++)
                     {
-                        if (debugskoler[i].name.Contains(sValue))
+                        if (debugskoler[i].name.Contains(sValue) || debugskoler[i].name.ToLower().Contains(sValue))
                         {
                             newSchList.Add(debugskoler[i]);
-                            skoler.ItemsSource = newSchList;
                         }
                     }
-
+                    skoler.ItemsSource = newSchList;
                 }
+
             };
 
-
-        }
-
-        public void ac(object o, TextChangedEventArgs a)
-        {
-
-        }
-
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
-            await GetListContent();
         }
 
         private async Task<List<School>> GetListContent()
