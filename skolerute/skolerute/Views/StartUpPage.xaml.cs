@@ -1,4 +1,4 @@
-﻿using skolerute.data;
+using skolerute.data;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -101,6 +101,7 @@ namespace skolerute.Views
 
             try
             {
+                
                 debugskoler = await database.GetSchools();
                 await progressBar.ProgressTo(1, 250, Easing.Linear);
                 skoler.ItemsSource = debugskoler;
