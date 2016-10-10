@@ -33,9 +33,10 @@ namespace skolerute.Views
             base.OnAppearing();
             School school;
             DatabaseManagerAsync db = new DatabaseManagerAsync();
-            school = await db.GetSchool(1);
+			List<School> schools = await db.GetSchools();
+			school = schools[0];
 
-            var currentMonth = 3;
+            var currentMonth = 2;
 
             bool inPreviousMonth = true;
             bool inCurrentMonth = false;
@@ -43,9 +44,11 @@ namespace skolerute.Views
 
             var cal = calendar;
             var calChildren = cal.Children;
-            List<int> consecutiveDays = data.Calendar.displayCal(2016, currentMonth);
+            List<int> consecutiveDays = data.Calendar.displayCal(2017, currentMonth);
             IEnumerator enumerator = calChildren.GetEnumerator();
             int i = 0;
+			int j = 0;
+			bool[] freeDays = Calendar.DayIsFree(school, currentMonth, 2017);
             while (enumerator.MoveNext())
             {
                 try
@@ -54,42 +57,66 @@ namespace skolerute.Views
                     Label label = sl.Children.First() as Label;
                     BoxView box = sl.Children.ElementAt(1) as BoxView;
                     label.Text = consecutiveDays.ElementAt(i).ToString();
-                    if (inPreviousMonth)
-                    {
-                        if (consecutiveDays.ElementAt(i) == 1)
-                        {
-                            inPreviousMonth = false;
-                            inCurrentMonth = true;
-                        }
-                        else
-                        {
-                            box.IsVisible = Calendar.DayIsFree(school, currentMonth - 1, consecutiveDays.ElementAt(i));
-                        }
-                    }
-                    else if (inCurrentMonth)
-                    {
-                        if (DateTime.DaysInMonth(2016, currentMonth) == consecutiveDays.ElementAt(i))
-                        {
-                            inCurrentMonth = false;
-                            inNextMonth = true;
-                        }
-                        else
-                        {
-                            box.IsVisible = Calendar.DayIsFree(school, currentMonth, consecutiveDays.ElementAt(i));
-                        }
-                    }
-                    else if (inNextMonth)
-                    {
-                        inNextMonth = false;
+					//if (inPreviousMonth)
+					//{
+					//    if (consecutiveDays.ElementAt(i) == 1)
+					//    {
+					//        inPreviousMonth = false;
+					//        inCurrentMonth = true;
+					//    }
+					//    else
+					//    {
+					//        box.IsVisible = Calendar.DayIsFree(school, currentMonth - 1, consecutiveDays.ElementAt(i));
+					//    }
+					//}
+					//else if (inCurrentMonth)
+					//{
+					//    if (DateTime.DaysInMonth(2017, currentMonth) == consecutiveDays.ElementAt(i))
+					//    {
+					//        inCurrentMonth = false;
+					//        inNextMonth = true;
+					//    }
+					//    else
+					//    {
+					//        box.IsVisible = Calendar.DayIsFree(school, currentMonth, consecutiveDays.ElementAt(i));
+					//    }
+					//}
+					//else if (inNextMonth)
+					//{
+					//    inNextMonth = false;
 
-                        box.IsVisible = Calendar.DayIsFree(school, currentMonth + 1, consecutiveDays.ElementAt(i));
-                    }
+					//    box.IsVisible = Calendar.DayIsFree(school, currentMonth + 1, consecutiveDays.ElementAt(i));
+					//}
+
+					if (consecutiveDays[i] == 1 && inPreviousMonth) 
+					{
+						if (i > 9)
+						{
+							inCurrentMonth = false;
+							inNextMonth = true;
+						}
+						else 
+						{ 
+							inCurrentMonth = true;
+							inPreviousMonth = false;
+						}
+
+					}
+
+					if (consecutiveDays[i] >= 1 && inCurrentMonth)
+					{
+
+						box.IsVisible = freeDays[j];
+
+						j++;
+					}
+
 
                     i++;
                 }
                 catch (Exception e)
                 {
-                    monthName.Text = e.StackTrace;
+					monthName.Text = string.Empty; //Replace with e.stacktrace
                 }
             }
         }

@@ -106,54 +106,64 @@ namespace skolerute.data
 			return calendarArr;
 		}
 
-        /// <summary>
-        /// Returns whether or not there is a free day on the given day of the month.
-        /// </summary>
-        /// <param name="school"></param>
-        /// <param name="month"></param>
-        /// <param name="dayOfMonth"></param>
-        public static bool DayIsFree(School school, int month, int dayOfMonth)
-        {
-            if(dayOfMonth <= 0)
-            {
-                throw new ArgumentOutOfRangeException("Please use the number corresponding to the date, it starts at 0");
-            }
+		/// <summary>
+		/// Returns whether or not there is a free day on the given day of the month.
+		/// </summary>
+		/// <param name="school"></param>
+		/// <param name="month"></param>
+		/// <param name="dayOfMonth"></param>
+		//public static bool DayIsFree(School school, int month, int dayOfMonth)
+		//{
+		//    if(dayOfMonth <= 0)
+		//    {
+		//        throw new ArgumentOutOfRangeException("Please use the number corresponding to the date, it starts at 0");
+		//    }
 
-            bool[] freeDays = GetFreeDays(school, month);
+		//    bool[] freeDays = GetFreeDays(school, month);
 
-            if(dayOfMonth > freeDays.Length)
-            {
-                throw new ArgumentOutOfRangeException("Day of month exceeded the number of days in this month");
-            }
+		//    return freeDays[dayOfMonth - 1];
+		//}
 
-            return freeDays[dayOfMonth - 1];
-        }
+		//public static bool[] GetFreeDays(School school, int month)
+		//{
+		//    List<CalendarDay> daysInSelectedMonth = FindCurrentMonth(school, month);
+		//    bool[] freeDays = new bool[daysInSelectedMonth.Count];
 
-        public static bool[] GetFreeDays(School school, int month)
-        {
-            List<CalendarDay> daysInSelectedMonth = FindCurrentMonth(school, month);
-            bool[] freeDays = new bool[daysInSelectedMonth.Count];
+		//    for(int i = 0; i < daysInSelectedMonth.Count; i++)
+		//    {
+		//        freeDays[i] = daysInSelectedMonth.ElementAt<CalendarDay>(i).isFreeDay;
+		//    }
+		//    return freeDays;
+		//}
 
-            for(int i = 0; i < daysInSelectedMonth.Count; i++)
-            {
-                freeDays[i] = daysInSelectedMonth.ElementAt<CalendarDay>(i).isFreeDay;
-            }
-            return freeDays;
-        }
+		private static List<CalendarDay> FindCurrentMonth(School school, int month)
+		{
+		    List<CalendarDay> allDays = school.calendar;
+		    List<CalendarDay> selectedDays = new List<CalendarDay>();
 
-        private static List<CalendarDay> FindCurrentMonth(School school, int month)
-        {
-            List<CalendarDay> allDays = school.calendar;
-            List<CalendarDay> selectedDays = new List<CalendarDay>();
+		    foreach (CalendarDay day in allDays)
+		    {
+		        if(day.date.Month == month)
+		        {
+		            selectedDays.Add(day);
+		        }
+		    }
+		    return selectedDays;   
+		}
 
-            foreach (CalendarDay day in allDays)
-            {
-                if(day.date.Month == month)
-                {
-                    selectedDays.Add(day);
-                }
-            }
-            return selectedDays;   
-        }
+		public static bool[] DayIsFree(School school, int month, int year) 
+		{
+			bool[] freeDays = new bool[DateTime.DaysInMonth(year, month)];
+
+			for (int i = 0; i < DateTime.DaysInMonth(year, month); i++) 
+			{
+				if (i + 1 == DateTime.DaysInMonth(year, month))
+					break;
+				freeDays[i + 1] = FindCurrentMonth(school, month)[i].isFreeDay;
+
+			}
+
+			return freeDays;
+		}
 	}
 }

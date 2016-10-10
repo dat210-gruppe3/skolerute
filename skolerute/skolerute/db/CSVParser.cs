@@ -87,11 +87,20 @@ namespace skolerute.db
 					cols = Splitter(rows[j]);
 				}
 
+				//if (j % 3 == 0)
+				//{
+				//	string hei = "";
+				//}
+
 				await database.InsertSingle(schoolObjs[schoolObjs.Count - 1]);
 			}
-            	//await database.InsertList(schoolObjs);
-            	//await database.InsertSingle(schoolObjs[schoolObjs.Count - 1]);
-			}
+			//await database.InsertList(schoolObjs);
+			//await database.InsertSingle(schoolObjs[schoolObjs.Count - 1]);
+
+			List<data.School> schoolsList = await database.GetSchools();
+			GC.KeepAlive(schoolsList);
+			string test = "hei";
+			schoolsList[23] = null;
 
 			//TODO: error handling
 		}
