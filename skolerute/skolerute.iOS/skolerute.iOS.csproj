@@ -142,6 +142,10 @@
       <HintPath>..\..\packages\SQLiteNetExtensions.1.3.0\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\SQLiteNetExtensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SQLiteNetExtensionsAsync, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SQLiteNetExtensions.Async.1.3.0\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\SQLiteNetExtensionsAsync.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SQLitePCL.batteries, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SQLitePCL.bundle_green.0.9.3\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCL.batteries.dll</HintPath>
       <Private>True</Private>

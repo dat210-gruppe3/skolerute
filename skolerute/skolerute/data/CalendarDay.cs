@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +22,9 @@ namespace skolerute.data
 
         [ForeignKey(typeof(School))]
         public int schoolID { get; set; }
+
+        [ManyToOne(CascadeOperations = CascadeOperation.All)]
+        public School school { get; set; }
 
 		public CalendarDay(DateTime date, bool isFreeDay, bool isNotWorkDay, bool isSFODay, string comment)
 		{

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,8 +15,9 @@ namespace skolerute.db
         Task<List<CalendarDay>> GetCalendarDays();
         Task<School> GetSchool(int id);
         Task<CalendarDay> GetCalendarDay(int id);
-        Task<int> InsertSingle(object obj);
-        Task<int> InsertList<T>(List<T> objList);
+        Task InsertSingle(object obj);
+        Task InsertList<T>(List<T> objList);
+        Task InsertSchools(List<School> schools);
         Task<int> DeleteSchool(int id);
         Task<int> DeleteCalendarDay(int id);
     }

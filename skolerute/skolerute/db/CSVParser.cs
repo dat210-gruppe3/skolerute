@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
@@ -86,9 +86,13 @@ namespace skolerute.db
 					if (j >= rows.Length) break;
 					cols = Splitter(rows[j]);
 				}
+
 				await database.InsertSingle(schoolObjs[schoolObjs.Count - 1]);
 			}
-            //await database.InsertList(schoolObjs);
+            	//await database.InsertList(schoolObjs);
+            	//await database.InsertSingle(schoolObjs[schoolObjs.Count - 1]);
+			}
+
 			//TODO: error handling
 		}
 
