@@ -15,9 +15,14 @@ namespace skolerute.Views
         {
             InitializeComponent();
 
-            // Placeholder liste over favoritt-skoler
-            List<string> favorites = new List<string> { "skole1", "skole2", "skole3" };
-            SchoolPicker.ItemsSource = favorites;
+			// Placeholder liste over favoritt-skoler
+			List<int> favorites = new List<int>();
+			MessagingCenter.Subscribe<StartUpPage, int>(this, "choosenSch", (sender, args) =>
+			{
+				favorites.Add(args);
+				//SchoolPicker.Items.Add(args.ToString());
+
+			});
 
             var cal = calendar;
 			var calChildren = cal.Children;
@@ -38,6 +43,8 @@ namespace skolerute.Views
 					monthName.Text = e.StackTrace;
 				}
 			}
+
+
         }
     }
 }

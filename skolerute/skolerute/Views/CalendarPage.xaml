@@ -34,7 +34,7 @@
   </ContentPage.Resources>
   <ContentPage.Content>
     <StackLayout Padding="0" Spacing="0">
-      <local:BindablePicker x:Name="SchoolPicker"/>
+      <!--<local:BindablePicker x:Name="SchoolPicker"/>-->
 
       <Label x:Name="monthName" Font="5" Text="Mars" FontSize="Large" HorizontalOptions="Center" VerticalTextAlignment="End" VerticalOptions="FillAndExpand"/>
       <Grid x:Name="calendar" Margin="0" Padding="0" RowSpacing="0" ColumnSpacing="0" HorizontalOptions="CenterAndExpand" VerticalOptions="FillAndExpand">
