@@ -104,4 +104,3 @@ namespace skolerute.iOS.db
         
     }
 }
-
