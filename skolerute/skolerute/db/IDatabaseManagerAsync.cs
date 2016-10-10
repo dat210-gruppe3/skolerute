@@ -22,3 +22,4 @@ namespace skolerute.db
         Task<int> DeleteCalendarDay(int id);
     }
 }
+
