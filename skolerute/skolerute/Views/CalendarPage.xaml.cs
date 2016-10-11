@@ -44,7 +44,7 @@ namespace skolerute.Views
 
             var cal = calendar;
             var calChildren = cal.Children;
-            List<int> consecutiveDays = data.Calendar.displayCal(2017, currentMonth);
+            List<int> consecutiveDays = data.Calendar.GetCal(2017, currentMonth);
             IEnumerator enumerator = calChildren.GetEnumerator();
             int i = 0;
 			int j = 0;
@@ -106,7 +106,7 @@ namespace skolerute.Views
 					if (consecutiveDays[i] >= 1 && inCurrentMonth)
 					{
 
-						box.IsVisible = freeDays[j];
+						//box.IsVisible = freeDays[j + 1];
 
 						j++;
 					}
