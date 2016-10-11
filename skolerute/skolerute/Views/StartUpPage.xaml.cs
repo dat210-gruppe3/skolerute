@@ -16,8 +16,6 @@ namespace skolerute.Views
 
         public StartUpPage()
         {
-            //http://blog.alectucker.com/post/2015/08/10/xamarinforms-searchbar-with-mvvm.aspx
-			
 			InitializeComponent();
         }
 
@@ -27,7 +25,6 @@ namespace skolerute.Views
             debugskoler = await GetListContent();
             dineskoler.ItemsSource = new List<School>() { new School { name = "favoritt1" }, new School { name = "favoritt2" } };
         }
-
         
         private void TextChanged(Object o, EventArgs e)
         {
@@ -99,23 +96,23 @@ namespace skolerute.Views
             {
                 return; //ItemSelected is called on deselection, which results in SelectedItem being set to null
             }
-
             School skole = (School)e.SelectedItem;
             string skolenavn = skole.name;
+			int skoleId = skole.ID;
 
-            var action = await DisplayActionSheet("Du valgte:","Legg til","Avbryt", skolenavn);
+			var action = await DisplayActionSheet("Du valgte: " + skolenavn,"Legg til","Avbryt");
 
             // Henter ut navnet på action (Legg til/Avbryt)
             string actionNavn = action.ToString();
-            
-            // Tenker her å kjøre en metode som sjekker actionNavn og hvis "Legg til" går inn i databasen
-            // og setter True på den valgte skolens IsFavorite-atributt i databasen.
-        }
 
-        public void ShowDayOff(Object o, EventArgs e)
-        {
-            //Label l = (Label)e.SelectedItem;
-            //l.IsVisible = true;
+			// Tenker her å kjøre en metode som sjekker actionNavn og hvis "Legg til" går inn i databasen
+			// og setter True på den valgte skolens IsFavorite-atributt i databasen.
+
+			if (actionNavn == "Legg til")
+			{
+				MessagingCenter.Send<StartUpPage, int>(this, "choosenSch", skoleId);
+			}
+
         }
     }
 }

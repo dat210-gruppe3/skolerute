@@ -6,30 +6,30 @@ namespace skolerute.data
 {
 	public class Calendar
 	{
-		public static int dayOfWeek(DateTime dt)
+		public static int DayOfWeek(DateTime dt)
 		{
 			int dow = 100;
 			switch (dt.DayOfWeek)
 			{
-				case DayOfWeek.Monday:
+				case System.DayOfWeek.Monday:
 					dow = 0;
 					break;
-				case DayOfWeek.Tuesday:
+				case System.DayOfWeek.Tuesday:
 					dow = 1;
 					break;
-				case DayOfWeek.Wednesday:
+				case System.DayOfWeek.Wednesday:
 					dow = 2;
 					break;
-				case DayOfWeek.Thursday:
+				case System.DayOfWeek.Thursday:
 					dow = 3;
 					break;
-				case DayOfWeek.Friday:
+				case System.DayOfWeek.Friday:
 					dow = 4;
 					break;
-				case DayOfWeek.Saturday:
+				case System.DayOfWeek.Saturday:
 					dow = 5;
 					break;
-				case DayOfWeek.Sunday:
+                case System.DayOfWeek.Sunday:
 					dow = 6;
 					break;
 			}
@@ -42,118 +42,100 @@ namespace skolerute.data
 		/// </summary>
 		/// <param name="year">Year.</param>
 		/// <param name="month">Month.</param>
-		public static List<int> displayCal(int year, int month)
-		{
-			List<int> calendarArr = new List<int>();
-
-			//insert heading (week days)
-			string[] days = { "M", "T", "O", "T", "F", "L", "S" };
-			for (int i = 0; i < days.Length; i++)
-			{
-				//TODO: render "col-heading-objects" with value "i"
-				//Console.Write(days[i] + "\t");
-			}
-			//TODO: jump down a line
-			//Console.Write("\n");
-
-
-			//insert days from prior month
-			int priorMonth = month - 1;
-			int priorYear = year;
-			if (priorMonth == 0)
-			{
-				priorMonth = 12;
-				priorYear = year - 1;
-			}
-			DateTime dt = new DateTime(year, month, 1);
-			int dow = dayOfWeek(dt);
-			int daysInPriorMonth = DateTime.DaysInMonth(priorYear, priorMonth);
-			for (int i = daysInPriorMonth - (dow - 1); i <= daysInPriorMonth; i++)
-			{
-				//TODO: render calendar-day-object with value "i"
-				//Console.Write(i + "\t");
-				calendarArr.Add(i);
-			}
-
-
-			//insert days from current month
-			int daysInMonth = DateTime.DaysInMonth(year, month);
-			for (int i = 1; i <= daysInMonth; i++)
-			{
-				//TODO: render calendar-day-object with value "i"
-				//Console.Write(i + "\t");
-				calendarArr.Add(i);
-				dt = new DateTime(year, month, i);
-				if (dayOfWeek(dt) == 6)
-				{
-					//TODO: jump down a line
-					//Console.Write("\n");
-				}
-			}
-
-
-			//insert days from future month
-			int daysLeft = 6 - dayOfWeek(dt);
-			if (daysLeft > 0)
-			{
-				for (int i = 1; i <= daysLeft; i++)
-				{
-					//TODO: render calendar-day-object with value "i"
-					//Console.Write(i + "\t");
-					calendarArr.Add(i);
-				}
-			}
-			return calendarArr;
-		}
-
-        /// <summary>
-        /// Returns whether or not there is a free day on the given day of the month.
-        /// </summary>
-        /// <param name="school"></param>
-        /// <param name="month"></param>
-        /// <param name="dayOfMonth"></param>
-        public static bool DayIsFree(School school, int month, int dayOfMonth)
+		public static List<int> GetCal(int year, int month)
         {
-            if(dayOfMonth <= 0)
-            {
-                throw new ArgumentOutOfRangeException("Please use the number corresponding to the date, it starts at 0");
-            }
+            //insert days from prior month
+            List<int> allDaysToBeShown = GetPriorMonth(year, month);
 
-            bool[] freeDays = GetFreeDays(school, month);
+            //insert days from current month
+            allDaysToBeShown.AddRange(GetCurrentMonth(year, month));
 
-            if(dayOfMonth > freeDays.Length)
-            {
-                throw new ArgumentOutOfRangeException("Day of month exceeded the number of days in this month");
-            }
 
-            return freeDays[dayOfMonth - 1];
+            //insert days from future month
+            allDaysToBeShown.AddRange(GetDaysInNextMonth(35 - allDaysToBeShown.Count));
+            return allDaysToBeShown;
         }
 
-        public static bool[] GetFreeDays(School school, int month)
+        private static List<int> GetDaysInNextMonth(int daysLeftToDisplay)
         {
-            List<CalendarDay> daysInSelectedMonth = FindCurrentMonth(school, month);
-            bool[] freeDays = new bool[daysInSelectedMonth.Count];
-
-            for(int i = 0; i < daysInSelectedMonth.Count; i++)
+            List<int> calendarDaysList = new List<int>();
+            if (daysLeftToDisplay > 0)
             {
-                freeDays[i] = daysInSelectedMonth.ElementAt<CalendarDay>(i).isFreeDay;
-            }
-            return freeDays;
-        }
-
-        private static List<CalendarDay> FindCurrentMonth(School school, int month)
-        {
-            List<CalendarDay> allDays = school.calendar;
-            List<CalendarDay> selectedDays = new List<CalendarDay>();
-
-            foreach (CalendarDay day in allDays)
-            {
-                if(day.date.Month == month)
+                for (int i = 1; i <= daysLeftToDisplay; i++)
                 {
-                    selectedDays.Add(day);
+                    calendarDaysList.Add(i);
                 }
             }
-            return selectedDays;   
+
+            return calendarDaysList;
+        }
+
+        private static List<int> GetCurrentMonth(int year, int month)
+        {
+            List<int> calendarDaysList = new List<int>();
+            DateTime dt = new DateTime(year, month, 1);
+            int daysInMonth = DateTime.DaysInMonth(year, month);
+
+            for (int i = 1; i <= daysInMonth; i++)
+            {
+                calendarDaysList.Add(i);
+                dt = new DateTime(year, month, i);
+            }
+
+            return calendarDaysList;
+        }
+
+        private static List<int> GetPriorMonth(int year, int month)
+        {
+            List<int> calendarDaysList = new List<int>();
+            int priorMonth = month - 1;
+            int priorYear = year;
+
+            if (priorMonth == 0)
+            {
+                priorMonth = 12;
+                priorYear = year - 1;
+            }
+
+            DateTime dt = new DateTime(year, month, 1);
+            int dow = DayOfWeek(dt);
+            int daysInPriorMonth = DateTime.DaysInMonth(priorYear, priorMonth);
+            for (int i = daysInPriorMonth - (dow - 1); i <= daysInPriorMonth; i++)
+            {
+                calendarDaysList.Add(i);
+            }
+
+            return calendarDaysList;
+        }
+
+        public static List<bool> GetAllFreeDays(List<CalendarDay> calendarDays, int year, int month)
+        {
+            List<CalendarDay> relevantDays = GetRelevantDays(calendarDays, year, month);
+            List<bool> freeDays = GetFreeDaysInMonth(year, month - 1);
+
+            return null;
+        }
+
+        private static List<CalendarDay> GetRelevantDays(List<CalendarDay> calendarDays, int year, int month)
+        {
+            for(int i = month - 1; i <= month + 1; i++)
+            {
+                DateTime current = new DateTime(year, i, 1);
+                foreach (CalendarDay day in calendarDays)
+                {
+                    if (true)
+                    {
+
+                    }
+                }
+            }
+            return null;
+        }
+
+        private static List<bool> GetFreeDaysInMonth(int year, int month)
+        {
+            return null;
         }
 	}
 }
+

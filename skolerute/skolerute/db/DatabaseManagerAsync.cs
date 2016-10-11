@@ -51,6 +51,11 @@ namespace skolerute.db
             return await connection.Table<CalendarDay>().ToListAsync();
         }
 
+		public async Task<List<CalendarDay>> GetOnlyCalendar(int schoolID)
+		{
+			return await connection.QueryAsync<CalendarDay>("SELECT * FROM CalendarDay WHERE schoolID=?", schoolID);
+		}
+
         public async Task<School> GetSchool(int id)
         {
             return await connection.GetWithChildrenAsync<School>(id as object, true);
@@ -58,7 +63,12 @@ namespace skolerute.db
 
         public async Task<List<School>> GetSchools()
         {
-            return await connection.GetAllWithChildrenAsync<School>(null, true);
+			List<School> tmp = await connection.GetAllWithChildrenAsync<School>(null, true);
+			for (int i = 0; i < tmp.Count; i++) 
+			{
+				tmp[i].calendar = await GetOnlyCalendar(i + 1);
+			}
+			return tmp;
         }
 
         public async Task InsertList<T>(List<T> objList)
@@ -73,7 +83,8 @@ namespace skolerute.db
 
         public async Task InsertSingle(object obj)
         {
-            await connection.InsertWithChildrenAsync(obj);
+            await connection.InsertWithChildrenAsync(obj, true);
         }
     }
 }
+

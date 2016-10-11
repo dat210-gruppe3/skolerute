@@ -8,7 +8,6 @@ using skolerute.data;
 using skolerute.db;
 
 using Xamarin.Forms;
-using System.Globalization;
 
 namespace skolerute.Views
 {
@@ -18,24 +17,58 @@ namespace skolerute.Views
         public CalendarPage()
         {
             InitializeComponent();
+			// Placeholder liste over favoritt-skoler
+			List<int> favorites = new List<int>();
+			MessagingCenter.Subscribe<StartUpPage, int>(this, "choosenSch", (sender, args) =>
+			{
+				favorites.Add(args);
+				//SchoolPicker.Items.Add(args.ToString());
 
-            // Placeholder liste over favoritt-skoler
-            List<string> favorites = new List<string> { "skole1", "skole2", "skole3" };
-            SchoolPicker.ItemsSource = favorites;
+			});
+
         }
 
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-
+            
             var cal = calendar;
-            var calChildren = cal.Children;
+            Label mName = monthName;
+            Label yName = year;
             DateTime current = DateTime.Now;
+            DisplayCalendar(mName, yName, cal, current);
+            
+            Prev.Tapped += (s, e) =>
+            {
+                current = current.AddMonths(-1);
+                DisplayCalendar(mName, yName, cal, current);
+            };
+
+            Next.Tapped += (s, e) =>
+            {
+                current = current.AddMonths(1);
+                DisplayCalendar(mName, yName, cal, current);
+            };
+
+        }
+
+        private async static void DisplayCalendar(Label monthName, Label year, Grid cal, DateTime current)
+        {
             monthName.Text = MonthToString(current.Month);
             year.Text = current.Year.ToString();
-            List<int> consecutiveDays = data.Calendar.displayCal(current.Year, current.Month);
+            
+            var calChildren = cal.Children;
+            DatabaseManagerAsync db = new DatabaseManagerAsync();
+            List<School> schools = await db.GetSchools();
+            School school = schools[0];
+            bool inPreviousMonth = true;
+            bool inCurrentMonth = false;
+            bool inNextMonth = false;
+            List<int> consecutiveDays = data.Calendar.GetCal(current.Year, current.Month);
             IEnumerator enumerator = calChildren.GetEnumerator();
             int i = 0;
+            int j = 0;
+            //bool[] freeDays = Calendar.DayIsFree(school, current.Month, current.Year);
             while (enumerator.MoveNext())
             {
                 try
@@ -43,64 +76,40 @@ namespace skolerute.Views
                     StackLayout sl = enumerator.Current as StackLayout;
                     Label label = sl.Children.First() as Label;
                     label.Text = consecutiveDays.ElementAt(i).ToString();
+                    if (consecutiveDays[i] == 1 && inPreviousMonth)
+                    {
+                        if (i > 9)
+                        {
+                            inCurrentMonth = false;
+                            inNextMonth = true;
+                        }
+                        else
+                        {
+                            inCurrentMonth = true;
+                            inPreviousMonth = false;
+                        }
+
+                    }
+
+                    if (consecutiveDays[i] >= 1 && inCurrentMonth)
+                    {
+
+                        //box.IsVisible = freeDays[j + 1];
+
+                        j++;
+                    }
+
+
                     i++;
                 }
                 catch (Exception e)
                 {
-                    monthName.Text = e.StackTrace;
-                }
-            }
-
-            Prev.Tapped += (s, a) =>
-            {
-                current = current.AddMonths(-1);
-                monthName.Text = MonthToString(current.Month);
-                year.Text = current.Year.ToString();
-                consecutiveDays = data.Calendar.displayCal(current.Year, current.Month);
-                enumerator = calChildren.GetEnumerator();
-                i = 0;
-                while (enumerator.MoveNext())
-                {
-                    try
-                    {
-                        StackLayout sl = enumerator.Current as StackLayout;
-                        Label label = sl.Children.First() as Label;
-                        label.Text = consecutiveDays.ElementAt(i).ToString();
-                        i++;
-                    }
-                    catch (Exception e)
-                    {
-                        monthName.Text = e.StackTrace;
-                    }
-                }
-            };
-            
-            Next.Tapped += (s, a) =>
-            {
-                current = current.AddMonths(1);
-                monthName.Text = MonthToString(current.Month);
-                year.Text = current.Year.ToString();
-                consecutiveDays = data.Calendar.displayCal(current.Year, current.Month);
-                enumerator = calChildren.GetEnumerator();
-                i = 0;
-                while (enumerator.MoveNext())
-                {
-                    try
-                    {
-                        StackLayout sl = enumerator.Current as StackLayout;
-                        Label label = sl.Children.First() as Label;
-                        label.Text = consecutiveDays.ElementAt(i).ToString();
-                        i++;
-                    }
-                    catch (Exception e)
-                    {
-                        monthName.Text = e.StackTrace;
-                    }
+                    monthName.Text = string.Empty; //Replace with e.stacktrace
                 }
             };
         }
-       
-        public string MonthToString(int i)
+
+        public static string MonthToString(int i)
         {
             switch (i)
             {
@@ -136,3 +145,4 @@ namespace skolerute.Views
 
     }
 }
+

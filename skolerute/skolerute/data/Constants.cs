@@ -18,5 +18,6 @@ namespace skolerute
         static Color teal = Color.Teal;
         static Color maroon = Color.Maroon;
         public static List<Color> colors = new List<Color>() { yellow, blue, purple, teal, maroon };
+
     }
 }

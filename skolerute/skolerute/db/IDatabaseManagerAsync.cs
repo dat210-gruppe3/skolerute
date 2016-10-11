@@ -15,6 +15,7 @@ namespace skolerute.db
         Task<List<CalendarDay>> GetCalendarDays();
         Task<School> GetSchool(int id);
         Task<CalendarDay> GetCalendarDay(int id);
+		Task<List<CalendarDay>> GetOnlyCalendar(int schoolID);
         Task InsertSingle(object obj);
         Task InsertList<T>(List<T> objList);
         Task InsertSchools(List<School> schools);

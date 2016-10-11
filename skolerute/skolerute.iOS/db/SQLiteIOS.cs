@@ -12,7 +12,7 @@ namespace skolerute.iOS.db
 {
     class SQLiteIOS : ISQLite
     {
-        private SQLiteConnectionWithLock _conn;
+		private SQLiteConnectionWithLock _conn;
 
         public SQLiteIOS()
         {
@@ -90,17 +90,18 @@ namespace skolerute.iOS.db
             var connectionFactory = new Func<SQLiteConnectionWithLock>(
                 () =>
                 {
-                    if (_conn == null)
-                    {
-                        _conn = new SQLiteConnectionWithLock(platform,
-                            new SQLiteConnectionString(dbPath, storeDateTimeAsTicks: true));
-                    }
-                    return _conn;
-                });
+					if (_conn == null)
+					{
+						_conn = new SQLiteConnectionWithLock(platform,
+							new SQLiteConnectionString(dbPath, storeDateTimeAsTicks: true));
+					}
+					return _conn;
+				});
 
-            return new SQLiteAsyncConnection(connectionFactory);
+			return new SQLiteAsyncConnection(connectionFactory);
         }
 
         
     }
 }
+

@@ -58,6 +58,7 @@ namespace skolerute.db
 						Convert.ToDateTime(cols[0]), !WordsToBool(cols[2]), WordsToBool(cols[3]), WordsToBool(cols[4]), cols[5]);
 
 			schoolList[schoolList.Count - 1].calendar.Add(calTemp);
+			string hei = "hei";
 		}
 
 
@@ -85,9 +86,22 @@ namespace skolerute.db
 					if (j >= rows.Length) break;
 					cols = Splitter(rows[j]);
 				}
-                //await database.InsertSingle(schoolObjs[schoolObjs.Count - 1]);
+
+				//if (j % 3 == 0)
+				//{
+				//	string hei = "";
+				//}
+
+				await database.InsertSingle(schoolObjs[schoolObjs.Count - 1]);
 			}
-            await database.InsertSchools(schoolObjs);
+			//await database.InsertList(schoolObjs);
+			//await database.InsertSingle(schoolObjs[schoolObjs.Count - 1]);
+
+			List<data.School> schoolsList = await database.GetSchools();
+			GC.KeepAlive(schoolsList);
+			string test = "hei";
+			schoolsList[23] = null;
+
 			//TODO: error handling
 		}
 
