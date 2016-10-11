@@ -13,6 +13,7 @@ namespace skolerute.Views
         public SettingsPage()
         {
             InitializeComponent();
+
         }
 
         void varseltoggler(object sender, EventArgs ea)

@@ -16,67 +16,38 @@ namespace skolerute.Views
 
         public StartUpPage()
         {
-            //http://blog.alectucker.com/post/2015/08/10/xamarinforms-searchbar-with-mvvm.aspx
-			
 			InitializeComponent();
-			MessagingCenter.Send<StartUpPage, string>(this, "test", "heiiii");
-            searchSchool.SearchButtonPressed += (s, e) =>
-            {
-                List<School> newSchList = new List<School>();
-                var sValue = searchSchool.Text.Trim();
-                if (sValue == "")
-                {
-                    skoler.ItemsSource = debugskoler;
-                }
-                else
-                {
-                    for (int i = 0; i < debugskoler.Count; i++)
-                    {
-                        if (debugskoler[i].name.Contains(sValue))
-                        {
-                            newSchList.Add(debugskoler[i]);
-                        }
-                    }
-                    skoler.ItemsSource = newSchList;
-                }
-            };
-
-
-            //Prøver en liten 'autocomplete' basert på samme konsept
-            searchSchool.TextChanged += (s, e) =>
-            {
-                List<data.School> newSchList = new List<data.School>();
-                var sValue = searchSchool.Text.Trim();
-                if (sValue == "")
-                {
-                    skoler.ItemsSource = debugskoler;
-                }
-                else
-                {
-                    for (int i = 0; i < debugskoler.Count; i++)
-                    {
-                        if (debugskoler[i].name.Contains(sValue))
-                        {
-                            newSchList.Add(debugskoler[i]);
-                            skoler.ItemsSource = newSchList;
-                        }
-                    }
-
-                }
-            };
-
-
-        }
-
-        public void ac(object o, TextChangedEventArgs a)
-        {
-
         }
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await GetListContent();
+            debugskoler = await GetListContent();
+            dineskoler.ItemsSource = new List<School>() { new School { name = "favoritt1" }, new School { name = "favoritt2" } };
+        }
+        
+        private void TextChanged(Object o, EventArgs e)
+        {
+            // Called in xaml: When the searchbar text changes,
+            // check if any of the school names contains a substring equal to current searchtext, 
+            // and display them if they do, if not, display nothing, if string is empty, display all
+            List<data.School> newSchList = new List<data.School>();
+            var sValue = searchSchool.Text.Trim();
+            if (sValue == "")
+            {
+                skoler.ItemsSource = debugskoler;
+            }
+            else
+            {
+                for (int i = 0; i < debugskoler.Count; i++)
+                {
+                    if (debugskoler[i].name.Contains(sValue) || debugskoler[i].name.ToLower().Contains(sValue))
+                    {
+                        newSchList.Add(debugskoler[i]);
+                    }
+                }
+                skoler.ItemsSource = newSchList;
+            }
         }
 
         private async Task<List<School>> GetListContent()
