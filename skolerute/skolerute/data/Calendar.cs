@@ -108,33 +108,24 @@ namespace skolerute.data
             return calendarDaysList;
         }
 
-        public static List<bool> GetAllFreeDays(List<CalendarDay> calendarDays, int year, int month)
+        public static List<CalendarDay> GetRelevantFreeDays(List<CalendarDay> calendarDays, int year, int month)
         {
-            List<CalendarDay> relevantDays = GetRelevantDays(calendarDays, year, month);
-            List<bool> freeDays = GetFreeDaysInMonth(year, month - 1);
-
-            return null;
-        }
-
-        private static List<CalendarDay> GetRelevantDays(List<CalendarDay> calendarDays, int year, int month)
-        {
-            for(int i = month - 1; i <= month + 1; i++)
+            List<int> calendar = GetCal(year, month);
+            List<CalendarDay> relevantDays = new List<CalendarDay>();
+            for(int i = 0; i < calendarDays.Count; i++)
             {
-                DateTime current = new DateTime(year, i, 1);
-                foreach (CalendarDay day in calendarDays)
+                CalendarDay currentDay = calendarDays.ElementAt(i);
+                if(currentDay.date.CompareTo(new DateTime(year, month - 1, calendar.ElementAt(0))) == 0)
                 {
-                    if (true)
+                    for (int j = 0; j < calendar.Count; j++)
                     {
-
+                        relevantDays.Add(calendarDays.ElementAt(i + j));
                     }
+                    return relevantDays;
                 }
             }
-            return null;
-        }
-
-        private static List<bool> GetFreeDaysInMonth(int year, int month)
-        {
-            return null;
+            
+            return relevantDays;
         }
 	}
 }

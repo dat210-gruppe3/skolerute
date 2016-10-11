@@ -48,7 +48,6 @@ namespace skolerute.Views
             IEnumerator enumerator = calChildren.GetEnumerator();
             int i = 0;
 			int j = 0;
-			bool[] freeDays = Calendar.DayIsFree(school, currentMonth, 2017);
             while (enumerator.MoveNext())
             {
                 try
