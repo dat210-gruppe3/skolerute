@@ -1,4 +1,4 @@
-﻿using skolerute.data;
+using skolerute.data;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -25,29 +25,32 @@ namespace skolerute.Views
         {
             base.OnAppearing();
             debugskoler = await GetListContent();
+            dineskoler.ItemsSource = new List<School>() { new School { name = "favoritt1" }, new School { name = "favoritt2" } };
+        }
 
-            searchSchool.TextChanged += (s, e) =>
+        
+        private void TextChanged(Object o, EventArgs e)
+        {
+            // Called in xaml: When the searchbar text changes,
+            // check if any of the school names contains a substring equal to current searchtext, 
+            // and display them if they do, if not, display nothing, if string is empty, display all
+            List<data.School> newSchList = new List<data.School>();
+            var sValue = searchSchool.Text.Trim();
+            if (sValue == "")
             {
-                List<data.School> newSchList = new List<data.School>();
-                var sValue = searchSchool.Text.Trim();
-                if (sValue == "")
+                skoler.ItemsSource = debugskoler;
+            }
+            else
+            {
+                for (int i = 0; i < debugskoler.Count; i++)
                 {
-                    skoler.ItemsSource = debugskoler;
-                }
-                else
-                {
-                    for (int i = 0; i < debugskoler.Count; i++)
+                    if (debugskoler[i].name.Contains(sValue) || debugskoler[i].name.ToLower().Contains(sValue))
                     {
-                        if (debugskoler[i].name.Contains(sValue) || debugskoler[i].name.ToLower().Contains(sValue))
-                        {
-                            newSchList.Add(debugskoler[i]);
-                        }
+                        newSchList.Add(debugskoler[i]);
                     }
-                    skoler.ItemsSource = newSchList;
                 }
-
-            };
-
+                skoler.ItemsSource = newSchList;
+            }
         }
 
         private async Task<List<School>> GetListContent()
@@ -72,6 +75,7 @@ namespace skolerute.Views
 
             try
             {
+                
                 debugskoler = await database.GetSchools();
                 await progressBar.ProgressTo(1, 250, Easing.Linear);
                 skoler.ItemsSource = debugskoler;
@@ -106,6 +110,12 @@ namespace skolerute.Views
             
             // Tenker her å kjøre en metode som sjekker actionNavn og hvis "Legg til" går inn i databasen
             // og setter True på den valgte skolens IsFavorite-atributt i databasen.
+        }
+
+        public void ShowDayOff(Object o, EventArgs e)
+        {
+            //Label l = (Label)e.SelectedItem;
+            //l.IsVisible = true;
         }
     }
 }

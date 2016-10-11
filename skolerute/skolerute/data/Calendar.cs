@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -105,6 +105,29 @@ namespace skolerute.data
 			}
 			return calendarArr;
 		}
+
+        /// <summary>
+        /// Returns whether or not there is a free day on the given day of the month.
+        /// </summary>
+        /// <param name="school"></param>
+        /// <param name="month"></param>
+        /// <param name="dayOfMonth"></param>
+        public static bool DayIsFree(School school, int month, int dayOfMonth)
+        {
+            if(dayOfMonth <= 0)
+            {
+                throw new ArgumentOutOfRangeException("Please use the number corresponding to the date, it starts at 0");
+            }
+
+            bool[] freeDays = GetFreeDays(school, month);
+
+            if(dayOfMonth > freeDays.Length)
+            {
+                throw new ArgumentOutOfRangeException("Day of month exceeded the number of days in this month");
+            }
+
+            return freeDays[dayOfMonth - 1];
+        }
 
         public static bool[] GetFreeDays(School school, int month)
         {

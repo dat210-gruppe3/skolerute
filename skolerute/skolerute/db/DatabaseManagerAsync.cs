@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SQLite.Net.Async;
-using SQLite.Net;
+using SQLiteNetExtensionsAsync.Extensions;
 using Xamarin.Forms;
 using skolerute.data;
 
@@ -53,22 +53,27 @@ namespace skolerute.db
 
         public async Task<School> GetSchool(int id)
         {
-            return await connection.GetAsync<School>(id as object);
+            return await connection.GetWithChildrenAsync<School>(id as object, true);
         }
 
         public async Task<List<School>> GetSchools()
         {
-            return await connection.Table<School>().ToListAsync();
+            return await connection.GetAllWithChildrenAsync<School>(null, true);
         }
 
-        public async Task<int> InsertList<T>(List<T> objList)
+        public async Task InsertList<T>(List<T> objList)
         {
-            return await connection.InsertAllAsync(objList);
+            await connection.InsertAllWithChildrenAsync(objList);
         }
 
-        public async Task<int> InsertSingle(object obj)
+        public async Task InsertSchools(List<School> schools)
         {
-            return await connection.InsertAsync(obj);
+            await connection.InsertAllWithChildrenAsync(schools, true);
+        }
+
+        public async Task InsertSingle(object obj)
+        {
+            await connection.InsertWithChildrenAsync(obj);
         }
     }
 }

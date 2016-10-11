@@ -1,9 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
+using skolerute.data;
+using skolerute.db;
 
 using Xamarin.Forms;
 using System.Globalization;
@@ -20,6 +22,11 @@ namespace skolerute.Views
             // Placeholder liste over favoritt-skoler
             List<string> favorites = new List<string> { "skole1", "skole2", "skole3" };
             SchoolPicker.ItemsSource = favorites;
+        }
+
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
 
             var cal = calendar;
             var calChildren = cal.Children;
@@ -90,12 +97,7 @@ namespace skolerute.Views
                         monthName.Text = e.StackTrace;
                     }
                 }
-
             };
-
-            
-
-            
         }
        
         public string MonthToString(int i)

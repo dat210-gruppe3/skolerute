@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +17,7 @@ namespace skolerute.data
 
 		public string name { get; set; }
 
-		[OneToMany(CascadeOperations = CascadeOperation.All)]
+		[OneToMany("schoolID", CascadeOperations = CascadeOperation.All)]
 		public List<CalendarDay> calendar { get; set; }
 
 		public School(string name, List<CalendarDay> calendar)

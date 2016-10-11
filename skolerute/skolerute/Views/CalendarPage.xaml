@@ -71,122 +71,152 @@
 
         <!-- Week1 -->
 		<StackLayout Grid.Row="1" Grid.Column="0">
-          <Label Text="1"/>
-
+          <Label Text="1" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="1" Grid.Column="1">
-          <Label Text="2"/>
+          <Label Text="2" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="1" Grid.Column="2">
-          <Label Text="3"/>
+          <Label Text="3" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="1" Grid.Column="3">
-          <Label Text="4"/>
+          <Label Text="4" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="1" Grid.Column="4">
-          <Label Text="5"/>
+          <Label Text="5" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="1" Grid.Column="5">
-          <Label Text="6"/>
+          <Label Text="6" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="1" Grid.Column="6">
-          <Label Text="7"/>
+          <Label Text="7" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
 				
-        <!-- Week1 -->
+        <!-- Week2 -->
         <StackLayout Grid.Row="2" Grid.Column="0">
-          <Label Text="8"/>
-
+          <Label Text="8" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="2" Grid.Column="1">
-          <Label Text="9"/>
+          <Label Text="9" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="2" Grid.Column="2">
-          <Label Text="10"/>
+          <Label Text="10" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="2" Grid.Column="3">
-          <Label Text="11"/>
+          <Label Text="11" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="2" Grid.Column="4">
-          <Label Text="12"/>
+          <Label Text="12" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="2" Grid.Column="5">
-          <Label Text="13"/>
+          <Label Text="13" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="2" Grid.Column="6">
-          <Label Text="14"/>
+          <Label Text="14" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
 
-        <!-- Week1 -->
+        <!-- Week3 -->
         <StackLayout Grid.Row="3" Grid.Column="0">
-          <Label Text="15"/>
-
+          <Label Text="15" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="3" Grid.Column="1">
-          <Label Text="16"/>
+          <Label Text="16" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="3" Grid.Column="2">
-          <Label Text="17"/>
+          <Label Text="17" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="3" Grid.Column="3">
-          <Label Text="18"/>
+          <Label Text="18" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="3" Grid.Column="4">
-          <Label Text="19"/>
+          <Label Text="19" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="3" Grid.Column="5">
-          <Label Text="20"/>
+          <Label Text="20" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="3" Grid.Column="6">
-          <Label Text="21"/>
+          <Label Text="21" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
 
-        <!-- Week1 -->
+        <!-- Week4 -->
         <StackLayout Grid.Row="4" Grid.Column="0">
-          <Label Text="22"/>
-
+          <Label Text="22" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="4" Grid.Column="1">
-          <Label Text="23"/>
+          <Label Text="23" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="4" Grid.Column="2">
-          <Label Text="24"/>
+          <Label Text="24" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="4" Grid.Column="3">
-          <Label Text="25"/>
+          <Label Text="25" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="4" Grid.Column="4">
-          <Label Text="26"/>
+          <Label Text="26" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="4" Grid.Column="5">
-          <Label Text="27"/>
+          <Label Text="27" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="4" Grid.Column="6">
-          <Label Text="28"/>
+          <Label Text="28" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
 
-        <!-- Week1 -->
+        <!-- Week5 -->
         <StackLayout Grid.Row="5" Grid.Column="0">
-          <Label Text="29"/>
-
+          <Label Text="29" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="5" Grid.Column="1">
-          <Label Text="30"/>
+          <Label Text="30" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="5" Grid.Column="2">
-          <Label Text="31"/>
+          <Label Text="31" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="5" Grid.Column="3">
-          <Label Text="32"/>
+          <Label Text="32" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="5" Grid.Column="4">
-          <Label Text="33"/>
+          <Label Text="33" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="5" Grid.Column="5">
-          <Label Text="34"/>
+          <Label Text="34" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
         <StackLayout Grid.Row="5" Grid.Column="6">
-          <Label Text="35"/>
+          <Label Text="35" HorizontalTextAlignment="Center"/>
+          <BoxView Color="Red" WidthRequest="1" HeightRequest="1" IsVisible="false"></BoxView>
         </StackLayout>
       </Grid>
     </StackLayout>
