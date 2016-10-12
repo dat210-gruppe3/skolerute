@@ -13,11 +13,6 @@ namespace skolerute.Views
         public SettingsPage()
         {
             InitializeComponent();
-			var label = new Label { Text = "This is a label.", TextColor = Color.FromHex("#77d065"), FontSize = 20 };
-			var label2 = new Label { Text = "This is a222 222label.", TextColor = Color.FromHex("#77d065"), FontSize = 20 };
-
-			layout.Children.Add(label);
-			layout.Children.Add(label2);
 
         }
 

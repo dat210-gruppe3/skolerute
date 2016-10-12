@@ -110,23 +110,47 @@ namespace skolerute.data
 
         public static List<CalendarDay> GetRelevantFreeDays(List<CalendarDay> calendarDays, int year, int month)
         {
-            List<int> calendar = GetCal(year, month);
-            List<CalendarDay> relevantDays = new List<CalendarDay>();
+            List<int> calendar = GetCal(year, month); //All visible days
+            List<CalendarDay> relevantDays = new List<CalendarDay>(); //The relevant calendar days in regards to shown days
+
             for(int i = 0; i < calendarDays.Count; i++)
             {
                 CalendarDay currentDay = calendarDays.ElementAt(i);
-                if(currentDay.date.CompareTo(new DateTime(year, month - 1, calendar.ElementAt(0))) == 0)
+                DateTime lastMonth = DateTime.Now;
+                bool hasGottenToCorrectDay = false;
+
+                if (calendar.ElementAt(0) == 1)
                 {
-                    for (int j = 0; j < calendar.Count; j++)
-                    {
-                        relevantDays.Add(calendarDays.ElementAt(i + j));
-                    }
-                    return relevantDays;
+                    lastMonth = new DateTime(year, month, calendar.ElementAt(0));
+                }
+                else
+                {
+                    if (month <= 1)
+                        lastMonth = new DateTime(year, 1, calendar.ElementAt(0));
+                    else
+                        lastMonth = new DateTime(year, month - 1, calendar.ElementAt(0));
+                }
+
+                hasGottenToCorrectDay = currentDay.date.CompareTo(lastMonth) >= 0;
+
+                if (hasGottenToCorrectDay)
+                {
+                    //Adds the CalendarDay objects corresponding to the shown months
+                    return GetRelevantCalendarDays(calendarDays, calendar, relevantDays, i);
                 }
             }
             
             return relevantDays;
         }
-	}
+
+        private static List<CalendarDay> GetRelevantCalendarDays(List<CalendarDay> calendarDays, List<int> calendar, List<CalendarDay> relevantDays, int i)
+        {
+            for (int j = 0; j < calendar.Count; j++)
+            {
+                relevantDays.Add(calendarDays.ElementAt(i + j));
+            }
+            return relevantDays;
+        }
+    }
 }
 
