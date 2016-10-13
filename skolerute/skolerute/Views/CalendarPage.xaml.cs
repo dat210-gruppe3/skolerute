@@ -13,6 +13,9 @@ namespace skolerute.Views
 {
     public partial class CalendarPage : ContentPage
     {
+        static DatabaseManagerAsync db;
+        static List<School> schools;
+        static DateTime current;
         
         public CalendarPage()
         {
@@ -31,35 +34,35 @@ namespace skolerute.Views
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-            
+            db = new DatabaseManagerAsync();
+            schools = await db.GetSchools();
             var cal = calendar;
             Label mName = monthName;
             Label yName = year;
-            DateTime current = DateTime.Now;
-            await DisplayCalendar(mName, yName, cal, current);
+            // current = DateTime.Now;
+            current = new DateTime(2017,1,1);
+            DisplayCalendar(mName, yName, cal);
             
-            Prev.Tapped += async (s, e) =>
+            Prev.Tapped += (s, e) =>
             {
                 current = current.AddMonths(-1);
-                await DisplayCalendar(mName, yName, cal, current);
+                DisplayCalendar(mName, yName, cal);
             };
 
-            Next.Tapped += async (s, e) =>
+            Next.Tapped += (s, e) =>
             {
                 current = current.AddMonths(1);
-                await DisplayCalendar(mName, yName, cal, current);
+                DisplayCalendar(mName, yName, cal);
             };
 
         }
 
-        private async static Task DisplayCalendar(Label monthName, Label year, Grid cal, DateTime current)
+        private static void DisplayCalendar(Label monthName, Label year, Grid cal)
         {
             monthName.Text = MonthToString(current.Month);
             year.Text = current.Year.ToString();
-            
+
             var calChildren = cal.Children;
-            DatabaseManagerAsync db = new DatabaseManagerAsync();
-            List<School> schools = await db.GetSchools();
             School school = schools[0];
 
             List<int> consecutiveDays = Calendar.GetCal(current.Year, current.Month);
