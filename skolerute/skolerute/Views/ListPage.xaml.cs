@@ -12,44 +12,30 @@ namespace skolerute.Views
 			InitializeComponent();
 			var layout = new StackLayout();
 			this.Content = layout;
+			var title = new Label { Text = "Neste fridag", FontSize = 30, HorizontalOptions = LayoutOptions.CenterAndExpand };
+			layout.Children.Add(title);
 
-			//for alle valgte skoler (max. 3), så skal følgende linjer med kode kjøres
-			var schLabel = new Label { Text = "Gosen skole", FontSize = 30, HorizontalOptions= LayoutOptions.CenterAndExpand };
-			layout.Children.Add(schLabel);
-			DateTime date = new DateTime(2001, 1, 1);
 
-			var freeDay = new Label { Text = dayOfWeek(date) + " " + date.ToString("dd.MM.yyyy"), FontSize = 15, HorizontalOptions = LayoutOptions.CenterAndExpand };
-			layout.Children.Add(freeDay);
+			//DateTime[] dager = new DateTime[4] { new DateTime(2017,01,02), new DateTime(2017,04,11), new DateTime(2017,05,15), new DateTime(2017,05,08) };
+			//string[] skoler = new string[3] {"Gosen skole", "Tjennsvoll skole", "Austvoll skole"};
+			//List<object> liste = new List<object>();
+			//for (int i = 0; i < dager.Length; i++) {
+			//	liste.Add(dager[i]);
+			//	for (int j = 0; j < skoler.Length; j++) { 
+			//		liste.Add(skoler[j]);
+			//	}
+			//}
+			//foreach (object i in liste) {
+			//	if (i is DateTime) {
+			//	}
+			//}
+			//ListView listview = new ListView { ItemsSource= liste, BackgroundColor = Color.Blue };
+			//layout.Children.Add(listview);
+
+
+
 		}
 
-		public static string dayOfWeek(DateTime dt)
-		{
-			string dow = "";
-			switch (dt.DayOfWeek)
-			{
-				case DayOfWeek.Monday:
-					dow = "Mandag";
-					break;
-				case DayOfWeek.Tuesday:
-					dow = "Tirsdag";
-					break;
-				case DayOfWeek.Wednesday:
-					dow = "Onsdag";
-					break;
-				case DayOfWeek.Thursday:
-					dow = "Torsdag";
-					break;
-				case DayOfWeek.Friday:
-					dow = "Fredag";
-					break;
-				case DayOfWeek.Saturday:
-					dow = "Lørdag";
-					break;
-				case DayOfWeek.Sunday:
-					dow = "Søndag";
-					break;
-			}
-			return dow;
-		}
+
 	}
 }
