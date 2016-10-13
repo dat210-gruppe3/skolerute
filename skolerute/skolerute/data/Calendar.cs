@@ -42,13 +42,13 @@ namespace skolerute.data
 		/// </summary>
 		/// <param name="year">Year.</param>
 		/// <param name="month">Month.</param>
-		public static List<int> GetCal(int year, int month)
+		public static List<int> GetCal(DateTime dt)
         {
             //insert days from prior month
-            List<int> allDaysToBeShown = GetPriorMonth(year, month);
+            List<int> allDaysToBeShown = GetPriorMonth(dt);
 
             //insert days from current month
-            allDaysToBeShown.AddRange(GetCurrentMonth(year, month));
+            allDaysToBeShown.AddRange(GetCurrentMonth(dt));
 
 
             //insert days from future month
@@ -70,36 +70,30 @@ namespace skolerute.data
             return calendarDaysList;
         }
 
-        private static List<int> GetCurrentMonth(int year, int month)
+        private static List<int> GetCurrentMonth(DateTime dt)
         {
             List<int> calendarDaysList = new List<int>();
-            DateTime dt = new DateTime(year, month, 1);
-            int daysInMonth = DateTime.DaysInMonth(year, month);
+            dt = new DateTime(dt.Year, dt.Month, 1);
+            int daysInMonth = DateTime.DaysInMonth(dt.Year, dt.Month);
 
             for (int i = 1; i <= daysInMonth; i++)
             {
                 calendarDaysList.Add(i);
-                dt = new DateTime(year, month, i);
+                dt = new DateTime(dt.Year, dt.Month, i);
             }
 
             return calendarDaysList;
         }
 
-        private static List<int> GetPriorMonth(int year, int month)
+        private static List<int> GetPriorMonth(DateTime dt)
         {
             List<int> calendarDaysList = new List<int>();
-            int priorMonth = month - 1;
-            int priorYear = year;
-
-            if (priorMonth == 0)
-            {
-                priorMonth = 12;
-                priorYear = year - 1;
-            }
-
-            DateTime dt = new DateTime(year, month, 1);
+            
+           
+            dt = new DateTime(dt.Year, dt.Month, 1);
             int dow = DayOfWeek(dt);
-            int daysInPriorMonth = DateTime.DaysInMonth(priorYear, priorMonth);
+            dt = dt.AddMonths(-1);
+            int daysInPriorMonth = DateTime.DaysInMonth(dt.Year, dt.Month);
             for (int i = daysInPriorMonth - (dow - 1); i <= daysInPriorMonth; i++)
             {
                 calendarDaysList.Add(i);
@@ -108,34 +102,49 @@ namespace skolerute.data
             return calendarDaysList;
         }
 
-        public static List<bool> GetAllFreeDays(List<CalendarDay> calendarDays, int year, int month)
+        public static List<CalendarDay> GetRelevantFreeDays(List<CalendarDay> calendarDays, DateTime dt)
         {
-            List<CalendarDay> relevantDays = GetRelevantDays(calendarDays, year, month);
-            List<bool> freeDays = GetFreeDaysInMonth(year, month - 1);
+            List<int> calendar = GetCal(dt); //All visible days
+            List<CalendarDay> relevantDays = new List<CalendarDay>(); //The relevant calendar days in regards to shown days
 
-            return null;
-        }
-
-        private static List<CalendarDay> GetRelevantDays(List<CalendarDay> calendarDays, int year, int month)
-        {
-            for(int i = month - 1; i <= month + 1; i++)
+            for(int i = 0; i < calendarDays.Count; i++)
             {
-                DateTime current = new DateTime(year, i, 1);
-                foreach (CalendarDay day in calendarDays)
-                {
-                    if (true)
-                    {
+                CalendarDay currentDay = calendarDays.ElementAt(i);
+                DateTime lastMonth = DateTime.Now;
+                bool hasGottenToCorrectDay = false;
 
-                    }
+                if (calendar.ElementAt(0) == 1)
+                {
+                    lastMonth = new DateTime(dt.Year, dt.Month, calendar.ElementAt(0));
+                }
+                else
+                {
+                    if (dt.Month <= 1)
+                        lastMonth = new DateTime(dt.Year-1, 12, calendar.ElementAt(0));
+                    else
+                        lastMonth = new DateTime(dt.Year, dt.Month - 1, calendar.ElementAt(0));
+                }
+
+                hasGottenToCorrectDay = currentDay.date.CompareTo(lastMonth) >= 0;
+
+                if (hasGottenToCorrectDay)
+                {
+                    //Adds the CalendarDay objects corresponding to the shown months
+                    return GetRelevantCalendarDays(calendarDays, calendar, relevantDays, i);
                 }
             }
-            return null;
+            
+            return relevantDays;
         }
 
-        private static List<bool> GetFreeDaysInMonth(int year, int month)
+        private static List<CalendarDay> GetRelevantCalendarDays(List<CalendarDay> calendarDays, List<int> calendar, List<CalendarDay> relevantDays, int i)
         {
-            return null;
+            for (int j = 0; j < calendar.Count; j++)
+            {
+                relevantDays.Add(calendarDays.ElementAt(i + j));
+            }
+            return relevantDays;
         }
-	}
+    }
 }
 

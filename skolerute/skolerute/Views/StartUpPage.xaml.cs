@@ -53,7 +53,6 @@ namespace skolerute.Views
         private async Task<List<School>> GetListContent()
         {
             db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
-            string url = "http://open.stavanger.kommune.no/dataset/86d3fe44-111e-4d82-be5a-67a9dbfbfcbb/resource/32d52130-ce7c-4282-9d37-3c68c7cdba92/download/skolerute-2016-17.csv";
 
             InitializeComponent();
             var progressBar = this.FindByName<ProgressBar>("progressBar");
@@ -63,7 +62,7 @@ namespace skolerute.Views
             {
                 await progressBar.ProgressTo(0.3, 100, Easing.Linear);
                 database.CreateNewDatabase();
-                skolerute.db.CSVParser parser = new db.CSVParser(url, database);
+                skolerute.db.CSVParser parser = new db.CSVParser(Constants.URL, database);
                 await parser.StringParser();
                 await progressBar.ProgressTo(0.7, 250, Easing.Linear);
             }
@@ -72,7 +71,6 @@ namespace skolerute.Views
 
             try
             {
-                
                 debugskoler = await database.GetSchools();
                 await progressBar.ProgressTo(1, 250, Easing.Linear);
                 skoler.ItemsSource = debugskoler;
@@ -84,6 +82,7 @@ namespace skolerute.Views
                 List<School> lista = new List<School>();
                 lista.Add(new School(e.Message, null));
                 skoler.ItemsSource = lista;
+                await DisplayActionSheet("En feil oppstod i GetListContent()","","");
                 progressBar.IsVisible = false;
                 return lista;
             }

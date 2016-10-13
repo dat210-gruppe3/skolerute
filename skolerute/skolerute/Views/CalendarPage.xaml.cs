@@ -13,6 +13,9 @@ namespace skolerute.Views
 {
     public partial class CalendarPage : ContentPage
     {
+        static DatabaseManagerAsync db;
+        static List<School> schools;
+        static DateTime current;
         
         public CalendarPage()
         {
@@ -31,74 +34,51 @@ namespace skolerute.Views
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-            
+            db = new DatabaseManagerAsync();
+            schools = await db.GetSchools();
             var cal = calendar;
             Label mName = monthName;
             Label yName = year;
-            DateTime current = DateTime.Now;
-            DisplayCalendar(mName, yName, cal, current);
+            current = DateTime.Now;
+            DisplayCalendar(mName, yName, cal);
             
             Prev.Tapped += (s, e) =>
             {
                 current = current.AddMonths(-1);
-                DisplayCalendar(mName, yName, cal, current);
+                DisplayCalendar(mName, yName, cal);
             };
 
             Next.Tapped += (s, e) =>
             {
                 current = current.AddMonths(1);
-                DisplayCalendar(mName, yName, cal, current);
+                DisplayCalendar(mName, yName, cal);
             };
 
         }
 
-        private async static void DisplayCalendar(Label monthName, Label year, Grid cal, DateTime current)
+        private static void DisplayCalendar(Label monthName, Label year, Grid cal)
         {
             monthName.Text = MonthToString(current.Month);
             year.Text = current.Year.ToString();
-            
+
             var calChildren = cal.Children;
-            DatabaseManagerAsync db = new DatabaseManagerAsync();
-            List<School> schools = await db.GetSchools();
             School school = schools[0];
-            bool inPreviousMonth = true;
-            bool inCurrentMonth = false;
-            bool inNextMonth = false;
-            List<int> consecutiveDays = data.Calendar.GetCal(current.Year, current.Month);
+
+            List<int> consecutiveDays = Calendar.GetCal(current);
             IEnumerator enumerator = calChildren.GetEnumerator();
             int i = 0;
-            int j = 0;
-            //bool[] freeDays = Calendar.DayIsFree(school, current.Month, current.Year);
+
+            List<CalendarDay> freeDays = Calendar.GetRelevantFreeDays(school.calendar, current);
             while (enumerator.MoveNext())
             {
                 try
                 {
                     StackLayout sl = enumerator.Current as StackLayout;
                     Label label = sl.Children.First() as Label;
+                    BoxView box = sl.Children.ElementAt(1) as BoxView;
                     label.Text = consecutiveDays.ElementAt(i).ToString();
-                    if (consecutiveDays[i] == 1 && inPreviousMonth)
-                    {
-                        if (i > 9)
-                        {
-                            inCurrentMonth = false;
-                            inNextMonth = true;
-                        }
-                        else
-                        {
-                            inCurrentMonth = true;
-                            inPreviousMonth = false;
-                        }
 
-                    }
-
-                    if (consecutiveDays[i] >= 1 && inCurrentMonth)
-                    {
-
-                        //box.IsVisible = freeDays[j + 1];
-
-                        j++;
-                    }
-
+                    box.IsVisible = freeDays.ElementAt(i).isFreeDay;
 
                     i++;
                 }
