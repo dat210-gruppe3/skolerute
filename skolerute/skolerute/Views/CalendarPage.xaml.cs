@@ -39,8 +39,7 @@ namespace skolerute.Views
             var cal = calendar;
             Label mName = monthName;
             Label yName = year;
-            // current = DateTime.Now;
-            current = new DateTime(2017,1,1);
+            current = DateTime.Now;
             DisplayCalendar(mName, yName, cal);
             
             Prev.Tapped += (s, e) =>
@@ -65,11 +64,11 @@ namespace skolerute.Views
             var calChildren = cal.Children;
             School school = schools[0];
 
-            List<int> consecutiveDays = Calendar.GetCal(current.Year, current.Month);
+            List<int> consecutiveDays = Calendar.GetCal(current);
             IEnumerator enumerator = calChildren.GetEnumerator();
             int i = 0;
 
-            List<CalendarDay> freeDays = Calendar.GetRelevantFreeDays(school.calendar, current.Year, current.Month);
+            List<CalendarDay> freeDays = Calendar.GetRelevantFreeDays(school.calendar, current);
             while (enumerator.MoveNext())
             {
                 try
