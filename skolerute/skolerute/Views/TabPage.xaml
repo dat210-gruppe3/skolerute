@@ -3,8 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:skolerute.Views;assembly=skolerute"
              x:Class="skolerute.Views.TabPage">
-<!--  <local:ListPage/>-->  
+
 	<local:StartUpPage/>
   <local:CalendarPage/>
+	<local:ListPage/>
   <local:SettingsPage/>
 </TabbedPage>

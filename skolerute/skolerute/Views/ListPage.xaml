@@ -20,14 +20,8 @@
 	
 	<ContentPage.Content>
 		<StackLayout>
-			<ListView IsGroupingEnabled="true">
-				<ListView.ItemTemplate>
-					<DataTemplate>
-						<TextCell Text="hei">
-						</TextCell>
-					</DataTemplate>
-				</ListView.ItemTemplate>
-			</ListView>
+
+
 		</StackLayout>
 	</ContentPage.Content>
 </ContentPage>

@@ -28,7 +28,7 @@ namespace skolerute.Views
 				//SchoolPicker.Items.Add(args.ToString());
 
 			});
-
+			
         }
 
         protected async override void OnAppearing()

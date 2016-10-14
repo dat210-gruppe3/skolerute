@@ -22,8 +22,11 @@ namespace skolerute.Views
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            debugskoler = await GetListContent();
-            dineskoler.ItemsSource = new List<School>() { new School { name = "favoritt1" }, new School { name = "favoritt2" } };
+			if (dineskoler.ItemsSource == null)
+			{
+				debugskoler = await GetListContent();
+				dineskoler.ItemsSource = new List<School>() { new School { name = "favoritt1" }, new School { name = "favoritt2" } };
+			}
         }
         
         private void TextChanged(Object o, EventArgs e)
