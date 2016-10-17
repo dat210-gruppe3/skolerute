@@ -64,10 +64,10 @@ namespace skolerute.db
         public async Task<List<School>> GetSchools()
         {
 			List<School> tmp = await connection.GetAllWithChildrenAsync<School>(null, true);
-			for (int i = 0; i < tmp.Count; i++) 
-			{
-				tmp[i].calendar = await GetOnlyCalendar(i + 1);
-			}
+			//for (int i = 0; i < tmp.Count; i++) 
+			//{
+				//tmp[i].calendar = await GetOnlyCalendar(i + 1);
+			//}
 			return tmp;
         }
 
@@ -78,12 +78,18 @@ namespace skolerute.db
 
         public async Task InsertSchools(List<School> schools)
         {
-            await connection.InsertAllWithChildrenAsync(schools, true);
+            await connection.InsertAllWithChildrenAsync(schools);
         }
 
         public async Task InsertSingle(object obj)
         {
-            await connection.InsertWithChildrenAsync(obj, true);
+            //await connection.InsertWithChildrenAsync(obj);
+            await connection.InsertAsync(obj);
+        }
+
+        public async Task UpdateSingle(object obj)
+        {
+            await connection.InsertOrReplaceWithChildrenAsync(obj);
         }
     }
 }
