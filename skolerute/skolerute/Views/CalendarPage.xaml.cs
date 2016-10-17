@@ -8,6 +8,7 @@ using skolerute.data;
 using skolerute.db;
 
 using Xamarin.Forms;
+using System.Collections.ObjectModel;
 
 namespace skolerute.Views
 {
@@ -20,13 +21,12 @@ namespace skolerute.Views
         public CalendarPage()
         {
             InitializeComponent();
-			// Placeholder liste over favoritt-skoler
-			List<int> favorites = new List<int>();
-			MessagingCenter.Subscribe<StartUpPage, int>(this, "choosenSch", (sender, args) =>
+            // Placeholder liste over favoritt-skoler
+            ObservableCollection<string> favoriteSchools = new ObservableCollection<string>();
+			MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
 			{
-				favorites.Add(args);
-				//SchoolPicker.Items.Add(args.ToString());
-
+				favoriteSchools.Add(args.name);
+                SchoolPicker.ItemsSource = favoriteSchools;
 			});
 			
         }

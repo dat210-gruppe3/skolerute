@@ -13,6 +13,7 @@ namespace skolerute.Views
     public partial class StartUpPage : ContentPage
     {
         List<School> debugskoler = new List<School>();
+        List<School> favorites = new List<School>();
 
         public StartUpPage()
         {
@@ -25,7 +26,7 @@ namespace skolerute.Views
 			if (dineskoler.ItemsSource == null)
 			{
 				debugskoler = await GetListContent();
-				dineskoler.ItemsSource = new List<School>() { new School { name = "favoritt1" }, new School { name = "favoritt2" } };
+                dineskoler.ItemsSource = favorites;
 			}
         }
         
@@ -112,7 +113,8 @@ namespace skolerute.Views
 
 			if (actionNavn == "Legg til")
 			{
-				MessagingCenter.Send<StartUpPage, int>(this, "choosenSch", skoleId);
+                favorites.Add(skole);
+				MessagingCenter.Send<StartUpPage, School>(this, "choosenSch", skole);
 			}
 
         }
