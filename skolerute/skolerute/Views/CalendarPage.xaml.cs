@@ -84,7 +84,7 @@ namespace skolerute.Views
                 }
                 catch (Exception e)
                 {
-                    monthName.Text = string.Empty; //Replace with e.stacktrace
+                    monthName.Text = e.StackTrace;
                 }
             };
         }

@@ -48,6 +48,7 @@
     <Compile Include="tests\DatabaseManagerTester.cs" />
     <Compile Include="utils\BindablePicker.cs" />
     <Compile Include="utils\EnumerableExtensions.cs" />
+    <Compile Include="utils\SettingsManager.cs" />
     <Compile Include="Views\CalendarPage.xaml.cs">
       <DependentUpon>CalendarPage.xaml</DependentUpon>
     </Compile>
