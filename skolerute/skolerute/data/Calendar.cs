@@ -52,7 +52,7 @@ namespace skolerute.data
 
 
             //insert days from future month
-            allDaysToBeShown.AddRange(GetDaysInNextMonth(35 - allDaysToBeShown.Count));
+            allDaysToBeShown.AddRange(GetDaysInNextMonth(42 - allDaysToBeShown.Count));
             return allDaysToBeShown;
         }
 
