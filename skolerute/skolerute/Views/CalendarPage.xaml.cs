@@ -16,12 +16,13 @@ namespace skolerute.Views
         static DatabaseManagerAsync db;
         static List<School> schools;
         static DateTime current;
-        
+        static List<int> favorites;
+
         public CalendarPage()
         {
             InitializeComponent();
 			// Placeholder liste over favoritt-skoler
-			List<int> favorites = new List<int>();
+			favorites = new List<int>();
 			MessagingCenter.Subscribe<StartUpPage, int>(this, "choosenSch", (sender, args) =>
 			{
 				favorites.Add(args);
