@@ -8,6 +8,7 @@ using skolerute.data;
 using skolerute.db;
 
 using Xamarin.Forms;
+using System.Collections.ObjectModel;
 
 namespace skolerute.Views
 {
@@ -17,17 +18,20 @@ namespace skolerute.Views
         static List<School> schools;
         static DateTime current;
         static List<int> favorites;
+        static List<School> favoriteSchools;
 
         public CalendarPage()
         {
             InitializeComponent();
-			// Placeholder liste over favoritt-skoler
-			favorites = new List<int>();
-			MessagingCenter.Subscribe<StartUpPage, int>(this, "choosenSch", (sender, args) =>
-			{
-				favorites.Add(args);
-				//SchoolPicker.Items.Add(args.ToString());
 
+            // Placeholder liste over favoritt-skoler
+            ObservableCollection<string> favoriteSchoolNames = new ObservableCollection<string>();
+            favoriteSchools = new List<School>();
+			MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
+			{
+                favoriteSchools.Add(args);
+				favoriteSchoolNames.Add(args.name);
+                SchoolPicker.ItemsSource = favoriteSchoolNames;
 			});
 			
         }
@@ -63,7 +67,7 @@ namespace skolerute.Views
             year.Text = current.Year.ToString();
 
             var calChildren = cal.Children;
-            School school = schools[0];
+            School school = favoriteSchools[0];
 
             List<int> consecutiveDays = Calendar.GetCal(current);
             IEnumerator enumerator = calChildren.GetEnumerator();
@@ -85,7 +89,7 @@ namespace skolerute.Views
                 }
                 catch (Exception e)
                 {
-                    monthName.Text = e.StackTrace;
+                    monthName.Text = string.Empty;
                 }
             };
         }
