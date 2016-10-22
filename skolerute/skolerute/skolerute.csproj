@@ -67,6 +67,7 @@
     <Compile Include="Views\ListPage.xaml.cs">
       <DependentUpon>ListPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="data\danieltester.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
