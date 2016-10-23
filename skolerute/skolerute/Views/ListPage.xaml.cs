@@ -33,8 +33,38 @@ namespace skolerute.Views
 					liste.Add(skoler[j]);
 				}
 			}
-			ListView listview = new ListView { ItemsSource= liste, BackgroundColor = Color.Blue };
+			ListView listview = new ListView { ItemsSource= liste, /*BackgroundColor = Color.Blue*/ };
 			layout.Children.Add(listview);
 		}
+
+
+		//private static List<object> CreateListView(List<int> schoolIDs)
+		//{
+		//	DateTime now = DateTime.Now;
+		//	int[] schIDsArray = schoolIDs.ToArray();
+		//	data.School[] schools = new data.School[schIDsArray.Length];
+		//	db.DatabaseManager db = new db.DatabaseManager();
+		//	DateTime counter = now;
+		//	List<object> listToReturn = new List<object>();
+
+		//	for (int i = 0; i < schIDsArray.Length; i++)
+		//	{
+		//		schools[i] = db.GetSchool(schIDsArray[i]);
+		//	}
+
+		//	List<data.CalendarDay> schoolCal = schools[0].calendar;
+		//	List<data.CalendarDay> freedays = data.Calendar.GetRelevantFreeDays(schoolCal, now);
+
+
+		//	if (counter == freedays[1].date)
+		//	{
+		//		listToReturn.Add(counter);
+		//		listToReturn.Add(counter);
+		//	}
+
+
+			
+		//	return listToReturn;
+		//}
 	}
 }

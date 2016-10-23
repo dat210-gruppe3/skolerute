@@ -67,7 +67,7 @@ namespace skolerute.Views
             year.Text = current.Year.ToString();
 
             var calChildren = cal.Children;
-            School school = favoriteSchools[0];
+            School school = favoriteSchools[0]; ///FEILER PÅ iOS
 
             List<int> consecutiveDays = Calendar.GetCal(current);
             IEnumerator enumerator = calChildren.GetEnumerator();
