@@ -38,14 +38,14 @@
       <Label x:Name="year" Font="5" WidthRequest="110" Text="År" FontSize="Large" HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
 
       <!--ImageButtons to iterate forward or backward by months-->
-      <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-        <Image Rotation="180" RotationX="180" HeightRequest="100" WidthRequest="100" Source="http://www.pngmart.com/files/3/Right-Arrow-Transparent-PNG.png">
+      <StackLayout x:Name="MonthSelect" Orientation="Horizontal" HorizontalOptions="Center">
+        <Image x:Name="PrevImg" Rotation="180" RotationX="180" HeightRequest="100" WidthRequest="100" Source="http://www.pngmart.com/files/3/Right-Arrow-Transparent-PNG.png">
           <Image.GestureRecognizers>
             <TapGestureRecognizer x:Name="Prev"/>
           </Image.GestureRecognizers>
         </Image>
         <Label x:Name="monthName" Font="5" WidthRequest="110" Text="Måned" FontSize="Large" HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" VerticalOptions="FillAndExpand"/>
-        <Image HeightRequest="100" WidthRequest="100" Source="http://www.pngmart.com/files/3/Right-Arrow-Transparent-PNG.png">
+        <Image x:Name="NextImg" HeightRequest="100" WidthRequest="100" Source="http://www.pngmart.com/files/3/Right-Arrow-Transparent-PNG.png">
           <Image.GestureRecognizers>
             <TapGestureRecognizer x:Name="Next"/>
           </Image.GestureRecognizers>

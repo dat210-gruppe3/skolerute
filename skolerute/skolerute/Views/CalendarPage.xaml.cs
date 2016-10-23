@@ -42,29 +42,42 @@ namespace skolerute.Views
             db = new DatabaseManagerAsync();
             schools = await db.GetSchools();
             var cal = calendar;
-            Label mName = monthName;
-            Label yName = year;
             current = DateTime.Now;
-            DisplayCalendar(mName, yName, cal);
+            DisplayCalendar(cal, MonthSelect);
             
             Prev.Tapped += (s, e) =>
             {
-                current = current.AddMonths(-1);
-                DisplayCalendar(mName, yName, cal);
+                if (current.Month != 8) { 
+                    current = current.AddMonths(-1);
+                    DisplayCalendar(cal, MonthSelect);
+                }
             };
 
             Next.Tapped += (s, e) =>
             {
-                current = current.AddMonths(1);
-                DisplayCalendar(mName, yName, cal);
+                if (current.Month != 6)
+                {
+                    current = current.AddMonths(1);
+                    DisplayCalendar(cal, MonthSelect);
+                }
             };
 
         }
 
-        private static void DisplayCalendar(Label monthName, Label year, Grid cal)
+        private static void DisplayCalendar(Grid cal, StackLayout MonthSelect)
         {
-            monthName.Text = MonthToString(current.Month);
-            year.Text = current.Year.ToString();
+            if (current.Month != 8) {
+                MonthSelect.FindByName<Image>("PrevImg").Opacity = 1;
+            } else {
+                MonthSelect.FindByName<Image>("PrevImg").Opacity = 0.3;
+            }
+            if (current.Month != 6) {
+                MonthSelect.FindByName<Image>("NextImg").Opacity = 1;
+            } else {
+                MonthSelect.FindByName<Image>("NextImg").Opacity = 0.3;
+            }
+            MonthSelect.FindByName<Label>("monthName").Text = MonthToString(current.Month);
+            MonthSelect.FindByName<Label>("year").Text = current.Year.ToString();
 
             var calChildren = cal.Children;
             School school = favoriteSchools[0];
@@ -89,7 +102,7 @@ namespace skolerute.Views
                 }
                 catch (Exception e)
                 {
-                    monthName.Text = string.Empty;
+                    MonthSelect.FindByName<Label>("monthName").Text = string.Empty;
                 }
             };
         }
