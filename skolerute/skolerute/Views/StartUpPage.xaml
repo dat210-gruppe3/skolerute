@@ -12,8 +12,8 @@
         <ProgressBar x:Name="progressBar" Progress="0" />
         <StackLayout>
             
-            <Label Text="Dine skoler:" HorizontalOptions="Center" FontSize="Large" />
-            <ListView x:Name="dineskoler" >
+            <Label Text="Mine skoler:" HorizontalOptions="Center" FontSize="Large" />
+            <ListView x:Name="mineskoler" ItemSelected="OnSelection">
                 <ListView.ItemTemplate >
                     <DataTemplate>
                         <TextCell Text="{Binding name}"/>
