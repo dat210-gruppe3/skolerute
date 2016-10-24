@@ -57,23 +57,6 @@ namespace skolerute.Views
             var cal = calendar;
             current = DateTime.Now;
             DisplayCalendar(cal, MonthSelect);
-            
-            Prev.Tapped += (s, e) =>
-            {
-                if (current.Month != 8) { 
-                    current = current.AddMonths(-1);
-                    DisplayCalendar(cal, MonthSelect);
-                }
-            };
-
-            Next.Tapped += (s, e) =>
-            {
-                if (current.Month != 6)
-                {
-                    current = current.AddMonths(1);
-                    DisplayCalendar(cal, MonthSelect);
-                }
-            };
         }
 
         public static void DisplayCalendar(Grid cal, StackLayout MonthSelect)
@@ -122,8 +105,14 @@ namespace skolerute.Views
                     {
                         for (int j = 0; j < selectedSchoolsCalendars.Count && j < favoriteSchools.Count; j++)
                         {
-                            boxes.Children.ElementAt(j).IsVisible = selectedSchoolsCalendars.ElementAt(j).ElementAt(i).isFreeDay;
+                            boxes.Children.ElementAt(j).IsVisible = true;
                             boxes.Children.ElementAt(j).BackgroundColor = Constants.colors.ElementAt(j);
+                            if (selectedSchoolsCalendars.ElementAt(j).ElementAt(i).isFreeDay) { 
+                                boxes.Children.ElementAt(j).Opacity = 1.0;
+                            } else {
+                                boxes.Children.ElementAt(j).Opacity = 0.0;
+                            }
+
                         }
                     }
                     i++;
