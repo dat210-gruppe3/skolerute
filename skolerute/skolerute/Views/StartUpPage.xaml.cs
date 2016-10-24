@@ -1,6 +1,7 @@
 using skolerute.data;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -13,20 +14,26 @@ namespace skolerute.Views
     public partial class StartUpPage : ContentPage
     {
         List<School> debugskoler = new List<School>();
-        List<School> favorites = new List<School>();
+        ObservableCollection<School> mySchools= new ObservableCollection<School>();
 
         public StartUpPage()
         {
 			InitializeComponent();
+
+            MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
+            {
+                mySchools.Add(args);
+                mineskoler.ItemsSource = mySchools;
+            });
         }
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-			if (dineskoler.ItemsSource == null)
+			if (mineskoler.ItemsSource == null)
 			{
 				debugskoler = await GetListContent();
-                dineskoler.ItemsSource = favorites;
+                mineskoler.ItemsSource = mySchools;
 			}
         }
         
@@ -113,7 +120,6 @@ namespace skolerute.Views
 
 			if (actionNavn == "Legg til")
 			{
-                favorites.Add(skole);
 				MessagingCenter.Send<StartUpPage, School>(this, "choosenSch", skole);
 			}
 
