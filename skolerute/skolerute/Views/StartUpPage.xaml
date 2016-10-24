@@ -13,7 +13,7 @@
         <StackLayout>
             
             <Label Text="Mine skoler:" HorizontalOptions="Center" FontSize="Large" />
-            <ListView x:Name="mineskoler" >
+            <ListView x:Name="mineskoler" ItemSelected="OnSelection">
                 <ListView.ItemTemplate >
                     <DataTemplate>
                         <TextCell Text="{Binding name}"/>
