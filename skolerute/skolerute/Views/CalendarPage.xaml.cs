@@ -97,16 +97,10 @@ namespace skolerute.Views
             List<int> consecutiveDays = Calendar.GetCal(current);
             IEnumerator enumerator = calChildren.GetEnumerator();
             int i = 0;
-            List<CalendarDay> freeDays = new List<CalendarDay>(0);
-
-            try { 
-                School school = favoriteSchools[0]; ///FEILER PÅ iOS
-                freeDays = Calendar.GetRelevantFreeDays(school.calendar, current);
-            } catch (Exception){}
 
             List<List<CalendarDay>> selectedSchoolsCalendars = new List<List<CalendarDay>>();
 
-            // Change from favorite schools to selected schools to enable the user to choose schools to be displayed
+            // TODO: Change from favorite schools to selected schools to enable the user to choose schools to be displayed
             foreach (School selected in favoriteSchools)
             {
                 selectedSchoolsCalendars.Add(Calendar.GetRelevantFreeDays(selected.calendar, current));
