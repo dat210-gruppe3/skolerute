@@ -19,9 +19,7 @@
 	</ContentPage.Padding>
 	
 	<ContentPage.Content>
-		<ListView x:Name = "nyliste" >
-			
-		</ListView>
+		
 		<ListView x:Name ="lstView" IsGroupingEnabled="true" GroupDisplayBinding="{Binding LongName}" GroupShortNameBinding="{Binding ShortName}">
 			<ListView.ItemTemplate>
 				<DataTemplate><TextCell Text="{Binding Name}" Detail = "{Binding Comment}" /></DataTemplate>

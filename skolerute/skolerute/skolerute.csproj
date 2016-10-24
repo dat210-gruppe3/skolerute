@@ -67,7 +67,6 @@
     <Compile Include="Views\ListPage.xaml.cs">
       <DependentUpon>ListPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\GroupedListCode.cs" />
     <Compile Include="ViewModel\veggieModel.cs" />
   </ItemGroup>
   <ItemGroup>

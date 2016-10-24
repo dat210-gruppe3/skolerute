@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Xamarin.Forms;
+using skolerute.data;
 
 namespace skolerute.Views
 {
@@ -42,6 +43,26 @@ namespace skolerute.Views
 			//TESTER EKSEMPELKODE: https://github.com/xamarin/xamarin-forms-samples/blob/master/UserInterface/ListView/Grouping/groupingSampleListView/groupingSampleListView/Views/GroupedListXaml.xaml.cs
 
 			InitializeComponent();
+
+			ObservableCollection<School> favoriteSchools = new ObservableCollection<School>();
+
+			MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
+			{
+				favoriteSchools.Add(args);
+			});
+
+			List<List<CalendarDay>> schoolCalendars = new List<List<CalendarDay>>();
+			List<CalendarDay> calendarDays = new List<CalendarDay>();
+
+			IEnumerator<School> enumerator = favoriteSchools.GetEnumerator();
+
+			int i = 0;
+			while (enumerator.MoveNext())
+			{
+				School school = enumerator.Current;
+
+			}
+
 			grouped = new ObservableCollection<GroupedVeggieModel>();
 			var veggieGroup = new GroupedVeggieModel() { LongName = "vegetables", ShortName = "v" };
 			var fruitGroup = new GroupedVeggieModel() { LongName = "fruit", ShortName = "f" };
@@ -54,9 +75,10 @@ namespace skolerute.Views
 			fruitGroup.Add(new VeggieModel() { Name = "cherry", IsReallyAVeggie = false, Comment = "topper for icecream" });
 			grouped.Add(veggieGroup); grouped.Add(fruitGroup);
 			lstView.ItemsSource = grouped;
-			//lstView.Children.ElementAt(0).BackgroundColor = Color.Red;
-			lstView.Children.BackgroundColor = Color.Red;
 
+			//lstView.Children.ElementAt(0).BackgroundColor = Color.Red;
+			//lstView.Children.BackgroundColor = Color.Red;
+			//labeltest.
 		}
 
 
