@@ -80,8 +80,7 @@ namespace skolerute.Views
                 await progressBar.ProgressTo(0.3, 100, Easing.Linear);
                 database.CreateNewDatabase();
                 skolerute.db.CSVParser parser = new db.CSVParser(Constants.URL, database);
-                //await parser.StringParser();
-                await parser.RetrieveSchools();
+                await parser.StringParser();
                 await progressBar.ProgressTo(0.7, 250, Easing.Linear);
             }
 
@@ -146,15 +145,8 @@ namespace skolerute.Views
 			// Tenker her å kjøre en metode som sjekker actionNavn og hvis "Legg til" går inn i databasen
 			// og setter True på den valgte skolens IsFavorite-atributt i databasen.
 
-			if (actionNavn == "Legg til")
-			{
-                // Hent kalenderen til valgt skole
+			
 
-                db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
-                skolerute.db.CSVParser parser = new db.CSVParser(Constants.URL, database);
-                await parser.RetrieveCalendar(skole);
-                MessagingCenter.Send<StartUpPage, int>(this, "choosenSch", skoleId);
-			}
         }
     }
 }
