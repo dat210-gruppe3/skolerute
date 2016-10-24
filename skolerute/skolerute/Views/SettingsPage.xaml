@@ -7,7 +7,7 @@
     <TableView Intent="Settings">
       <TableRoot>
         <TableSection>
-          <SwitchCell x:Name="offlineMode" Text="Offline modus" On="false" OnChanged="OnOfflineModeChanged"/>
+          <SwitchCell x:Name="varseltoggle" Text="Varsling av" On="false" OnChanged="varseltoggler"/>
         </TableSection>
       </TableRoot>
     </TableView>

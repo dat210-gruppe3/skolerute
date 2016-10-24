@@ -1,7 +1,6 @@
 using skolerute.data;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -14,33 +13,17 @@ namespace skolerute.Views
     public partial class StartUpPage : ContentPage
     {
         List<School> debugskoler = new List<School>();
-        ObservableCollection<School> mySchools= new ObservableCollection<School>();
 
         public StartUpPage()
         {
 			InitializeComponent();
-
-            MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
-            {
-                mySchools.Add(args);
-                mineskoler.ItemsSource = mySchools;
-            });
-
-            MessagingCenter.Subscribe<StartUpPage, School>(this, "deleteSch", (sender, args) =>
-            {
-                mySchools.Remove(args);
-                mineskoler.ItemsSource = mySchools;
-            });
         }
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-			if (mineskoler.ItemsSource == null)
-			{
-				debugskoler = await GetListContent();
-                mineskoler.ItemsSource = mySchools;
-			}
+            debugskoler = await GetListContent();
+            dineskoler.ItemsSource = new List<School>() { new School { name = "favoritt1" }, new School { name = "favoritt2" } };
         }
         
         private void TextChanged(Object o, EventArgs e)
@@ -117,31 +100,10 @@ namespace skolerute.Views
             string skolenavn = skole.name;
 			int skoleId = skole.ID;
 
-            var list = (ListView)sender;
-
-
-            if(list.Id.ToString() != mineskoler.Id.ToString())
-            {
-                var action = await DisplayActionSheet("Du valgte: " + skolenavn, "Legg til", "Avbryt");
-                string actionNavn = action.ToString();
-                if (actionNavn == "Legg til")
-                {
-                    MessagingCenter.Send<StartUpPage, School>(this, "choosenSch", skole);
-                }
-
-            } else
-            {
-                var action = await DisplayActionSheet("Du valgte: " + skolenavn, "Slett", "Avbryt");
-                string actionNavn = action.ToString();
-                if (actionNavn == "Slett")
-                {
-                    MessagingCenter.Send<StartUpPage, School>(this, "deleteSch", skole);
-                }
-            }
-
+			var action = await DisplayActionSheet("Du valgte: " + skolenavn,"Legg til","Avbryt");
 
             // Henter ut navnet på action (Legg til/Avbryt)
-            
+            string actionNavn = action.ToString();
 
 			// Tenker her å kjøre en metode som sjekker actionNavn og hvis "Legg til" går inn i databasen
 			// og setter True på den valgte skolens IsFavorite-atributt i databasen.
@@ -155,6 +117,7 @@ namespace skolerute.Views
                 await parser.RetrieveCalendar(skole);
                 MessagingCenter.Send<StartUpPage, int>(this, "choosenSch", skoleId);
 			}
+
         }
     }
 }
