@@ -80,7 +80,8 @@ namespace skolerute.Views
                 await progressBar.ProgressTo(0.3, 100, Easing.Linear);
                 database.CreateNewDatabase();
                 skolerute.db.CSVParser parser = new db.CSVParser(Constants.URL, database);
-                await parser.StringParser();
+                //await parser.StringParser();
+                await parser.RetrieveSchools();
                 await progressBar.ProgressTo(0.7, 250, Easing.Linear);
             }
 
@@ -125,6 +126,11 @@ namespace skolerute.Views
                 string actionNavn = action.ToString();
                 if (actionNavn == "Legg til")
                 {
+                    // Hent kalenderen til valgt skole
+                    db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
+                    skolerute.db.CSVParser parser = new db.CSVParser(Constants.URL, database);
+                    await parser.RetrieveCalendar(skole);
+
                     MessagingCenter.Send<StartUpPage, School>(this, "choosenSch", skole);
                 }
 

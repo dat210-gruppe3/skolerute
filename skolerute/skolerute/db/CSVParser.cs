@@ -61,8 +61,52 @@ namespace skolerute.db
 			string hei = "hei";
 		}
 
+        public async Task RetrieveSchools()
+        {
+            var csv = await GetContent(Constants.URL);
+            char[] delimiter = new char[] { '\r', '\n' };
+            string[] rows = csv.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+            string[] cols = new string[5];
+            List<data.School> schools = new List<data.School>();
+            string oldschool = "";
 
-		public async Task StringParser()
+            for (int i = 1; i < rows.Length; i++)
+            {
+                cols = Splitter(rows[i]);
+                string schname = cols[1];
+
+                if (schname != oldschool)
+                {
+                    oldschool = schname;
+                    schools.Add(new data.School(cols[1], null));
+                    await database.InsertSingle(schools[schools.Count - 1]);
+                }
+            }
+        }
+
+        public async Task RetrieveCalendar(data.School sch)
+        {
+            var csv = await GetContent(Constants.URL);
+            char[] delimiter = new char[] { '\r', '\n' };
+            string[] rows = csv.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+            string[] cols = new string[5];
+            List<data.CalendarDay> schCalendar = new List<data.CalendarDay>();
+
+            for (int i = 1; i < rows.Length; i++)
+            {
+                cols = Splitter(rows[i]);
+
+                if (cols[1] == sch.name)
+                {
+                    schCalendar.Add(new data.CalendarDay(Convert.ToDateTime(cols[0]),
+                        !WordsToBool(cols[2]), WordsToBool(cols[3]), WordsToBool(cols[4]), cols[5]));
+                }
+            }
+            sch.calendar = schCalendar;
+            await database.UpdateSingle(sch);
+        }
+
+        public async Task StringParser()
 		{
 			var csv = await GetContent(Constants.URL);
 			char[] delimiter = new char[] { '\r', '\n' };
