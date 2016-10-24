@@ -29,11 +29,11 @@ namespace skolerute.Views
             favoriteSchools = new List<School>();
 			MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
 			{
+
                 favoriteSchools.Add(args);
 				favoriteSchoolNames.Add(args.name);
                 SchoolPicker.ItemsSource = favoriteSchoolNames;
 			});
-			
         }
 
         protected async override void OnAppearing()
@@ -66,6 +66,7 @@ namespace skolerute.Views
 
         private static void DisplayCalendar(Grid cal, StackLayout MonthSelect)
         {
+            // Makes the buttons transparent if user is at the end of intended month intverval
             if (current.Month != 8) {
                 MonthSelect.FindByName<Image>("PrevImg").Opacity = 1;
             } else {
@@ -80,13 +81,17 @@ namespace skolerute.Views
             MonthSelect.FindByName<Label>("year").Text = current.Year.ToString();
 
             var calChildren = cal.Children;
-            School school = favoriteSchools[0]; ///FEILER PÅ iOS
 
             List<int> consecutiveDays = Calendar.GetCal(current);
             IEnumerator enumerator = calChildren.GetEnumerator();
             int i = 0;
+            List<CalendarDay> freeDays = new List<CalendarDay>(0);
 
-            List<CalendarDay> freeDays = Calendar.GetRelevantFreeDays(school.calendar, current);
+            try { 
+                School school = favoriteSchools[0]; ///FEILER PÅ iOS
+                freeDays = Calendar.GetRelevantFreeDays(school.calendar, current);
+            } catch (Exception){}
+
             while (enumerator.MoveNext())
             {
                 try
@@ -96,7 +101,9 @@ namespace skolerute.Views
                     BoxView box = sl.Children.ElementAt(1) as BoxView;
                     label.Text = consecutiveDays.ElementAt(i).ToString();
 
+                    try { 
                     box.IsVisible = freeDays.ElementAt(i).isFreeDay;
+                    } catch (Exception) { }
 
                     i++;
                 }
