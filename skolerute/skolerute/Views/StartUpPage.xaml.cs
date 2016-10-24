@@ -22,8 +22,11 @@ namespace skolerute.Views
 
             MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
             {
-                mySchools.Add(args);
-                mineskoler.ItemsSource = mySchools;
+                if (!mySchools.Contains(args))
+                {
+                    mySchools.Add(args);
+                    mineskoler.ItemsSource = mySchools;
+                }
             });
 
             MessagingCenter.Subscribe<StartUpPage, School>(this, "deleteSch", (sender, args) =>
