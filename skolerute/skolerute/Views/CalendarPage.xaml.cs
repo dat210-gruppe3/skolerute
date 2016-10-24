@@ -19,21 +19,30 @@ namespace skolerute.Views
         static DateTime current;
         static List<int> favorites;
         static List<School> favoriteSchools;
-
+        static Grid cal;
+        static StackLayout MS;
         public CalendarPage()
         {
             InitializeComponent();
 
+            MS = MonthSelect;
+            current = DateTime.Now;
+            cal = calendar;
+            DisplayCalendar(cal, MS);
             // Placeholder liste over favoritt-skoler
             ObservableCollection<string> favoriteSchoolNames = new ObservableCollection<string>();
             favoriteSchools = new List<School>();
-			MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
+            
+            MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
 			{
 
                 favoriteSchools.Add(args);
 				favoriteSchoolNames.Add(args.name);
                 SchoolPicker.ItemsSource = favoriteSchoolNames;
 			});
+            
+            
+            
         }
 
         protected async override void OnAppearing()
@@ -41,30 +50,10 @@ namespace skolerute.Views
             base.OnAppearing();
             db = new DatabaseManagerAsync();
             schools = await db.GetSchools();
-            var cal = calendar;
-            current = DateTime.Now;
-            DisplayCalendar(cal, MonthSelect);
-            
-            Prev.Tapped += (s, e) =>
-            {
-                if (current.Month != 8) { 
-                    current = current.AddMonths(-1);
-                    DisplayCalendar(cal, MonthSelect);
-                }
-            };
-
-            Next.Tapped += (s, e) =>
-            {
-                if (current.Month != 6)
-                {
-                    current = current.AddMonths(1);
-                    DisplayCalendar(cal, MonthSelect);
-                }
-            };
-
+            DisplayCalendar(cal, MS);
         }
 
-        private static void DisplayCalendar(Grid cal, StackLayout MonthSelect)
+        public static void DisplayCalendar(Grid cal, StackLayout MonthSelect)
         {
             // Makes the buttons transparent if user is at the end of intended month intverval
             if (current.Month != 8) {
@@ -102,7 +91,7 @@ namespace skolerute.Views
                     label.Text = consecutiveDays.ElementAt(i).ToString();
 
                     try { 
-                    box.IsVisible = freeDays.ElementAt(i).isFreeDay;
+                        box.IsVisible = freeDays.ElementAt(i).isFreeDay;
                     } catch (Exception) { }
 
                     i++;
@@ -112,6 +101,24 @@ namespace skolerute.Views
                     MonthSelect.FindByName<Label>("monthName").Text = string.Empty;
                 }
             };
+        }
+
+        void NextMonth(object o, EventArgs e)
+        {
+            if (current.Month != 6)
+            {
+                current = current.AddMonths(1);
+                DisplayCalendar(cal, MS);
+            }
+        }
+
+        void PrevMonth(object o, EventArgs e)
+        {
+            if (current.Month != 8)
+            {
+                current = current.AddMonths(-1);
+                DisplayCalendar(cal, MS);
+            }
         }
 
         public static string MonthToString(int i)
