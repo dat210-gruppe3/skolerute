@@ -19,26 +19,35 @@ namespace skolerute.Views
         static DateTime current;
         static List<int> favorites;
         static List<School> favoriteSchools;
-
+        static Grid cal;
+        static StackLayout MS;
         public CalendarPage()
         {
             InitializeComponent();
 
+            MS = MonthSelect;
+            current = DateTime.Now;
+            cal = calendar;
+            DisplayCalendar(cal, MS);
             // Placeholder liste over favoritt-skoler
             ObservableCollection<string> favoriteSchoolNames = new ObservableCollection<string>();
             favoriteSchools = new List<School>();
-			MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
+            
+            MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
 			{
+
                 favoriteSchools.Add(args);
 				favoriteSchoolNames.Add(args.name);
                 SchoolPicker.ItemsSource = favoriteSchoolNames;
 			});
+
 
             MessagingCenter.Subscribe<StartUpPage, School>(this, "deleteSch", (sender, args) =>
             {
                 favoriteSchoolNames.Remove(args.name);
                 SchoolPicker.ItemsSource = favoriteSchoolNames;
             });
+
 
         }
 
@@ -47,31 +56,12 @@ namespace skolerute.Views
             base.OnAppearing();
             db = new DatabaseManagerAsync();
             schools = await db.GetSchools();
-            var cal = calendar;
-            current = DateTime.Now;
-            DisplayCalendar(cal, MonthSelect);
-            
-            Prev.Tapped += (s, e) =>
-            {
-                if (current.Month != 8) { 
-                    current = current.AddMonths(-1);
-                    DisplayCalendar(cal, MonthSelect);
-                }
-            };
-
-            Next.Tapped += (s, e) =>
-            {
-                if (current.Month != 6)
-                {
-                    current = current.AddMonths(1);
-                    DisplayCalendar(cal, MonthSelect);
-                }
-            };
-
+            DisplayCalendar(cal, MS);
         }
 
-        private static void DisplayCalendar(Grid cal, StackLayout MonthSelect)
+        public static void DisplayCalendar(Grid cal, StackLayout MonthSelect)
         {
+            // Makes the buttons transparent if user is at the end of intended month intverval
             if (current.Month != 8) {
                 MonthSelect.FindByName<Image>("PrevImg").Opacity = 1;
             } else {
@@ -86,13 +76,17 @@ namespace skolerute.Views
             MonthSelect.FindByName<Label>("year").Text = current.Year.ToString();
 
             var calChildren = cal.Children;
-            School school = favoriteSchools[0]; ///FEILER PÅ iOS
 
             List<int> consecutiveDays = Calendar.GetCal(current);
             IEnumerator enumerator = calChildren.GetEnumerator();
             int i = 0;
+            List<CalendarDay> freeDays = new List<CalendarDay>(0);
 
-            List<CalendarDay> freeDays = Calendar.GetRelevantFreeDays(school.calendar, current);
+            try { 
+                School school = favoriteSchools[0]; ///FEILER PÅ iOS
+                freeDays = Calendar.GetRelevantFreeDays(school.calendar, current);
+            } catch (Exception){}
+
             while (enumerator.MoveNext())
             {
                 try
@@ -102,7 +96,9 @@ namespace skolerute.Views
                     BoxView box = sl.Children.ElementAt(1) as BoxView;
                     label.Text = consecutiveDays.ElementAt(i).ToString();
 
-                    box.IsVisible = freeDays.ElementAt(i).isFreeDay;
+                    try { 
+                        box.IsVisible = freeDays.ElementAt(i).isFreeDay;
+                    } catch (Exception) { }
 
                     i++;
                 }
@@ -111,6 +107,24 @@ namespace skolerute.Views
                     MonthSelect.FindByName<Label>("monthName").Text = string.Empty;
                 }
             };
+        }
+
+        void NextMonth(object o, EventArgs e)
+        {
+            if (current.Month != 6)
+            {
+                current = current.AddMonths(1);
+                DisplayCalendar(cal, MS);
+            }
+        }
+
+        void PrevMonth(object o, EventArgs e)
+        {
+            if (current.Month != 8)
+            {
+                current = current.AddMonths(-1);
+                DisplayCalendar(cal, MS);
+            }
         }
 
         public static string MonthToString(int i)
