@@ -107,9 +107,11 @@ namespace skolerute.Views
             List<List<CalendarDay>> selectedSchoolsCalendars = new List<List<CalendarDay>>();
 
             // Change from favorite schools to selected schools to enable the user to choose schools to be displayed
-            foreach (School selected in favoriteSchools)
-            {
-                selectedSchoolsCalendars.Add(Calendar.GetRelevantFreeDays(selected.calendar, current));
+            if (!(favoriteSchools == null)) { 
+                foreach (School selected in favoriteSchools)
+                {
+                    selectedSchoolsCalendars.Add(Calendar.GetRelevantFreeDays(selected.calendar, current));
+                }
             }
 
             while (enumerator.MoveNext())
@@ -122,12 +124,14 @@ namespace skolerute.Views
                     
                     label.Text = consecutiveDays.ElementAt(i).ToString();
 
-                    for(int j = 0; j < selectedSchoolsCalendars.Count && j < favoriteSchools.Count; j++)
+                    if (!(favoriteSchools == null))
                     {
-                        boxes.Children.ElementAt(j).IsVisible = selectedSchoolsCalendars.ElementAt(j).ElementAt(i).isFreeDay;
-                        boxes.Children.ElementAt(j).BackgroundColor = Constants.colors.ElementAt(j);
+                        for (int j = 0; j < selectedSchoolsCalendars.Count && j < favoriteSchools.Count; j++)
+                        {
+                            boxes.Children.ElementAt(j).IsVisible = selectedSchoolsCalendars.ElementAt(j).ElementAt(i).isFreeDay;
+                            boxes.Children.ElementAt(j).BackgroundColor = Constants.colors.ElementAt(j);
+                        }
                     }
-
                     i++;
                 }
                 catch (Exception e)
