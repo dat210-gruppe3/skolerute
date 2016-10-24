@@ -35,9 +35,14 @@ namespace skolerute.Views
             MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
 			{
 
-                favoriteSchools.Add(args);
-				favoriteSchoolNames.Add(args.name);
-                SchoolPicker.ItemsSource = favoriteSchoolNames;
+                if (!favoriteSchoolNames.Contains(args.name))
+                {
+                    favoriteSchools.Add(args);
+                    favoriteSchoolNames.Add(args.name);
+                    SchoolPicker.ItemsSource = favoriteSchoolNames;
+                }
+
+                
 			});
 
 

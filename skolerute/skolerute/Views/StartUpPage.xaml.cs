@@ -22,8 +22,11 @@ namespace skolerute.Views
 
             MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
             {
-                mySchools.Add(args);
-                mineskoler.ItemsSource = mySchools;
+                if (!mySchools.Contains(args))
+                {
+                    mySchools.Add(args);
+                    mineskoler.ItemsSource = mySchools;
+                }
             });
 
             MessagingCenter.Subscribe<StartUpPage, School>(this, "deleteSch", (sender, args) =>
@@ -123,8 +126,17 @@ namespace skolerute.Views
             if(list.Id.ToString() != mineskoler.Id.ToString())
             {
                 var action = await DisplayActionSheet("Du valgte: " + skolenavn, "Legg til", "Avbryt");
-                string actionNavn = action.ToString();
-                if (actionNavn == "Legg til")
+
+                if (action != null)
+                {
+                    string actionNavn = action.ToString();
+                    if (actionNavn == "Legg til")
+                    {
+                        MessagingCenter.Send<StartUpPage, School>(this, "choosenSch", skole);
+                    }
+                }
+
+                else
                 {
                     // Hent kalenderen til valgt skole
                     db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
@@ -137,21 +149,26 @@ namespace skolerute.Views
             } else
             {
                 var action = await DisplayActionSheet("Du valgte: " + skolenavn, "Slett", "Avbryt");
-                string actionNavn = action.ToString();
-                if (actionNavn == "Slett")
+
+                if (action != null)
                 {
-                    MessagingCenter.Send<StartUpPage, School>(this, "deleteSch", skole);
+
+                    string actionNavn = action.ToString();
+                    if (actionNavn == "Slett")
+                    {
+                        MessagingCenter.Send<StartUpPage, School>(this, "deleteSch", skole);
+                    }
+                }
+
+                else
+                {
+
                 }
             }
 
+             
 
-            // Henter ut navnet på action (Legg til/Avbryt)
-            
-
-			// Tenker her å kjøre en metode som sjekker actionNavn og hvis "Legg til" går inn i databasen
-			// og setter True på den valgte skolens IsFavorite-atributt i databasen.
-
-			
+          
 
         }
     }
