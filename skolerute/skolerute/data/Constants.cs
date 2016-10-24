@@ -13,8 +13,8 @@ namespace skolerute
 
         // Colors
         static Color yellow = Color.Yellow;
-        static Color blue = Color.FromHex("5555ff");
-        static Color purple = Color.FromHex("aa55ff");
+        static Color blue = Color.Navy;
+        static Color purple = Color.Purple;
         static Color teal = Color.Teal;
         static Color maroon = Color.Maroon;
         static Color lime = Color.Lime;
