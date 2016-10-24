@@ -41,13 +41,13 @@
       <StackLayout x:Name="MonthSelect" Orientation="Horizontal" HorizontalOptions="Center">
         <Image x:Name="PrevImg" Rotation="180" RotationX="180" HeightRequest="100" WidthRequest="100" Source="http://www.pngmart.com/files/3/Right-Arrow-Transparent-PNG.png">
           <Image.GestureRecognizers>
-            <TapGestureRecognizer x:Name="Prev"/>
+            <TapGestureRecognizer x:Name="Prev" Tapped="PrevMonth"/>
           </Image.GestureRecognizers>
         </Image>
         <Label x:Name="monthName" Font="5" WidthRequest="110" Text="Måned" FontSize="Large" HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" VerticalOptions="FillAndExpand"/>
         <Image x:Name="NextImg" HeightRequest="100" WidthRequest="100" Source="http://www.pngmart.com/files/3/Right-Arrow-Transparent-PNG.png">
           <Image.GestureRecognizers>
-            <TapGestureRecognizer x:Name="Next"/>
+            <TapGestureRecognizer x:Name="Next" Tapped="NextMonth"/>
           </Image.GestureRecognizers>
         </Image>
       </StackLayout>

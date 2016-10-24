@@ -18,21 +18,30 @@ namespace skolerute.Views
         static List<School> schools;
         static DateTime current;
         static List<School> favoriteSchools;
-
+        static Grid cal;
+        static StackLayout MS;
         public CalendarPage()
         {
             InitializeComponent();
 
+            MS = MonthSelect;
+            current = DateTime.Now;
+            cal = calendar;
+            DisplayCalendar(cal, MS);
             // Placeholder liste over favoritt-skoler
             ObservableCollection<string> favoriteSchoolNames = new ObservableCollection<string>();
             favoriteSchools = new List<School>();
-			MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
+            
+            MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
 			{
+
                 favoriteSchools.Add(args);
 				favoriteSchoolNames.Add(args.name);
                 SchoolPicker.ItemsSource = favoriteSchoolNames;
 			});
-			
+            
+            
+            
         }
 
         protected async override void OnAppearing()
@@ -59,11 +68,11 @@ namespace skolerute.Views
                     DisplayCalendar(cal, MonthSelect);
                 }
             };
-
         }
 
-        private static void DisplayCalendar(Grid cal, StackLayout MonthSelect)
+        public static void DisplayCalendar(Grid cal, StackLayout MonthSelect)
         {
+            // Makes the buttons transparent if user is at the end of intended month intverval
             if (current.Month != 8) {
                 MonthSelect.FindByName<Image>("PrevImg").Opacity = 1;
             } else {
@@ -82,6 +91,12 @@ namespace skolerute.Views
             List<int> consecutiveDays = Calendar.GetCal(current);
             IEnumerator enumerator = calChildren.GetEnumerator();
             int i = 0;
+            List<CalendarDay> freeDays = new List<CalendarDay>(0);
+
+            try { 
+                School school = favoriteSchools[0]; ///FEILER PÅ iOS
+                freeDays = Calendar.GetRelevantFreeDays(school.calendar, current);
+            } catch (Exception){}
 
             List<List<CalendarDay>> selectedSchoolsCalendars = new List<List<CalendarDay>>();
 
@@ -114,6 +129,24 @@ namespace skolerute.Views
                     MonthSelect.FindByName<Label>("monthName").Text = string.Empty;
                 }
             };
+        }
+
+        void NextMonth(object o, EventArgs e)
+        {
+            if (current.Month != 6)
+            {
+                current = current.AddMonths(1);
+                DisplayCalendar(cal, MS);
+            }
+        }
+
+        void PrevMonth(object o, EventArgs e)
+        {
+            if (current.Month != 8)
+            {
+                current = current.AddMonths(-1);
+                DisplayCalendar(cal, MS);
+            }
         }
 
         public static string MonthToString(int i)
