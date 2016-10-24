@@ -8,6 +8,7 @@ using skolerute.data;
 using skolerute.db;
 
 using Xamarin.Forms;
+using System.Collections.ObjectModel;
 
 namespace skolerute.Views
 {
@@ -16,77 +17,140 @@ namespace skolerute.Views
         static DatabaseManagerAsync db;
         static List<School> schools;
         static DateTime current;
-        
+        static List<School> favoriteSchools;
+        static Grid cal;
+        static StackLayout MS;
         public CalendarPage()
         {
             InitializeComponent();
-			// Placeholder liste over favoritt-skoler
-			List<int> favorites = new List<int>();
-			MessagingCenter.Subscribe<StartUpPage, int>(this, "choosenSch", (sender, args) =>
-			{
-				favorites.Add(args);
-				//SchoolPicker.Items.Add(args.ToString());
 
+            MS = MonthSelect;
+            current = DateTime.Now;
+            cal = calendar;
+            DisplayCalendar(cal, MS);
+            // Placeholder liste over favoritt-skoler
+            ObservableCollection<string> favoriteSchoolNames = new ObservableCollection<string>();
+            favoriteSchools = new List<School>();
+            
+            MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
+			{
+
+                favoriteSchools.Add(args);
+				favoriteSchoolNames.Add(args.name);
+                SchoolPicker.ItemsSource = favoriteSchoolNames;
 			});
+
+
+            MessagingCenter.Subscribe<StartUpPage, School>(this, "deleteSch", (sender, args) =>
+            {
+                favoriteSchoolNames.Remove(args.name);
+                SchoolPicker.ItemsSource = favoriteSchoolNames;
+            });
+
 
         }
 
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-            db = new DatabaseManagerAsync();
-            schools = await db.GetSchools();
+
             var cal = calendar;
-            Label mName = monthName;
-            Label yName = year;
             current = DateTime.Now;
-            DisplayCalendar(mName, yName, cal);
+            DisplayCalendar(cal, MonthSelect);
             
             Prev.Tapped += (s, e) =>
             {
-                current = current.AddMonths(-1);
-                DisplayCalendar(mName, yName, cal);
+                if (current.Month != 8) { 
+                    current = current.AddMonths(-1);
+                    DisplayCalendar(cal, MonthSelect);
+                }
             };
 
             Next.Tapped += (s, e) =>
             {
-                current = current.AddMonths(1);
-                DisplayCalendar(mName, yName, cal);
+                if (current.Month != 6)
+                {
+                    current = current.AddMonths(1);
+                    DisplayCalendar(cal, MonthSelect);
+                }
             };
-
         }
 
-        private static void DisplayCalendar(Label monthName, Label year, Grid cal)
+        public static void DisplayCalendar(Grid cal, StackLayout MonthSelect)
         {
-            monthName.Text = MonthToString(current.Month);
-            year.Text = current.Year.ToString();
+            // Makes the buttons transparent if user is at the end of intended month intverval
+            if (current.Month != 8) {
+                MonthSelect.FindByName<Image>("PrevImg").Opacity = 1;
+            } else {
+                MonthSelect.FindByName<Image>("PrevImg").Opacity = 0.3;
+            }
+            if (current.Month != 6) {
+                MonthSelect.FindByName<Image>("NextImg").Opacity = 1;
+            } else {
+                MonthSelect.FindByName<Image>("NextImg").Opacity = 0.3;
+            }
+            MonthSelect.FindByName<Label>("monthName").Text = MonthToString(current.Month);
+            MonthSelect.FindByName<Label>("year").Text = current.Year.ToString();
 
             var calChildren = cal.Children;
-            School school = schools[0];
 
             List<int> consecutiveDays = Calendar.GetCal(current);
             IEnumerator enumerator = calChildren.GetEnumerator();
             int i = 0;
 
-            List<CalendarDay> freeDays = Calendar.GetRelevantFreeDays(school.calendar, current);
+            List<List<CalendarDay>> selectedSchoolsCalendars = new List<List<CalendarDay>>();
+
+            // TODO: Change from favorite schools to selected schools to enable the user to choose schools to be displayed
+            if (!(favoriteSchools == null)) { 
+                foreach (School selected in favoriteSchools)
+                {
+                    selectedSchoolsCalendars.Add(Calendar.GetRelevantFreeDays(selected.calendar, current));
+                }
+            }
+
             while (enumerator.MoveNext())
             {
                 try
                 {
                     StackLayout sl = enumerator.Current as StackLayout;
                     Label label = sl.Children.First() as Label;
-                    BoxView box = sl.Children.ElementAt(1) as BoxView;
+                    StackLayout boxes = sl.Children.Last() as StackLayout;
+                    
                     label.Text = consecutiveDays.ElementAt(i).ToString();
 
-                    box.IsVisible = freeDays.ElementAt(i).isFreeDay;
-
+                    if (!(favoriteSchools == null))
+                    {
+                        for (int j = 0; j < selectedSchoolsCalendars.Count && j < favoriteSchools.Count; j++)
+                        {
+                            boxes.Children.ElementAt(j).IsVisible = selectedSchoolsCalendars.ElementAt(j).ElementAt(i).isFreeDay;
+                            boxes.Children.ElementAt(j).BackgroundColor = Constants.colors.ElementAt(j);
+                        }
+                    }
                     i++;
                 }
                 catch (Exception e)
                 {
-                    monthName.Text = string.Empty; //Replace with e.stacktrace
+                    MonthSelect.FindByName<Label>("monthName").Text = string.Empty;
                 }
             };
+        }
+
+        void NextMonth(object o, EventArgs e)
+        {
+            if (current.Month != 6)
+            {
+                current = current.AddMonths(1);
+                DisplayCalendar(cal, MS);
+            }
+        }
+
+        void PrevMonth(object o, EventArgs e)
+        {
+            if (current.Month != 8)
+            {
+                current = current.AddMonths(-1);
+                DisplayCalendar(cal, MS);
+            }
         }
 
         public static string MonthToString(int i)
