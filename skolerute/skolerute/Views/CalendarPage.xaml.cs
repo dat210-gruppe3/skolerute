@@ -39,9 +39,15 @@ namespace skolerute.Views
 				favoriteSchoolNames.Add(args.name);
                 SchoolPicker.ItemsSource = favoriteSchoolNames;
 			});
-            
-            
-            
+
+
+            MessagingCenter.Subscribe<StartUpPage, School>(this, "deleteSch", (sender, args) =>
+            {
+                favoriteSchoolNames.Remove(args.name);
+                SchoolPicker.ItemsSource = favoriteSchoolNames;
+            });
+
+
         }
 
         protected async override void OnAppearing()

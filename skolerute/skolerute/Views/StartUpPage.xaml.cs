@@ -25,6 +25,12 @@ namespace skolerute.Views
                 mySchools.Add(args);
                 mineskoler.ItemsSource = mySchools;
             });
+
+            MessagingCenter.Subscribe<StartUpPage, School>(this, "deleteSch", (sender, args) =>
+            {
+                mySchools.Remove(args);
+                mineskoler.ItemsSource = mySchools;
+            });
         }
 
         protected override async void OnAppearing()
@@ -110,18 +116,36 @@ namespace skolerute.Views
             string skolenavn = skole.name;
 			int skoleId = skole.ID;
 
-			var action = await DisplayActionSheet("Du valgte: " + skolenavn,"Legg til","Avbryt");
+            var list = (ListView)sender;
+
+
+            if(list.Id.ToString() != mineskoler.Id.ToString())
+            {
+                var action = await DisplayActionSheet("Du valgte: " + skolenavn, "Legg til", "Avbryt");
+                string actionNavn = action.ToString();
+                if (actionNavn == "Legg til")
+                {
+                    MessagingCenter.Send<StartUpPage, School>(this, "choosenSch", skole);
+                }
+
+            } else
+            {
+                var action = await DisplayActionSheet("Du valgte: " + skolenavn, "Slett", "Avbryt");
+                string actionNavn = action.ToString();
+                if (actionNavn == "Slett")
+                {
+                    MessagingCenter.Send<StartUpPage, School>(this, "deleteSch", skole);
+                }
+            }
+
 
             // Henter ut navnet på action (Legg til/Avbryt)
-            string actionNavn = action.ToString();
+            
 
 			// Tenker her å kjøre en metode som sjekker actionNavn og hvis "Legg til" går inn i databasen
 			// og setter True på den valgte skolens IsFavorite-atributt i databasen.
 
-			if (actionNavn == "Legg til")
-			{
-				MessagingCenter.Send<StartUpPage, School>(this, "choosenSch", skole);
-			}
+			
 
         }
     }
