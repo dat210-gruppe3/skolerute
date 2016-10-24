@@ -17,7 +17,8 @@ namespace skolerute
         static Color purple = Color.Purple;
         static Color teal = Color.Teal;
         static Color maroon = Color.Maroon;
-        public static List<Color> colors = new List<Color>() { yellow, blue, purple, teal, maroon };
+        static Color lime = Color.Lime;
+        public static List<Color> colors = new List<Color>() { yellow, blue, purple, teal, maroon, lime };
 
         // Settings
         public const string offlineMode = "offline"; 
