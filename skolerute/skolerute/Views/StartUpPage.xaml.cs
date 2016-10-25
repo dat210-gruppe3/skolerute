@@ -1,4 +1,5 @@
 using skolerute.data;
+using skolerute.utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,26 +15,11 @@ namespace skolerute.Views
     public partial class StartUpPage : ContentPage
     {
         List<School> debugskoler = new List<School>();
-        ObservableCollection<School> mySchools= new ObservableCollection<School>();
+        ObservableCollection<string> mySchools= new ObservableCollection<string>();
 
         public StartUpPage()
         {
-			InitializeComponent();
-
-            MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
-            {
-                if (!mySchools.Contains(args))
-                {
-                    mySchools.Add(args);
-                    mineskoler.ItemsSource = mySchools;
-                }
-            });
-
-            MessagingCenter.Subscribe<StartUpPage, School>(this, "deleteSch", (sender, args) =>
-            {
-                mySchools.Remove(args);
-                mineskoler.ItemsSource = mySchools;
-            });
+			InitializeComponent();          
         }
 
         protected override async void OnAppearing()
@@ -118,38 +104,51 @@ namespace skolerute.Views
             }
             School skole = (School)e.SelectedItem;
             string skolenavn = skole.name;
-			int skoleId = skole.ID;
 
             var list = (ListView)sender;
+            
+            var action = await DisplayActionSheet("Du valgte: " + skolenavn, "Legg til", "Avbryt");
 
-
-            if(list.Id.ToString() != mineskoler.Id.ToString())
+            if (action != null)
             {
-                var action = await DisplayActionSheet("Du valgte: " + skolenavn, "Legg til", "Avbryt");
-
-                if (action != null)
+                string actionNavn = action.ToString();
+                if (actionNavn == "Legg til")
                 {
-                    string actionNavn = action.ToString();
-                    if (actionNavn == "Legg til")
+                    // Hent kalenderen til valgt skole
+                    if (!mySchools.Contains(skolenavn))
                     {
-						// Hent kalenderen til valgt skole
-						db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
-						skolerute.db.CSVParser parser = new db.CSVParser(Constants.URL, database);
-						await parser.RetrieveCalendar(skole);
-                        MessagingCenter.Send<StartUpPage, School>(this, "choosenSch", skole);
+
+                        mySchools.Add(skolenavn);
+                        mineskoler.ItemsSource = mySchools;
+
                     }
-                }
-
-                else
-                {
-                   
-
                     MessagingCenter.Send<StartUpPage, School>(this, "choosenSch", skole);
-                }
+                    db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
+                    skolerute.db.CSVParser parser = new db.CSVParser(Constants.URL, database);
+                    await parser.RetrieveCalendar(skole);
 
-            } else
+
+                }
+            }
+
+            else
             {
-                var action = await DisplayActionSheet("Du valgte: " + skolenavn, "Slett", "Avbryt");
+
+            } 
+
+            
+        }
+
+        public async void OnDeletion(object sender, SelectedItemChangedEventArgs e)
+        {
+            if (e.SelectedItem == null)
+            {
+                return; //ItemSelected is called on deselection, which results in SelectedItem being set to null
+            }
+
+            string skolenavn = (string)e.SelectedItem;
+
+            var action = await DisplayActionSheet("Du valgte: " + skolenavn, "Slett", "Avbryt");
 
                 if (action != null)
                 {
@@ -157,7 +156,14 @@ namespace skolerute.Views
                     string actionNavn = action.ToString();
                     if (actionNavn == "Slett")
                     {
-                        MessagingCenter.Send<StartUpPage, School>(this, "deleteSch", skole);
+                        if (mySchools.Contains(skolenavn))
+                        {
+                            mySchools.Remove(skolenavn);
+                            mineskoler.ItemsSource = mySchools;
+                        }
+
+                        MessagingCenter.Send<StartUpPage, string>(this, "deleteSch", skolenavn);
+                        
                     }
                 }
 
@@ -173,4 +179,4 @@ namespace skolerute.Views
 
         }
     }
-}
+
