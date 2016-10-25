@@ -4,18 +4,16 @@ using System.Collections.ObjectModel;
 
 namespace skolerute
 {
-	public class VeggieModel
+	public class FreeDayModel
 	{
 		public string Name { get; set; }
 		public string Comment { get; set; }
-		public bool IsReallyAVeggie { get; set; }
-		public string Image { get; set; }
-		public VeggieModel()
+		public FreeDayModel()
 		{
 		}
 	}
 
-	public class GroupedVeggieModel : ObservableCollection<VeggieModel>
+	public class GroupedFreeDayModel : ObservableCollection<FreeDayModel>
 	{
 		public string LongName { get; set; }
 		public string ShortName { get; set; }
