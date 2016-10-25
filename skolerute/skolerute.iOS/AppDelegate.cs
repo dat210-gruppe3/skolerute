@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using UserNotifications;
 using Foundation;
 using UIKit;
 
@@ -25,7 +26,12 @@ namespace skolerute.iOS
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
 
-            return base.FinishedLaunching(app, options);
+            // Request notification permissions from user
+            UNUserNotificationCenter.Current.RequestAuthorization(UNAuthorizationOptions.Alert, (approved, err) =>
+            {
+                // TODO: Handle approval
+            });
+            return true;
         }
     }
 }
