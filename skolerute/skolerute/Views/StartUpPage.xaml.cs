@@ -117,23 +117,26 @@ namespace skolerute.Views
                     // Hent kalenderen til valgt skole
                     if (!mySchools.Contains(skolenavn))
                     {
+
                         mySchools.Add(skolenavn);
                         mineskoler.ItemsSource = mySchools;
+
                     }
                     MessagingCenter.Send<StartUpPage, School>(this, "choosenSch", skole);
                     db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
-					skolerute.db.CSVParser parser = new db.CSVParser(Constants.URL, database);
-					await parser.RetrieveCalendar(skole);
-                    
-                        
+                    skolerute.db.CSVParser parser = new db.CSVParser(Constants.URL, database);
+                    await parser.RetrieveCalendar(skole);
+
+
                 }
             }
 
-                else
-                {
-                   
-                }
+            else
+            {
 
+            } 
+
+            
         }
 
         public async void OnDeletion(object sender, SelectedItemChangedEventArgs e)
