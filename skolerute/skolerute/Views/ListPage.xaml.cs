@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Collections.ObjectModel;
 using Xamarin.Forms;
+using skolerute.data;
 
 namespace skolerute.Views
 {
 	public partial class ListPage : ContentPage
-	{
+	{	//FØLGENDE LINJE ER DEL AV EKSEMPELKODE
+		private ObservableCollection<GroupedVeggieModel> grouped { get; set; }
+
 		public ListPage()
 		{
-			InitializeComponent();
+			/*InitializeComponent();
 			var layout = new StackLayout();
 			this.Content = layout;
 			var title = new Label { Text = "Neste fridag", FontSize = 30, HorizontalOptions = LayoutOptions.CenterAndExpand };
@@ -33,8 +36,49 @@ namespace skolerute.Views
 					liste.Add(skoler[j]);
 				}
 			}
-			ListView listview = new ListView { ItemsSource= liste, /*BackgroundColor = Color.Blue*/ };
-			layout.Children.Add(listview);
+			ListView listview = new ListView { ItemsSource= liste, };
+			layout.Children.Add(listview);*/
+
+			//_____________________________________________________________________________________
+			//TESTER EKSEMPELKODE: https://github.com/xamarin/xamarin-forms-samples/blob/master/UserInterface/ListView/Grouping/groupingSampleListView/groupingSampleListView/Views/GroupedListXaml.xaml.cs
+
+			InitializeComponent();
+
+			ObservableCollection<School> favoriteSchools = new ObservableCollection<School>();
+
+			MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
+			{
+				favoriteSchools.Add(args);
+			});
+
+			List<List<CalendarDay>> schoolCalendars = new List<List<CalendarDay>>();
+			List<CalendarDay> calendarDays = new List<CalendarDay>();
+
+			IEnumerator<School> enumerator = favoriteSchools.GetEnumerator();
+
+			int i = 0;
+			while (enumerator.MoveNext())
+			{
+				School school = enumerator.Current;
+
+			}
+
+			grouped = new ObservableCollection<GroupedVeggieModel>();
+			var veggieGroup = new GroupedVeggieModel() { LongName = "vegetables", ShortName = "v" };
+			var fruitGroup = new GroupedVeggieModel() { LongName = "fruit", ShortName = "f" };
+			veggieGroup.Add(new VeggieModel() { Name = "celery", IsReallyAVeggie = true, Comment = "try ants on a log" });
+			veggieGroup.Add(new VeggieModel() { Name = "tomato", IsReallyAVeggie = false, Comment = "pairs well with basil" });
+			veggieGroup.Add(new VeggieModel() { Name = "zucchini", IsReallyAVeggie = true, Comment = "zucchini bread > bannana bread" });
+			veggieGroup.Add(new VeggieModel() { Name = "peas", IsReallyAVeggie = true, Comment = "like peas in a pod" });
+			fruitGroup.Add(new VeggieModel() { Name = "banana", IsReallyAVeggie = false, Comment = "available in chip form factor" });
+			fruitGroup.Add(new VeggieModel() { Name = "strawberry", IsReallyAVeggie = false, Comment = "spring plant" });
+			fruitGroup.Add(new VeggieModel() { Name = "cherry", IsReallyAVeggie = false, Comment = "topper for icecream" });
+			grouped.Add(veggieGroup); grouped.Add(fruitGroup);
+			lstView.ItemsSource = grouped;
+
+			//lstView.Children.ElementAt(0).BackgroundColor = Color.Red;
+			//lstView.Children.BackgroundColor = Color.Red;
+			//labeltest.
 		}
 
 

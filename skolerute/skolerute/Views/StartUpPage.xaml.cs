@@ -142,7 +142,7 @@ namespace skolerute.Views
                 }
 
                 else
-                {                 
+                { 
                     MessagingCenter.Send<StartUpPage, School>(this, "choosenSch", skole);
                 }
 
