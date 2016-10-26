@@ -2,6 +2,9 @@ using System;
 using Android.Support.V4.App;
 using Android.App;
 using Android.Content;
+using Android.OS;
+using Android.Net;
+using Android.Media;
 
 
 // This will not function without the reminder service
@@ -29,6 +32,7 @@ namespace skolerute.Droid.notifications
                 .SetContentTitle(title)
                 .SetContentText(description)
                 .SetStyle(style)
+                .SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Notification))
                 .SetWhen(Java.Lang.JavaSystem.CurrentTimeMillis())
                 .SetAutoCancel(true);
 
