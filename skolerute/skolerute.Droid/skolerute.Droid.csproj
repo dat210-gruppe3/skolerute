@@ -168,6 +168,8 @@
     <Compile Include="db\SQLiteAndroid.cs" />
     <Compile Include="GPS\GPSinterface.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="notifications\AlarmReciever.cs" />
+    <Compile Include="notifications\AndroidReminderSercvice.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
