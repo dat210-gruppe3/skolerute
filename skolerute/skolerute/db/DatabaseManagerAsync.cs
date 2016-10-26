@@ -58,7 +58,7 @@ namespace skolerute.db
 
         public async Task<School> GetSchool(int id)
         {
-            return await connection.GetWithChildrenAsync<School>(id as object, true);
+            return await connection.GetWithChildrenAsync<School>(id as object);
         }
 
         public async Task<List<School>> GetSchools()

@@ -68,7 +68,8 @@
     <Compile Include="Views\ListPage.xaml.cs">
       <DependentUpon>ListPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\veggieModel.cs" />
+    <Compile Include="notifications\INotification.cs" />
+    <Compile Include="ViewModel\freeDayModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -31,7 +31,7 @@ namespace skolerute.iOS
             {
                 // TODO: Handle approval
             });
-            return true;
+			return base.FinishedLaunching(app, options);
         }
     }
 }
