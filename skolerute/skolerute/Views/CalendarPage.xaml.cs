@@ -9,6 +9,7 @@ using skolerute.db;
 
 using Xamarin.Forms;
 using System.Collections.ObjectModel;
+using skolerute.utils;
 
 namespace skolerute.Views
 {
@@ -31,6 +32,8 @@ namespace skolerute.Views
             // Placeholder liste over favoritt-skoler
             ObservableCollection<string> favoriteSchoolNames = new ObservableCollection<string>();
             favoriteSchools = new List<School>();
+
+            
             
             MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
 			{
@@ -46,20 +49,23 @@ namespace skolerute.Views
 			});
 
 
-            MessagingCenter.Subscribe<StartUpPage, string>(this, "deleteSch", (sender, args) =>
+            MessagingCenter.Subscribe<StartUpPage, string>(this, "deleteSch", async(sender, args) =>
             {
                 favoriteSchoolNames.Remove(args);
+                await SettingsManager.SavePreferenceAsync("" + (favoriteSchools.Find(x => x.name.Contains(args)).ID), false);
                 favoriteSchools.Remove(favoriteSchools.Find(x => x.name.Contains(args)));
                 SchoolPicker.ItemsSource = favoriteSchoolNames;
+                
             });
 
 
         }
 
+
+
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-
             var cal = calendar;
             current = DateTime.Now;
             DisplayCalendar(cal, MonthSelect);
@@ -88,7 +94,6 @@ namespace skolerute.Views
             int i = 0;
 
             List<List<CalendarDay>> selectedSchoolsCalendars = new List<List<CalendarDay>>();
-
             // TODO: Change from favorite schools to selected schools to enable the user to choose schools to be displayed
             if (favoriteSchools != null && favoriteSchools.Count > 0) { 
                 foreach (School selected in favoriteSchools)
