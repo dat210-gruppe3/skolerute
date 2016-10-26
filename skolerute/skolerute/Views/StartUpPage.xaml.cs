@@ -17,6 +17,7 @@ namespace skolerute.Views
         List<School> debugskoler = new List<School>();
         ObservableCollection<string> mySchools= new ObservableCollection<string>();
 
+
         public StartUpPage()
         {
 			InitializeComponent();          
@@ -24,10 +25,21 @@ namespace skolerute.Views
 
         protected override async void OnAppearing()
         {
+
+
+
             base.OnAppearing();
-			if (mineskoler.ItemsSource == null)
-			{
-				debugskoler = await GetListContent();
+            if (skoler.ItemsSource == null) { 
+		        debugskoler = await GetListContent();
+                mineskoler.ItemsSource = mySchools;
+            }
+            else
+            {
+                skoler.ItemsSource = debugskoler;
+            }
+            if (SettingsManager.GetPreference("i") != null && (bool)SettingsManager.GetPreference("i"))
+            {
+                mySchools = await getFavSchools();
                 mineskoler.ItemsSource = mySchools;
 			}
 
@@ -122,13 +134,27 @@ namespace skolerute.Views
 
                         mySchools.Add(skolenavn);
                         mineskoler.ItemsSource = mySchools;
+                        if (SettingsManager.GetPreference("i") == null)
+                        {
+                            await SettingsManager.SavePreferenceAsync("i", true);
+                            foreach (School x in debugskoler)
+                            {
+                                await SettingsManager.SavePreferenceAsync(x.ID.ToString(), false);
+                            }
+                            await SettingsManager.SavePreferenceAsync(skole.ID.ToString(), true);
+                        }
+                        else
+                        {
+                            await SettingsManager.SavePreferenceAsync(skole.ID.ToString(), true);
+                            
+                        }
 
                     }
-                    MessagingCenter.Send<StartUpPage, School>(this, "choosenSch", skole);
+                    
                     db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
                     skolerute.db.CSVParser parser = new db.CSVParser(Constants.URL, database);
                     await parser.RetrieveCalendar(skole);
-
+                    MessagingCenter.Send<StartUpPage, School>(this, "choosenSch", skole);
 
                 }
             }
@@ -168,17 +194,27 @@ namespace skolerute.Views
                         
                     }
                 }
-
                 else
                 {
 
                 }
             }
 
-             
-
-          
-
+        private async Task<ObservableCollection<string>> getFavSchools()
+        {
+            ObservableCollection<string> list = new ObservableCollection<string>();
+            db.DatabaseManagerAsync db = new db.DatabaseManagerAsync();
+            foreach (School x in debugskoler)
+            {
+                if ((bool)SettingsManager.GetPreference(x.ID.ToString())) { 
+                    School currentschool = await db.GetSchool(x.ID);
+                    currentschool.calendar = await db.GetOnlyCalendar(x.ID);
+                    list.Add(currentschool.name);
+                    MessagingCenter.Send<StartUpPage, School>(this, "choosenSch", currentschool);
+                }
+            }
+            return list;
         }
+    }
     }
 

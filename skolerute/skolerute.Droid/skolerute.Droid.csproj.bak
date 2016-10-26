@@ -17,7 +17,7 @@
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <AndroidUseLatestPlatformSdk>true</AndroidUseLatestPlatformSdk>
-    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v7.0</TargetFrameworkVersion>
     <AndroidSupportedAbis>armeabi,armeabi-v7a,x86</AndroidSupportedAbis>
     <AndroidStoreUncompressedFileExtensions />
     <MandroidI18n />
@@ -166,7 +166,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="db\SQLiteAndroid.cs" />
+    <Compile Include="GPS\GPSinterface.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="notifications\AlarmReciever.cs" />
+    <Compile Include="notifications\AndroidReminderSercvice.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
