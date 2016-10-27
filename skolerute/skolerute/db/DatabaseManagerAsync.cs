@@ -58,39 +58,32 @@ namespace skolerute.db
 
         public async Task<School> GetSchool(int id)
         {
-            return await connection.GetWithChildrenAsync<School>(id as object);
+            return await connection.GetAsync<School>(id);
         }
 
         public async Task<List<School>> GetSchools()
         {
-			List<School> tmp = await connection.GetAllWithChildrenAsync<School>(null, true);
-			//for (int i = 0; i < tmp.Count; i++) 
-		//	{
-				//tmp[i].calendar = await GetOnlyCalendar(i + 1);
-			//}
-			return tmp;
+            return await connection.Table<School>().ToListAsync();
         }
 
         public async Task InsertList<T>(List<T> objList)
         {
-            await connection.InsertAllWithChildrenAsync(objList);
+            await connection.InsertAllAsync(objList);
         }
 
         public async Task InsertSchools(List<School> schools)
         {
-            //await connection.InsertAllWithChildrenAsync(schools);
-            await connection.InsertAllWithChildrenAsync(schools);
+            await connection.InsertAllAsync(schools);
         }
 
         public async Task InsertSingle(object obj)
         {
-            //await connection.InsertWithChildrenAsync(obj, true);
             await connection.InsertAsync(obj);
         }
 
         public async Task UpdateSingle(object obj)
         {
-            await connection.InsertOrReplaceWithChildrenAsync(obj);
+            await connection.InsertOrReplaceAsync(obj);
         }
     }
 }
