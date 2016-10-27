@@ -49,6 +49,7 @@
     <Compile Include="db\CSVParser.cs" />
     <Compile Include="tests\DatabaseManagerTester.cs" />
     <Compile Include="utils\BindablePicker.cs" />
+    <Compile Include="utils\DistanceCalc.cs" />
     <Compile Include="utils\EnumerableExtensions.cs" />
     <Compile Include="utils\SettingsManager.cs" />
     <Compile Include="Views\CalendarPage.xaml.cs">

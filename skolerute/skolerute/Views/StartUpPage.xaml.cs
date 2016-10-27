@@ -16,6 +16,8 @@ namespace skolerute.Views
     {
         List<School> debugskoler = new List<School>();
         ObservableCollection<string> mySchools= new ObservableCollection<string>();
+        List<double> avstander = new List<double>();
+        List<int> bestMatches = new List<int>();
 
 
         public StartUpPage()
@@ -25,8 +27,8 @@ namespace skolerute.Views
 
         protected override async void OnAppearing()
         {
-            
 
+            
 
             base.OnAppearing();
             if (skoler.ItemsSource == null) { 
@@ -44,6 +46,13 @@ namespace skolerute.Views
 			}
 
             DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now);
+
+            
+            // Tar inn gps-latitude(double),gps-longitude(double),liste med skolenes latitude(double),liste med skolenes longitudes(double)
+            // Lagrer liste med skoleid på de 5 nærmeste skolene. (bestMatches)
+            // Lagrer liste med avstand i km samsvarende med listen av skoleid-er. (avstander) Mikser litt norsk og engelsk her ser jeg:)
+            //getNearbySchools(gpslat,gpslong,latitudes,longitudes);       
+
         }
         
         private void showloc()
@@ -220,6 +229,56 @@ namespace skolerute.Views
                 }
             }
             return list;
+        }
+
+        private void getNearbySchools(double gpslati, double gpslongi, List<double> latis, List<double> longis)
+        {
+
+            List<double> latitudes = new List<double>();
+            List<double> longitudes = new List<double>();
+
+            latitudes.Add(gpslati);
+            longitudes.Add(gpslongi);
+
+            for(int t=0;t<latis.Count;t++)
+            {
+                latitudes.Add(latis.ElementAt(t));
+                longitudes.Add(longis.ElementAt(t));
+            }
+
+
+            for (int i=1;i<latitudes.Count;i++)
+            {
+  
+
+                if (i<6)
+                {
+                    bestMatches.Add(i);
+                    avstander.Add(DistanceCalc.HaversineDistance(latitudes.ElementAt(0), longitudes.ElementAt(0), latitudes.ElementAt(i), longitudes.ElementAt(i)));
+                }  
+                
+                else
+                {
+
+                    double biggest = avstander.Max();
+                    int bigindex = avstander.FindIndex(0, 5, y => y == biggest);
+
+                    double ny = DistanceCalc.HaversineDistance(latitudes.ElementAt(0), longitudes.ElementAt(0), latitudes.ElementAt(i), longitudes.ElementAt(i));
+    
+
+                    if (ny < avstander.ElementAt(bigindex))
+                    {
+                        avstander.RemoveAt(bigindex);
+                        avstander.Insert(bigindex, ny);
+                        bestMatches.RemoveAt(bigindex);
+                        bestMatches.Insert(bigindex,i);     
+                        
+                    }
+                    
+                }           
+            }
+            
+
         }
     }
     }
