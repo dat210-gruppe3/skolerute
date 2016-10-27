@@ -86,11 +86,46 @@ namespace skolerute.Views
 
             for (int i = 0; i < skole.calendar.Count; i++)
             {
-
+                CalendarDay currentDay = skole.calendar[i];
                 //Ignore weekends
                 if(skole.calendar[i].date.DayOfWeek == DayOfWeek.Saturday || skole.calendar[i].date.DayOfWeek == DayOfWeek.Sunday)
                 {
                     i++;
+                }
+                //Handle vacations
+                else if(currentDay.comment.Substring(Math.Max(0, currentDay.comment.Length - 5)) == "ferie")
+                {
+                    FreeDayGroup = new GroupedFreeDayModel() { LongName = currentDay.comment };
+                    DateTime startDate = skole.calendar[i].date;
+                    string dateInterval;
+
+                    if (i + 1 < skole.calendar.Count)
+                    {
+                        while (skole.calendar[i].isFreeDay)
+                        {
+                            i++;
+
+                            if (i >= skole.calendar.Count - 1)
+                            {
+                                break;
+                            }
+                        }
+                    }
+
+                    DateTime endDate = skole.calendar[i].date;
+                    //Check if end of dataset is reached
+                    if (i == skole.calendar.Count - 1)
+                    {
+                        dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year;
+                    }
+                    else
+                    {
+                        dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year
+                            + " - " + endDate.Day + "/" + endDate.Month + "/" + endDate.Year;
+                    }
+
+                    FreeDayGroup.Add(new FreeDayModel() { Name = skole.name, Comment = dateInterval });
+                    grouped.Add(FreeDayGroup);
                 }
                 //Handle summer vacation
                 else if (skole.calendar[i].isFreeDay && skole.calendar[i].comment == "")
@@ -120,8 +155,8 @@ namespace skolerute.Views
                         dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year;
                     } else
                     {
-                        dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year
-                            + " - " + endDate.Day + "/" + endDate.Month + "/" + endDate.Year;
+                        FreeDayGroup.LongName = "Slutten av sommerferien";
+                        dateInterval = " - " + endDate.Day + "/" + endDate.Month + "/" + endDate.Year;
                     }
 
                     FreeDayGroup.Add(new FreeDayModel() { Name = skole.name, Comment = dateInterval });
@@ -135,6 +170,7 @@ namespace skolerute.Views
                     string currentComment = skole.calendar[i].comment;
                     DateTime startDate = skole.calendar[i].date;
 
+                    /*
                     if(i+1 < skole.calendar.Count)
                     {
                         while (skole.calendar[i + 1].comment == currentComment)
@@ -149,16 +185,8 @@ namespace skolerute.Views
                     } 
 
                     DateTime endDate = skole.calendar[i].date;
-                    string dateInterval;
-                    if (startDate == endDate)
-                    {
-                        dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year;
-                    }
-                    else
-                    {
-                        dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year
-                            + " - " + endDate.Day + "/" + endDate.Month + "/" + endDate.Year;
-                    }
+                    */
+                    string dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year;
 
                     FreeDayGroup.Add(new FreeDayModel() { Name = skole.name, Comment = dateInterval });
                     grouped.Add(FreeDayGroup);
