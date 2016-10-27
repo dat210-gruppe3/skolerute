@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
+using skolerute.notifications;
 
 using Xamarin.Forms;
 
@@ -30,6 +32,7 @@ namespace skolerute.Views
 				debugskoler = await GetListContent();
                 mineskoler.ItemsSource = mySchools;
 			}
+
         }
         
         private void TextChanged(Object o, EventArgs e)

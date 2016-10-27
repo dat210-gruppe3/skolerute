@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Linq;
 using skolerute.db;
+using System.Globalization;
 
 namespace skolerute.db
 {
@@ -51,6 +52,10 @@ namespace skolerute.db
 			return rows;
 		}
 
+		private float StringToFloat(string s)
+		{
+			return float.Parse(s, CultureInfo.InvariantCulture.NumberFormat);
+		}
 
 		public void InsertToCalAndSch(string[] cols, List<data.School> schoolList)
 		{
@@ -58,7 +63,6 @@ namespace skolerute.db
 						Convert.ToDateTime(cols[0]), !WordsToBool(cols[2]), WordsToBool(cols[3]), WordsToBool(cols[4]), cols[5]);
 
 			schoolList[schoolList.Count - 1].calendar.Add(calTemp);
-			string hei = "hei";
 		}
 
         public async Task RetrieveSchools()
@@ -78,8 +82,11 @@ namespace skolerute.db
                 if (schname != oldschool)
                 {
                     oldschool = schname;
-                    schools.Add(new data.School(cols[1], null));
+					data.School school = new data.School(cols[1], null);
+                    schools.Add(school);
+					await RetrievePosition(school);
                     await database.InsertSingle(schools[schools.Count - 1]);
+					string hei = "hei";
                 }
             }
         }
@@ -165,5 +172,28 @@ namespace skolerute.db
 				throw new WebException("Could not interact with \n" + Constants.URL);
             }
         }
+
+
+		public async Task RetrievePosition(data.School sch)
+		{
+			var csv = await GetContent(Constants.PositionURL);
+			char[] delimiter = new char[] { '\r', '\n' };
+			string[] rows = csv.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+			string[] cols = new string[13];
+
+			for (int i = 1; i < rows.Length; i++)
+			{
+				cols = Splitter(rows[i]);
+				string schname = cols[9];
+
+				if (schname == sch.name)
+				{
+					sch.latitude = StringToFloat(cols[2]);
+					sch.longitude = StringToFloat(cols[3]);
+					sch.address = cols[10];
+					sch.website = cols[11];
+				}
+			}
+		}
 	}
 }
