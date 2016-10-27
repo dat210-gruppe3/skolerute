@@ -26,7 +26,7 @@ namespace skolerute.Droid.GPS
         public List<double> GetGpsCoordinates()
         {
             context = Forms.Context;
-            LocationManager mgr = (LocationManager)context.GetSystemService(context);
+            LocationManager mgr = (LocationManager)context.GetSystemService("");
             var LC = new Criteria();
             LC.Accuracy = Accuracy.Coarse;
             LC.PowerRequirement = Power.Medium;
