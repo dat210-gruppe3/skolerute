@@ -46,10 +46,10 @@ namespace skolerute.Views
             DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now);
         }
         
-        private void showloc()
+        private void GetClosest()
         {
-            List<double> l = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
-            locbut.Text = l[0].ToString();
+            List<double> userposition = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
+            List<data.School> newSchList = new List<data.School>();
         }
 
         private void TextChanged(Object o, EventArgs e)

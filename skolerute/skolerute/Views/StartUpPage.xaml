@@ -21,9 +21,9 @@
                 </ListView.ItemTemplate>
             </ListView>
         </StackLayout>
-      <StackLayout Orientation="Horizontal">
+      <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
       <Label Text="Legg til skole" HorizontalOptions="Center" FontSize="Large" />
-        <Button x:Name="locbut" Text="Vis posisjon" Clicked="showloc"/>
+        <Button Text="Vis nærmeste" Clicked="GetClosest"/>
       </StackLayout>
       <SearchBar x:Name="searchSchool" Placeholder="Søk etter skoler" TextChanged="TextChanged"/>
         <ListView x:Name="skoler" ItemSelected="OnSelection">
