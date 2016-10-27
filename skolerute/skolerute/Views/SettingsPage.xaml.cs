@@ -17,9 +17,9 @@ namespace skolerute.Views
             InitializeComponent();
 
             // Checking to see if the value of offline mode has been set by the user
-            if(SettingsManager.GetPreference(Constants.offlineMode) != null)
+            if(SettingsManager.GetPreference(Constants.OfflineMode) != null)
             {
-                offlineMode.SetValue(SwitchCell.OnProperty, SettingsManager.GetPreference(Constants.offlineMode));
+                offlineMode.SetValue(SwitchCell.OnProperty, SettingsManager.GetPreference(Constants.OfflineMode));
             }
         }
 
@@ -29,12 +29,12 @@ namespace skolerute.Views
             // app starts
             if (offlineMode.On == true)
             {
-                await SettingsManager.SavePreferenceAsync(Constants.offlineMode, true);
+                await SettingsManager.SavePreferenceAsync(Constants.OfflineMode, true);
                 //TODO: Start parsing all data from csv file into database
             }
             else if(!offlineMode.On)
             {
-                await SettingsManager.SavePreferenceAsync(Constants.offlineMode, false);
+                await SettingsManager.SavePreferenceAsync(Constants.OfflineMode, false);
             }
         }
     }
