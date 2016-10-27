@@ -9,9 +9,15 @@ namespace skolerute.Views
 	public partial class ListPage : ContentPage
 	{	//FØLGENDE LINJE ER DEL AV EKSEMPELKODE
 		private ObservableCollection<GroupedFreeDayModel> grouped { get; set; }
+		ObservableCollection<School> favoriteSchools = new ObservableCollection<School>();
+
 
 		public ListPage()
 		{
+			MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
+			{
+				favoriteSchools.Add(args);
+			});
 			/*InitializeComponent();
 			var layout = new StackLayout();
 			this.Content = layout;
@@ -61,36 +67,69 @@ namespace skolerute.Views
             //lstView.Children.ElementAt(0).BackgroundColor = Color.Red;
             //lstView.Children.BackgroundColor = Color.Red;
             //labeltest.
+
+
         }
 
         protected override async void OnAppearing()
         {
-            ObservableCollection<School> favoriteSchools = new ObservableCollection<School>();
-
-            //MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
-            //{
-              //  favoriteSchools.Add(args);
-            //});
+            
 
             List<List<CalendarDay>> schoolCalendars = new List<List<CalendarDay>>();
             List<CalendarDay> calendarDays = new List<CalendarDay>();
 
             //TODO remove Placeholder
-            //School skole = favoriteSchools[0];
+            School skole = favoriteSchools[0];
             db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
 
-            School skole = await database.GetSchool(1);
+            //School skole = await database.GetSchool(1);
+
 
             grouped = new ObservableCollection<GroupedFreeDayModel>();
             GroupedFreeDayModel FreeDayGroup = null;
 
             for (int i = 0; i < skole.calendar.Count; i++)
             {
-
+                CalendarDay currentDay = skole.calendar[i];
                 //Ignore weekends
                 if(skole.calendar[i].date.DayOfWeek == DayOfWeek.Saturday || skole.calendar[i].date.DayOfWeek == DayOfWeek.Sunday)
                 {
                     i++;
+                }
+                //Handle vacations
+                else if(currentDay.comment.Substring(Math.Max(0, currentDay.comment.Length - 5)) == "ferie")
+                {
+                    FreeDayGroup = new GroupedFreeDayModel() { LongName = currentDay.comment };
+                    DateTime startDate = skole.calendar[i].date;
+                    string dateInterval;
+
+                    if (i + 1 < skole.calendar.Count)
+                    {
+                        while (skole.calendar[i].isFreeDay)
+                        {
+                            i++;
+
+                            if (i >= skole.calendar.Count - 1)
+                            {
+                                break;
+                            }
+                        }
+                    }
+
+                    DateTime endDate = skole.calendar[i].date;
+                    //Check if end of dataset is reached
+                    if (i == skole.calendar.Count - 1)
+                    {
+                        dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year;
+                    }
+                    else
+                    {
+                        dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year
+                            + " - " + endDate.Day + "/" + endDate.Month + "/" + endDate.Year;
+                    }
+
+                    FreeDayGroup.Add(new FreeDayModel() { Name = skole.name, Comment = dateInterval });
+                    grouped.Add(FreeDayGroup);
                 }
                 //Handle summer vacation
                 else if (skole.calendar[i].isFreeDay && skole.calendar[i].comment == "")
@@ -120,8 +159,8 @@ namespace skolerute.Views
                         dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year;
                     } else
                     {
-                        dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year
-                            + " - " + endDate.Day + "/" + endDate.Month + "/" + endDate.Year;
+                        FreeDayGroup.LongName = "Slutten av sommerferien";
+                        dateInterval = " - " + endDate.Day + "/" + endDate.Month + "/" + endDate.Year;
                     }
 
                     FreeDayGroup.Add(new FreeDayModel() { Name = skole.name, Comment = dateInterval });
@@ -135,6 +174,7 @@ namespace skolerute.Views
                     string currentComment = skole.calendar[i].comment;
                     DateTime startDate = skole.calendar[i].date;
 
+                    /*
                     if(i+1 < skole.calendar.Count)
                     {
                         while (skole.calendar[i + 1].comment == currentComment)
@@ -149,16 +189,8 @@ namespace skolerute.Views
                     } 
 
                     DateTime endDate = skole.calendar[i].date;
-                    string dateInterval;
-                    if (startDate == endDate)
-                    {
-                        dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year;
-                    }
-                    else
-                    {
-                        dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year
-                            + " - " + endDate.Day + "/" + endDate.Month + "/" + endDate.Year;
-                    }
+                    */
+                    string dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year;
 
                     FreeDayGroup.Add(new FreeDayModel() { Name = skole.name, Comment = dateInterval });
                     grouped.Add(FreeDayGroup);

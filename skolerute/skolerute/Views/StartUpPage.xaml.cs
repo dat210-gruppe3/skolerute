@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
+using skolerute.notifications;
 
 using Xamarin.Forms;
 
@@ -45,6 +47,7 @@ namespace skolerute.Views
                 mineskoler.ItemsSource = mySchools;
 			}
 
+
             DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now);
 
             
@@ -55,10 +58,10 @@ namespace skolerute.Views
 
         }
         
-        private void showloc()
+        private void GetClosest()
         {
-            List<double> l = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
-            locbut.Text = l[0].ToString();
+            List<double> userposition = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
+            List<data.School> newSchList = new List<data.School>();
         }
 
         private void TextChanged(Object o, EventArgs e)

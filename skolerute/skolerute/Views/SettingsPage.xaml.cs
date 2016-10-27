@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using skolerute.utils;
 using skolerute.data;
+using skolerute.notifications;
 
 using Xamarin.Forms;
 
@@ -22,6 +23,12 @@ namespace skolerute.Views
                 offlineMode.SetValue(SwitchCell.OnProperty, SettingsManager.GetPreference(Constants.OfflineMode));
             }
         }
+
+		//protected override void OnAppearing()
+		//{
+			
+		//	DependencyService.Get<INotification>().SendCalendarNotification("testTittel", "dette er en test", DateTime.Now.AddSeconds(10));
+		//}
 
         async Task OnOfflineModeChanged(object sender, EventArgs ea)
         {

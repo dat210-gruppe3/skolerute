@@ -16,9 +16,15 @@ namespace skolerute.data
 		public int ID { get; set; }
 
 		public string name { get; set; }
+		public float latitude { get; set; }
+		public float longitude { get; set; }
+		public string address { get; set; }
+		public string website { get; set; }
+
 
 		[OneToMany("schoolID", CascadeOperations = CascadeOperation.All)]
 		public List<CalendarDay> calendar { get; set; }
+
 
 		public School(string name, List<CalendarDay> calendar)
 		{

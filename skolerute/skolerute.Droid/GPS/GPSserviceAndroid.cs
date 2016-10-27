@@ -13,46 +13,38 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.Locations;
-
 using Xamarin.Forms;
 
 
 [assembly: Xamarin.Forms.Dependency(typeof(skolerute.Droid.GPS.GPSserviceAndroid))]
 namespace skolerute.Droid.GPS
 {
-    class GPSserviceAndroid : IGPSservice
+    class GPSserviceAndroid : Java.Lang.Object, IGPSservice
     {
-        Context context;
         public List<double> GetGpsCoordinates()
         {
-            context = Forms.Context;
-            LocationManager mgr = (LocationManager)context.GetSystemService("");
+            LocationManager mgr = (LocationManager)Forms.Context.GetSystemService(Context.LocationService);
             var LC = new Criteria();
             LC.Accuracy = Accuracy.Coarse;
             LC.PowerRequirement = Power.Medium;
-
-            string LP = mgr.GetBestProvider(LC, true);
             LocationListener LL = new LocationListener();
+            string LP = mgr.GetBestProvider(LC, true);
             mgr.RequestLocationUpdates(LP, 1000, 100, LL);
-            Location location = LL.getLocation();
-            double lat = location.Latitude;
-            double lon = location.Longitude;
+            
+            try { 
+                Location location = mgr.GetLastKnownLocation(LP);
+                double lat = location.Latitude;
+                double lon = location.Longitude;
+                return new List<double> { lat, lon };
+            } catch (Exception e) { }
 
-            return new List<Double>() { lat, lon };
+            return null;
+            
         }
     }
 
-    class LocationListener : ILocationListener
+    class LocationListener : Java.Lang.Object, ILocationListener
     {
-        Location currentlocation;
-        public IntPtr Handle
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
         public void Dispose()
         {
             throw new NotImplementedException();
@@ -60,7 +52,6 @@ namespace skolerute.Droid.GPS
 
         public void OnLocationChanged(Location location)
         {
-            currentlocation = location;
         }
 
         public void OnProviderDisabled(string provider)
@@ -76,11 +67,6 @@ namespace skolerute.Droid.GPS
         public void OnStatusChanged(string provider, [GeneratedEnum] Availability status, Bundle extras)
         {
             throw new NotImplementedException();
-        }
-
-        public Location getLocation()
-        {
-            return currentlocation;
         }
     }
 }
