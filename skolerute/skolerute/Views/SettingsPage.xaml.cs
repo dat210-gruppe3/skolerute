@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using skolerute.utils;
 using skolerute.data;
+using skolerute.notifications;
 
 using Xamarin.Forms;
 
@@ -17,11 +18,17 @@ namespace skolerute.Views
             InitializeComponent();
 
             // Checking to see if the value of offline mode has been set by the user
-            if(SettingsManager.GetPreference(Constants.offlineMode) != null)
+            if(SettingsManager.GetPreference(Constants.OfflineMode) != null)
             {
-                offlineMode.SetValue(SwitchCell.OnProperty, SettingsManager.GetPreference(Constants.offlineMode));
+                offlineMode.SetValue(SwitchCell.OnProperty, SettingsManager.GetPreference(Constants.OfflineMode));
             }
         }
+
+		//protected override void OnAppearing()
+		//{
+			
+		//	DependencyService.Get<INotification>().SendCalendarNotification("testTittel", "dette er en test", DateTime.Now.AddSeconds(10));
+		//}
 
         async Task OnOfflineModeChanged(object sender, EventArgs ea)
         {
@@ -29,12 +36,12 @@ namespace skolerute.Views
             // app starts
             if (offlineMode.On == true)
             {
-                await SettingsManager.SavePreferenceAsync(Constants.offlineMode, true);
+                await SettingsManager.SavePreferenceAsync(Constants.OfflineMode, true);
                 //TODO: Start parsing all data from csv file into database
             }
             else if(!offlineMode.On)
             {
-                await SettingsManager.SavePreferenceAsync(Constants.offlineMode, false);
+                await SettingsManager.SavePreferenceAsync(Constants.OfflineMode, false);
             }
         }
     }

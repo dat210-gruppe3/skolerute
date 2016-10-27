@@ -9,9 +9,15 @@ namespace skolerute.Views
 	public partial class ListPage : ContentPage
 	{	//FØLGENDE LINJE ER DEL AV EKSEMPELKODE
 		private ObservableCollection<GroupedFreeDayModel> grouped { get; set; }
+		ObservableCollection<School> favoriteSchools = new ObservableCollection<School>();
+
 
 		public ListPage()
 		{
+			MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
+			{
+				favoriteSchools.Add(args);
+			});
 			/*InitializeComponent();
 			var layout = new StackLayout();
 			this.Content = layout;
@@ -61,25 +67,23 @@ namespace skolerute.Views
             //lstView.Children.ElementAt(0).BackgroundColor = Color.Red;
             //lstView.Children.BackgroundColor = Color.Red;
             //labeltest.
+
+
         }
 
         protected override async void OnAppearing()
         {
-            ObservableCollection<School> favoriteSchools = new ObservableCollection<School>();
-
-            //MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
-            //{
-              //  favoriteSchools.Add(args);
-            //});
+            
 
             List<List<CalendarDay>> schoolCalendars = new List<List<CalendarDay>>();
             List<CalendarDay> calendarDays = new List<CalendarDay>();
 
             //TODO remove Placeholder
-            //School skole = favoriteSchools[0];
+            School skole = favoriteSchools[0];
             db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
 
-            School skole = await database.GetSchool(1);
+            //School skole = await database.GetSchool(1);
+
 
             grouped = new ObservableCollection<GroupedFreeDayModel>();
             GroupedFreeDayModel FreeDayGroup = null;
