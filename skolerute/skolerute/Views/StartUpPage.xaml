@@ -21,8 +21,11 @@
                 </ListView.ItemTemplate>
             </ListView>
         </StackLayout>
-        <Label Text="Legg til skole" HorizontalOptions="Center" FontSize="Large" />
-        <SearchBar x:Name="searchSchool" Placeholder="Søk etter skoler" TextChanged="TextChanged"/>
+      <StackLayout Orientation="Horizontal">
+      <Label Text="Legg til skole" HorizontalOptions="Center" FontSize="Large" />
+        <Button x:Name="locbut" Text="Vis posisjon" Clicked="showloc"/>
+      </StackLayout>
+      <SearchBar x:Name="searchSchool" Placeholder="Søk etter skoler" TextChanged="TextChanged"/>
         <ListView x:Name="skoler" ItemSelected="OnSelection">
             <ListView.ItemTemplate>
                 <DataTemplate>

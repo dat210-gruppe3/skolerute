@@ -25,7 +25,7 @@ namespace skolerute.Views
 
         protected override async void OnAppearing()
         {
-
+            
 
 
             base.OnAppearing();
@@ -46,6 +46,12 @@ namespace skolerute.Views
             DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now);
         }
         
+        private void showloc()
+        {
+            List<double> l = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
+            locbut.Text = l[0].ToString();
+        }
+
         private void TextChanged(Object o, EventArgs e)
         {
             // Called in xaml: When the searchbar text changes,

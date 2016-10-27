@@ -166,7 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="db\SQLiteAndroid.cs" />
-    <Compile Include="GPS\GPSinterface.cs" />
+    <Compile Include="GPS\GPSserviceAndroid.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="notifications\AlarmReciever.cs" />
     <Compile Include="notifications\AndroidReminderSercvice.cs" />
