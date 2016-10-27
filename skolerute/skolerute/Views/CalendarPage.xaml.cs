@@ -9,13 +9,12 @@ using skolerute.db;
 
 using Xamarin.Forms;
 using System.Collections.ObjectModel;
+using skolerute.utils;
 
 namespace skolerute.Views
 {
     public partial class CalendarPage : ContentPage
     {
-        static DatabaseManagerAsync db;
-        static List<School> schools;
         static DateTime current;
         static List<School> favoriteSchools;
         static Grid cal;
@@ -31,6 +30,8 @@ namespace skolerute.Views
             // Placeholder liste over favoritt-skoler
             ObservableCollection<string> favoriteSchoolNames = new ObservableCollection<string>();
             favoriteSchools = new List<School>();
+
+            
             
             MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
 			{
@@ -46,19 +47,25 @@ namespace skolerute.Views
 			});
 
 
-            MessagingCenter.Subscribe<StartUpPage, string>(this, "deleteSch", (sender, args) =>
+            MessagingCenter.Subscribe<StartUpPage, string>(this, "deleteSch", async(sender, args) =>
             {
                 favoriteSchoolNames.Remove(args);
+                await SettingsManager.SavePreferenceAsync("" + (favoriteSchools.Find(x => x.name.Contains(args)).ID), false);
                 favoriteSchools.Remove(favoriteSchools.Find(x => x.name.Contains(args)));
                 SchoolPicker.ItemsSource = favoriteSchoolNames;
+                
             });
 
 
         }
 
-        protected async override void OnAppearing()
+
+
+        protected override void OnAppearing()
         {
             base.OnAppearing();
+
+            ResetAllIndicators();
 
             var cal = calendar;
             current = DateTime.Now;
@@ -87,11 +94,14 @@ namespace skolerute.Views
             IEnumerator enumerator = calChildren.GetEnumerator();
             int i = 0;
 
+            List<School> favoriteSchoolsTrimmed = favoriteSchools;
             List<List<CalendarDay>> selectedSchoolsCalendars = new List<List<CalendarDay>>();
+            if (favoriteSchoolsTrimmed != null && favoriteSchoolsTrimmed.Count > Constants.MaximumSelectedSchools)
+                favoriteSchoolsTrimmed = favoriteSchools.GetRange(0, Constants.MaximumSelectedSchools);
 
             // TODO: Change from favorite schools to selected schools to enable the user to choose schools to be displayed
-            if (favoriteSchools != null && favoriteSchools.Count > 0) { 
-                foreach (School selected in favoriteSchools)
+            if (favoriteSchoolsTrimmed != null && favoriteSchoolsTrimmed.Count > 0) { 
+                foreach (School selected in favoriteSchoolsTrimmed)
                 {
                     selectedSchoolsCalendars.Add(Calendar.GetRelevantFreeDays(selected.calendar, current));
                 }
@@ -109,7 +119,7 @@ namespace skolerute.Views
 
                     if (selectedSchoolsCalendars != null && selectedSchoolsCalendars.Count > 0)
                     {
-                        for (int j = 0; j < selectedSchoolsCalendars.Count && j < favoriteSchools.Count; j++)
+                        for (int j = 0; j < selectedSchoolsCalendars.Count && j < favoriteSchoolsTrimmed.Count; j++)
                         {
                             boxes.Children.ElementAt(j).IsVisible = true;
                             boxes.Children.ElementAt(j).BackgroundColor = Constants.colors.ElementAt(j);
@@ -180,7 +190,17 @@ namespace skolerute.Views
             return "";
         }
 
-
+        void ResetAllIndicators()
+        {
+            foreach (StackLayout day in cal.Children)
+            {
+                StackLayout boxContainer = day.Children.Last() as StackLayout;
+                foreach (BoxView box in boxContainer.Children)
+                {
+                    box.IsVisible = false;
+                }
+            }
+        }
 
     }
 }

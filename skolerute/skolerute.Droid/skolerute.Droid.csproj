@@ -166,7 +166,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="db\SQLiteAndroid.cs" />
+    <Compile Include="GPS\GPSserviceAndroid.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="notifications\AlarmReciever.cs" />
+    <Compile Include="notifications\AndroidReminderSercvice.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -183,7 +186,9 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\AndroidManifest.xml" />
+    <None Include="Properties\AndroidManifest.xml">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\skolerute\skolerute.csproj">
