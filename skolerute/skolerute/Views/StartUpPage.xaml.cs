@@ -25,9 +25,6 @@ namespace skolerute.Views
 
         protected override async void OnAppearing()
         {
-            
-
-
             base.OnAppearing();
             if (skoler.ItemsSource == null) { 
 		        debugskoler = await GetListContent();
@@ -42,14 +39,25 @@ namespace skolerute.Views
                 mySchools = await getFavSchools();
                 mineskoler.ItemsSource = mySchools;
 			}
-
             DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now);
         }
         
         private void GetClosest()
         {
+            //Called in xaml if button to get closest schools is pressed. Gets user global position and compares it
+            //to school positions and displays these schools in the GUI school list.
             List<double> userposition = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
+            List<int> IDs = new List<int>(); //SOME FUNCTION ADDS THe cLOSESETTETS SCHOOLses TO TEH LIIST
             List<data.School> newSchList = new List<data.School>();
+            GC.IsVisible = false;
+            GA.IsVisible = true;
+            foreach (School x in debugskoler)
+            {
+                if (IDs.Contains(x.ID)) {
+                    newSchList.Add(x);
+                }
+            }
+            skoler.ItemsSource = newSchList;
         }
 
         private void TextChanged(Object o, EventArgs e)
@@ -57,7 +65,15 @@ namespace skolerute.Views
             // Called in xaml: When the searchbar text changes,
             // check if any of the school names contains a substring equal to current searchtext, 
             // and display them if they do, if not, display nothing, if string is empty, display all
+            GC.IsVisible = true;
+            GA.IsVisible = false;
+
             List<data.School> newSchList = new List<data.School>();
+            if (searchSchool.Text == null)
+            {
+                skoler.ItemsSource = debugskoler;
+                return;
+            }
             var sValue = searchSchool.Text.Trim();
             if (sValue == "")
             {
