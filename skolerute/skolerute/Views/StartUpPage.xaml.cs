@@ -60,14 +60,7 @@ namespace skolerute.Views
             //Called in xaml if button to get closest schools is pressed. Gets user global position and compares it
             //to school positions and displays these schools in the GUI school list.
             List<double> userposition = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
-            List<double> lats = new List<double>();
-            List<double> lons = new List<double>();
-            foreach (School y in debugskoler)
-            {
-                lats.Add(y.latitude);
-                lons.Add(y.longitude);
-            }
-            getNearbySchools(userposition[0], userposition[1], lats, lons);
+            getNearbySchools(userposition[0], userposition[1]);
             GC.IsVisible = false;
             GA.IsVisible = true;
             List<School> ads = new List<School>();
@@ -259,6 +252,7 @@ namespace skolerute.Views
         private void getNearbySchools(double gpslati, double gpslongi)
         {
             avstander = new List<double>();
+            bestMatches = new List<int>();
             List<double> latitudes = new List<double>();
             List<double> longitudes = new List<double>();
 

@@ -29,8 +29,8 @@ namespace skolerute.Droid.GPS
             LC.PowerRequirement = Power.Medium;
             LocationListener LL = new LocationListener();
             string LP = mgr.GetBestProvider(LC, true);
-            mgr.RequestLocationUpdates(LP, 1000, 100, LL);
-            System.Threading.Thread.Sleep(1200);
+            mgr.RequestLocationUpdates(LP, 500, 100, LL);
+            System.Threading.Thread.Sleep(550);
             try { 
                 Location location = mgr.GetLastKnownLocation(LP);
                 double lat = location.Latitude;
