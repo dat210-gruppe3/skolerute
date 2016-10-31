@@ -16,8 +16,8 @@ namespace skolerute.data
 		public int ID { get; set; }
 
 		public string name { get; set; }
-		public float latitude { get; set; }
-		public float longitude { get; set; }
+		public double latitude { get; set; }
+		public double longitude { get; set; }
 		public string address { get; set; }
 		public string website { get; set; }
 

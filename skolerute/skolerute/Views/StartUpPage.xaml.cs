@@ -50,6 +50,8 @@ namespace skolerute.Views
 
             DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now);
 
+
+            
             
             // Tar inn gps-latitude(double),gps-longitude(double),liste med skolenes latitude(double),liste med skolenes longitudes(double)
             // Lagrer liste med skoleid på de 5 nærmeste skolene. (bestMatches)
@@ -234,7 +236,7 @@ namespace skolerute.Views
             return list;
         }
 
-        private void getNearbySchools(double gpslati, double gpslongi, List<double> latis, List<double> longis)
+        private void getNearbySchools(double gpslati, double gpslongi)
         {
 
             List<double> latitudes = new List<double>();
@@ -243,17 +245,14 @@ namespace skolerute.Views
             latitudes.Add(gpslati);
             longitudes.Add(gpslongi);
 
-            for(int t=0;t<latis.Count;t++)
+            foreach (School x in debugskoler)
             {
-                latitudes.Add(latis.ElementAt(t));
-                longitudes.Add(longis.ElementAt(t));
+                latitudes.Add(x.latitude);
+                longitudes.Add(x.longitude);
             }
-
 
             for (int i=1;i<latitudes.Count;i++)
             {
-  
-
                 if (i<6)
                 {
                     bestMatches.Add(i);
@@ -262,26 +261,19 @@ namespace skolerute.Views
                 
                 else
                 {
-
                     double biggest = avstander.Max();
                     int bigindex = avstander.FindIndex(0, 5, y => y == biggest);
-
                     double ny = DistanceCalc.HaversineDistance(latitudes.ElementAt(0), longitudes.ElementAt(0), latitudes.ElementAt(i), longitudes.ElementAt(i));
-    
 
                     if (ny < avstander.ElementAt(bigindex))
                     {
                         avstander.RemoveAt(bigindex);
                         avstander.Insert(bigindex, ny);
                         bestMatches.RemoveAt(bigindex);
-                        bestMatches.Insert(bigindex,i);     
-                        
-                    }
-                    
+                        bestMatches.Insert(bigindex,i);      
+                    }  
                 }           
             }
-            
-
         }
     }
     }
