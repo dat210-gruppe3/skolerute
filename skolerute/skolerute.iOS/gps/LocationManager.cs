@@ -11,7 +11,16 @@ namespace skolerute.iOS.gps
     {
         protected CLLocationManager locationManager;
 
-        public LocationManager()
+        public CLLocationManager LocManager
+        {
+            get { return this.locationManager; }
+        }
+
+        /// <summary>
+        /// This method returns the latitude and longitude values of the device.
+        /// </summary>
+        /// <returns>List<double> { longitude, latitude } or null if location services are not allowed</returns>
+        public List<double> GetGpsCoordinates()
         {
             this.locationManager = new CLLocationManager();
             this.locationManager.PausesLocationUpdatesAutomatically = true;
@@ -27,20 +36,20 @@ namespace skolerute.iOS.gps
             {
                 locationManager.AllowsBackgroundLocationUpdates = true;
             }
-        }
 
-        public CLLocationManager LocManager
-        {
-            get { return this.locationManager; }
-        }
+            if (CLLocationManager.LocationServicesEnabled)
+            {
+                LocManager.DesiredAccuracy = 100; // In meters
 
-        public List<double> GetGpsCoordinates()
-        {
-            LocManager.DesiredAccuracy = 100; // In meters
-            LocManager.RequestLocation();
-            double latitude = LocManager.Location.Coordinate.Latitude;
-            double longitude = LocManager.Location.Coordinate.Longitude;
-            return new List<double>(2) { latitude, longitude };
+                LocManager.RequestLocation();
+
+                double latitude = LocManager.Location.Coordinate.Latitude;
+                double longitude = LocManager.Location.Coordinate.Longitude;
+
+                return new List<double>(2) { latitude, longitude };
+            }
+
+            return null;
         }
     }
 }
