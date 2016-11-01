@@ -52,19 +52,21 @@ namespace skolerute.Views
         {
             //Called in xaml if button to get closest schools is pressed. Gets user global position and compares it
             //to school positions and displays these schools in the GUI school list.
-            Coordinate userposition = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
-            getNearbySchools(userposition);
 
-            GetCoords.IsVisible = false;
-            GA.IsVisible = true;
-
-            List<School> ads = new List<School>();
-
-            foreach (int x in bestMatches)
+            if (GetCoords.Text == "Vis nærmeste") { 
+                Coordinate userposition = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
+                getNearbySchools(userposition);
+                GetCoords.Text = "Vis alle";
+                List<School> ads = new List<School>();
+                foreach (int x in bestMatches) {
+                    ads.Add(allSchools.Find(y => y.ID == x));
+                }
+                schools.ItemsSource = ads;
+            } else
             {
-                ads.Add(allSchools.Find(y => y.ID == x));
+                GetCoords.Text = "Vis nærmeste";
+                schools.ItemsSource = allSchools;
             }
-            schools.ItemsSource = ads;
         }
 
         private void TextChanged(Object o, EventArgs e)
@@ -72,8 +74,6 @@ namespace skolerute.Views
             // Called in xaml: When the searchbar text changes,
             // check if any of the school names contains a substring equal to current searchtext, 
             // and display them if they do, if not, display nothing, if string is empty, display all
-            GetCoords.IsVisible = true;
-            GA.IsVisible = false;
 
             List<data.School> newSchList = new List<data.School>();
             if (searchSchool.Text == null)
@@ -274,6 +274,20 @@ namespace skolerute.Views
                     }
                 }
             }
+            
+            List<double> avs = new List<double>(5);
+            List<int> ids = new List<int>(5);
+            for (int j=5; j>0;j--)
+            {
+                double min = distances.Min();
+                int minindex = distances.FindIndex(0, j, y => y == min);
+                avs.Add(distances[minindex]);
+                ids.Add(bestMatches[minindex]);
+                distances.RemoveAt(minindex);
+                bestMatches.RemoveAt(minindex);
+            }
+            bestMatches = ids;
+            distances = avs;
         }
     }
 }

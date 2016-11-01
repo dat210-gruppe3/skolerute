@@ -34,6 +34,7 @@ namespace skolerute.Droid.GPS
             string LP = mgr.GetBestProvider(LC, true);
 
             mgr.RequestLocationUpdates(LP, 500, 100, LL);
+
             System.Threading.Thread.Sleep(550);
 
             try

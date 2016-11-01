@@ -24,7 +24,6 @@
       <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
       <Label Text="Legg til skole" HorizontalOptions="Center" VerticalOptions="Center" FontSize="Large" />
         <Button x:Name="GetCoords" Text="Vis nærmeste" Clicked="GetClosest" HorizontalOptions="End"/>
-        <Button x:Name="GA" Text="  Vis Alle  " Clicked="TextChanged" IsVisible="false"/>
       </StackLayout>
       <SearchBar x:Name="searchSchool" Placeholder="Søk etter skoler" TextChanged="TextChanged" SearchButtonPressed="TextChanged"/>
         <ListView x:Name="schools" ItemSelected="OnSelection">
