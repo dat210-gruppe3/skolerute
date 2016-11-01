@@ -35,6 +35,7 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="data\CalendarDay.cs" />
+    <Compile Include="data\Coordinate.cs" />
     <Compile Include="data\School.cs" />
     <Compile Include="db\DatabaseManager.cs" />
     <Compile Include="db\DatabaseManagerAsync.cs" />
@@ -45,9 +46,7 @@
     <Compile Include="notifications\INotification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="db\CSVParser.cs" />
-    <Compile Include="tests\DatabaseManagerTester.cs" />
     <Compile Include="utils\BindablePicker.cs" />
-    <Compile Include="utils\DistanceCalc.cs" />
     <Compile Include="utils\EnumerableExtensions.cs" />
     <Compile Include="utils\SettingsManager.cs" />
     <Compile Include="Views\CalendarPage.xaml.cs">
@@ -59,7 +58,6 @@
     <Compile Include="Views\StartUpPage.xaml.cs">
       <DependentUpon>StartUpPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="data\SchoolList.cs" />
     <Compile Include="Views\TabPage.xaml.cs">
       <DependentUpon>TabPage.xaml</DependentUpon>
     </Compile>

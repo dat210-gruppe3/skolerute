@@ -4,6 +4,7 @@ using System.Text;
 using skolerute.GPS;
 using CoreLocation;
 using UIKit;
+using skolerute.data;
 
 namespace skolerute.iOS.gps
 {
@@ -20,7 +21,7 @@ namespace skolerute.iOS.gps
         /// This method returns the latitude and longitude values of the device.
         /// </summary>
         /// <returns>List<double> { longitude, latitude } or null if location services are not allowed</returns>
-        public List<double> GetGpsCoordinates()
+        public Coordinate GetGpsCoordinates()
         {
             this.locationManager = new CLLocationManager();
             this.locationManager.PausesLocationUpdatesAutomatically = true;
@@ -43,10 +44,7 @@ namespace skolerute.iOS.gps
 
                 LocManager.RequestLocation();
 
-                double latitude = LocManager.Location.Coordinate.Latitude;
-                double longitude = LocManager.Location.Coordinate.Longitude;
-
-                return new List<double>(2) { latitude, longitude };
+                return new Coordinate(LocManager.Location.Coordinate.Latitude, LocManager.Location.Coordinate.Longitude);
             }
 
             return null;
