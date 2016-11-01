@@ -49,7 +49,9 @@
 	<array>
 		<string>location</string>
 	</array>
-  <key>NSLocationWhenInUseUsageDescription</key>
-  <string>This application is requesting location data.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This application is requesting location data.</string>
+	<key>CFBundleName</key>
+	<string>skolerute</string>
 </dict>
 </plist>

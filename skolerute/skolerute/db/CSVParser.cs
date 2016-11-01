@@ -52,7 +52,7 @@ namespace skolerute.db
 			return rows;
 		}
 
-		private float StringToFloat(string s)
+		private double StringToFloat(string s)
 		{
 			return float.Parse(s, CultureInfo.InvariantCulture.NumberFormat);
 		}
@@ -186,10 +186,10 @@ namespace skolerute.db
 				cols = Splitter(rows[i]);
 				string schname = cols[9];
 
-				if (schname == sch.name)
+				if (schname.ToLower() == sch.name.ToLower())
 				{
-					sch.latitude = StringToFloat(cols[2]);
-					sch.longitude = StringToFloat(cols[3]);
+					sch.latitude = Convert.ToDouble(cols[2]);
+					sch.longitude = Convert.ToDouble(cols[3]);
 					sch.address = cols[10];
 					sch.website = cols[11];
 				}

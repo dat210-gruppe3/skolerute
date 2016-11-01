@@ -43,7 +43,7 @@ namespace skolerute.Views
                 mySchools = await getFavSchools();
                 mineskoler.ItemsSource = mySchools;
 			}
-            DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now);
+            //DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now);
 
 
             
