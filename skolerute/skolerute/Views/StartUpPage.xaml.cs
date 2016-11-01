@@ -44,30 +44,27 @@ namespace skolerute.Views
                 mineskoler.ItemsSource = mySchools;
 			}
             DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now);
-
-
             
-            
-            // Tar inn gps-latitude(double),gps-longitude(double),liste med skolenes latitude(double),liste med skolenes longitudes(double)
-            // Lagrer liste med skoleid på de 5 nærmeste skolene. (bestMatches)
-            // Lagrer liste med avstand i km samsvarende med listen av skoleid-er. (avstander) Mikser litt norsk og engelsk her ser jeg:)
-            //getNearbySchools(gpslat,gpslong,latitudes,longitudes);       
-
         }
         
         private void GetClosest()
         {
             //Called in xaml if button to get closest schools is pressed. Gets user global position and compares it
             //to school positions and displays these schools in the GUI school list.
-            List<double> userposition = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
-            getNearbySchools(userposition[0], userposition[1]);
-            GC.IsVisible = false;
-            GA.IsVisible = true;
-            List<School> ads = new List<School>();
-            foreach (int x in bestMatches) {
-                ads.Add(debugskoler.Find(y => y.ID == x));
+            if (GetCoords.Text == "Vis nærmeste") { 
+                List<double> userposition = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
+                getNearbySchools(userposition[0], userposition[1]);
+                GetCoords.Text = "Vis alle";
+                List<School> ads = new List<School>();
+                foreach (int x in bestMatches) {
+                    ads.Add(debugskoler.Find(y => y.ID == x));
+                }
+                skoler.ItemsSource = ads;
+            } else
+            {
+                GetCoords.Text = "Vis nærmeste";
+                skoler.ItemsSource = debugskoler;
             }
-            skoler.ItemsSource = ads;
         }
 
         private void TextChanged(Object o, EventArgs e)
@@ -75,8 +72,6 @@ namespace skolerute.Views
             // Called in xaml: When the searchbar text changes,
             // check if any of the school names contains a substring equal to current searchtext, 
             // and display them if they do, if not, display nothing, if string is empty, display all
-            GC.IsVisible = true;
-            GA.IsVisible = false;
 
             List<data.School> newSchList = new List<data.School>();
             if (searchSchool.Text == null)
@@ -288,6 +283,20 @@ namespace skolerute.Views
                     }  
                 }           
             }
+            
+            List<double> avs = new List<double>(5);
+            List<int> ids = new List<int>(5);
+            for (int j=5; j>0;j--)
+            {
+                double min = avstander.Min();
+                int minindex = avstander.FindIndex(0, j, y => y == min);
+                avs.Add(avstander[minindex]);
+                ids.Add(bestMatches[minindex]);
+                avstander.RemoveAt(minindex);
+                bestMatches.RemoveAt(minindex);
+            }
+            bestMatches = ids;
+            avstander = avs;
         }
     }
     }

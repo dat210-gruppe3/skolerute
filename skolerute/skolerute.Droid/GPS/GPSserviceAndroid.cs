@@ -30,7 +30,7 @@ namespace skolerute.Droid.GPS
             LocationListener LL = new LocationListener();
             string LP = mgr.GetBestProvider(LC, true);
             mgr.RequestLocationUpdates(LP, 500, 100, LL);
-            System.Threading.Thread.Sleep(550);
+            System.Threading.Thread.Sleep(1550);
             try { 
                 Location location = mgr.GetLastKnownLocation(LP);
                 double lat = location.Latitude;
