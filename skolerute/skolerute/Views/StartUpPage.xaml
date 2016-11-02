@@ -11,8 +11,7 @@
     <StackLayout Spacing="10">
         <ProgressBar x:Name="progressBar" Progress="0" />
         <StackLayout>
-            
-            <Label Text="Mine skoler:" HorizontalOptions="Center" FontSize="Large" />
+            <Label Text="Mine skoler" HorizontalOptions="Center" FontSize="Large" />
             <ListView x:Name="mineskoler" ItemSelected="OnDeletion">
                 <ListView.ItemTemplate >
                     <DataTemplate>
@@ -21,8 +20,8 @@
                 </ListView.ItemTemplate>
             </ListView>
         </StackLayout>
-      <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-      <Label Text="Legg til skole" HorizontalOptions="Center" VerticalOptions="Center" FontSize="Large" />
+      <StackLayout Orientation="Horizontal" Padding="30,0,30,0">
+      <Label Text="Legg til skole" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Large" />
         <Button x:Name="GetCoords" Text="Vis nærmeste" Clicked="GetClosest" HorizontalOptions="End"/>
       </StackLayout>
       <SearchBar x:Name="searchSchool" Placeholder="Søk etter skoler" TextChanged="TextChanged" SearchButtonPressed="TextChanged"/>
