@@ -24,6 +24,7 @@ namespace skolerute.Views
         public StartUpPage()
         {
             InitializeComponent();
+            
         }
 
         protected override async void OnAppearing()
@@ -46,6 +47,7 @@ namespace skolerute.Views
 
             }
 
+
             //DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now);
         }
 
@@ -63,10 +65,20 @@ namespace skolerute.Views
                     ads.Add(allSchools.Find(y => y.ID == x));
                 }
                 schools.ItemsSource = ads;
+                avstand.IsVisible = true;
+                avstand.WidthRequest = 100;
+                List<string> result = new List<string>();
+                foreach (double arry in distances)
+                {
+                    string verdi = Math.Round(arry, 2).ToString()+ " km";
+                    result.Add(verdi);
+                }
+                avstand.ItemsSource = result;     
             } else
             {
                 GetCoords.Text = "Vis nærmeste";
                 schools.ItemsSource = allSchools;
+                avstand.IsVisible = false;   
             }
         }
 
