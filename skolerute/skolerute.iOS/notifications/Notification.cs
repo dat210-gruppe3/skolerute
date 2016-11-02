@@ -3,49 +3,44 @@ using skolerute.notifications;
 using UserNotifications;
 using Xamarin.Forms.Platform.iOS;
 using Foundation;
+using UIKit;
+using Xamarin.Forms;
+using skolerute.utils;
 
+
+[assembly: Dependency(typeof(skolerute.iOS.Notification))]
 namespace skolerute.iOS
 {
-	public class Notification //: INotification
+	public class Notification : INotification
 	{
-		public Notification()
+
+		public async void SendCalendarNotification(string title, string description, DateTime triggerTime)
 		{
+			// create the notification
+			var notification = new UILocalNotification();
 
+			// set the fire date (the date time in which it will fire)
+			notification.FireDate = NSDate.FromTimeIntervalSinceNow(5);
+			//notification.FireDate = triggerTime.ToNSDate();
 
-		}
+			// configure the alert
+			notification.AlertAction = "View Alert";
+			notification.AlertBody = "Your 10 second alert has fired!";
 
+			// modify the badge
+			//int currentNr = (int)(SettingsManager.GetPreference("badge"));
+			//notification.ApplicationIconBadgeNumber = currentNr + 1;
+			//await SettingsManager.SavePreferenceAsync("badge", currentNr + 1);
 
-		public void SendCalendarNotification(string title, string description, DateTime triggerTime)
-		{
-			NSDate nsdate = DateExtensions.ToNSDate(triggerTime);
-			NSDateComponents NSTriggerTime = new NSDateComponents();
-			NSTriggerTime.SetValueForComponent(triggerTime.Day, NSCalendarUnit.Day);
-			NSTriggerTime.SetValueForComponent(triggerTime.Month, NSCalendarUnit.Month);
-			NSTriggerTime.SetValueForComponent(triggerTime.Year, NSCalendarUnit.Year);
-			NSTriggerTime.SetValueForComponent(triggerTime.Hour, NSCalendarUnit.Hour);
-			NSTriggerTime.SetValueForComponent(triggerTime.Minute, NSCalendarUnit.Minute);
-			NSTriggerTime.SetValueForComponent(triggerTime.Second, NSCalendarUnit.Second);
+			nint badge = UIApplication.SharedApplication.ApplicationIconBadgeNumber + 1;
+			notification.ApplicationIconBadgeNumber = badge;
 
-			//DateExtensions.ToNSDate
-			var content = new UNMutableNotificationContent();
-			content.Title = title;
-			content.Subtitle = description;
-			content.Body = "This is the message body of the notification.";
-			content.Badge = 1;
+			// set the sound to be the default sound
+			notification.SoundName = UILocalNotification.DefaultSoundName;
 
-			var trigger = UNCalendarNotificationTrigger.CreateTrigger(NSTriggerTime, false);
-
-			var requestID = "sampleRequest";
-			var request = UNNotificationRequest.FromIdentifier(requestID, content, trigger);
-
-			UNUserNotificationCenter.Current.AddNotificationRequest(request, (err) =>
-			{
-				if (err != null)
-				{
-					// Do something with error...
-				}
-			});
-
+			// schedule it
+			UIApplication.SharedApplication.ScheduleLocalNotification(notification);
+			Console.WriteLine("Scheduled...");
 		}
 	}
 }

@@ -24,13 +24,23 @@ namespace skolerute.Views
             }
         }
 
-		//protected override void OnAppearing()
-		//{
-		//	string DBUG = "hei";
-		//	//DependencyService.Get<INotification>().SendCalendarNotification("testTittel", "dette er en test", DateTime.Now.AddSeconds(10));
-		//	//DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now.AddSeconds(10));
+		protected override void OnAppearing()
+		{
+			string DBUG = "hei";
+			//DependencyService.Get<INotification>().SendCalendarNotification("testTittel", "dette er en test", DateTime.Now.AddSeconds(10));
+			DependencyService.Get<INotification>().SendCalendarNotification("testTittel", "dette er en test", DateTime.Now.AddSeconds(20));
+			DependencyService.Get<INotification>().SendCalendarNotification("testTittel", "dette er en test", DateTime.Now.AddSeconds(20));
 
-		//}
+			DependencyService.Get<INotification>().SendCalendarNotification("testTittel", "dette er en test", DateTime.Now.AddSeconds(20));
+
+			DependencyService.Get<INotification>().SendCalendarNotification("testTittel", "dette er en test", DateTime.Now.AddSeconds(20));
+
+			DependencyService.Get<INotification>().SendCalendarNotification("testTittel", "dette er en test", DateTime.Now.AddSeconds(20));
+			DependencyService.Get<INotification>().SendCalendarNotification("testTittel", "dette er en test", DateTime.Now.AddSeconds(20));
+			DependencyService.Get<INotification>().SendCalendarNotification("testTittel", "dette er en test", DateTime.Now.AddSeconds(20));
+
+
+		}
 
         async Task OnOfflineModeChanged(object sender, EventArgs ea)
         {
@@ -40,7 +50,6 @@ namespace skolerute.Views
             {
                 await SettingsManager.SavePreferenceAsync(Constants.OfflineMode, true);
 				//TODO: Start parsing all data from csv file into database
-				//DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now.AddSeconds(10));
             }
             else if(!offlineMode.On)
             {
