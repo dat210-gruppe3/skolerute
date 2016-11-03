@@ -68,20 +68,20 @@ namespace skolerute.db
             await database.GetConnection().RunInTransactionAsync((SQLiteConnection connection) =>
             {
                 for (int i = 1; i < rows.Length; i++)
-            {
-                cols = Splitter(rows[i]);
-                string schname = cols[1];
-
-                if (schname != oldschool)
                 {
-                    oldschool = schname;
-                    data.School school = new data.School(cols[1], null);
-                    schools.Add(school);
+                    cols = Splitter(rows[i]);
+                    string schname = cols[1];
 
-                    RetrievePosition(school);
-                    connection.Insert(schools.Last());
+                    if (schname != oldschool)
+                    {
+                        oldschool = schname;
+                        data.School school = new data.School(cols[1], null);
+                        schools.Add(school);
+
+                        RetrievePosition(school).Wait();
+                        connection.Insert(schools.Last());
+                    }
                 }
-            }
             });
         }
 
@@ -165,7 +165,7 @@ namespace skolerute.db
         }
 
 
-        public async void RetrievePosition(data.School sch)
+        public async Task RetrievePosition(data.School sch)
         {
             var csv = await GetContent(Constants.PositionURL);
             char[] delimiter = new char[] { '\r', '\n' };
