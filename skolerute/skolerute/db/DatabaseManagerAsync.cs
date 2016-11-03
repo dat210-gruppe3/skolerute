@@ -19,6 +19,11 @@ namespace skolerute.db
             connection = DependencyService.Get<ISQLite>().GetAsyncConnection();
         }
 
+        public SQLiteAsyncConnection GetConnection()
+        {
+            return connection;
+        }
+
         public static async Task<bool> TableExists<T>(SQLiteAsyncConnection connection)
         {
             string query = "SELECT name FROM sqlite_master WHERE type='table' AND name=?";
