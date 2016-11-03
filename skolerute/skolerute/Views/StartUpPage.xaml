@@ -7,11 +7,11 @@
         <OnPlatform x:TypeArguments="Thickness"
                     iOS="0, 20, 0, 0" />
      </ContentPage.Padding>
-    <StackLayout Spacing="10"  x:Name="faren">
+    <StackLayout Spacing="10">
         <ProgressBar x:Name="progressBar" Progress="0" />
         <StackLayout>
             <Label Text="Mine skoler" HorizontalOptions="Center" FontSize="Large" />
-            <ListView x:Name="mineskoler" ItemSelected="OnDeletion">
+            <ListView x:Name="mineskoler" ItemSelected="OnDeletion" SeparatorVisibility="None">
                 <ListView.ItemTemplate >
                     <DataTemplate>
                         <TextCell Text="{Binding}"/>
@@ -35,7 +35,7 @@
         <ListView x:Name="avstand" IsVisible="false" SeparatorVisibility="None" ItemSelected="OnSelection">
           <ListView.ItemTemplate>
             <DataTemplate>
-              <TextCell Text="{Binding}" />
+              <TextCell Text="{Binding}"/>
             </DataTemplate>
           </ListView.ItemTemplate>
         </ListView>      

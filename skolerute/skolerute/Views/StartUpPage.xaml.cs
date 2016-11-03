@@ -20,7 +20,6 @@ namespace skolerute.Views
         List<double> distances = new List<double>();
         List<int> bestMatches = new List<int>();
 
-
         public StartUpPage()
         {
             InitializeComponent();
@@ -166,8 +165,6 @@ namespace skolerute.Views
             string skolenavn = "";
             School school = null;
 
-            
-
             if ((e.SelectedItem).GetType() == typeof(string))
             {
                 skolenavn = (string)(e.SelectedItem);
@@ -175,14 +172,11 @@ namespace skolerute.Views
                 skolenavn = skolenavn.Remove(index, (skolenavn.Length)-index);
                 school = allSchools.Find(y => y.name == skolenavn);
             }
-
             else
             {
                 school = (School)e.SelectedItem;
                 skolenavn = school.name;
             }
-          
-            //var list = (ListView)sender;
 
             var action = await DisplayActionSheet("Du valgte: " + skolenavn, "Legg til", "Avbryt");
 
@@ -194,7 +188,6 @@ namespace skolerute.Views
                     // Get calendar for chosen school
                     if (!mySchools.Contains(skolenavn))
                     {
-
                         mySchools.Add(skolenavn);
                         mineskoler.ItemsSource = mySchools;
                         if (SettingsManager.GetPreference("i") == null)
@@ -210,16 +203,18 @@ namespace skolerute.Views
                         {
                             await SettingsManager.SavePreferenceAsync(school.ID.ToString(), true);
                         }
-
                     }
 
                     db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
                     skolerute.db.CSVParser parser = new db.CSVParser(Constants.URL, database);
+                    ((ListView)sender).SelectedItem = null;
 
                     await parser.RetrieveCalendar(school);
                     MessagingCenter.Send<StartUpPage, School>(this, "choosenSch", school);
+                    
                 }
             }
+            ((ListView)sender).SelectedItem = null;
         }
 
         public async void OnDeletion(object sender, SelectedItemChangedEventArgs e)
@@ -230,7 +225,6 @@ namespace skolerute.Views
             }
 
             string skolenavn = (string)e.SelectedItem;
-
             var action = await DisplayActionSheet("Du valgte: " + skolenavn, "Slett", "Avbryt");
 
             if (action != null)
@@ -244,11 +238,10 @@ namespace skolerute.Views
                         mySchools.Remove(skolenavn);
                         mineskoler.ItemsSource = mySchools;
                     }
-
                     MessagingCenter.Send<StartUpPage, string>(this, "deleteSch", skolenavn);
-
                 }
             }
+            ((ListView)sender).SelectedItem = null;
         }
 
         private async Task<ObservableCollection<string>> getFavSchools()
@@ -266,7 +259,6 @@ namespace skolerute.Views
                     MessagingCenter.Send<StartUpPage, School>(this, "choosenSch", currentschool);
                 }
             }
-
             return list;
         }
 
