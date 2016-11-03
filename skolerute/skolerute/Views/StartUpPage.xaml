@@ -32,7 +32,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <ListView x:Name="avstand" IsVisible="false" SeparatorVisibility="None">
+        <ListView x:Name="avstand" IsVisible="false" SeparatorVisibility="None" ItemSelected="OnSelection">
           <ListView.ItemTemplate>
             <DataTemplate>
               <TextCell Text="{Binding}" />

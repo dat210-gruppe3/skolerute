@@ -66,19 +66,21 @@ namespace skolerute.Views
                 }
                 schools.ItemsSource = ads;
                 avstand.IsVisible = true;
-                avstand.WidthRequest = 100;
+                //avstand.WidthRequest = 100;
                 List<string> result = new List<string>();
-                foreach (double arry in distances)
+                for(int a=0;a<distances.Count;a++)
                 {
-                    string verdi = Math.Round(arry, 2).ToString()+ " km";
+                    string verdi = ads.ElementAt(a).name + ": " + Math.Round(distances.ElementAt(a), 2).ToString()+ " km";
                     result.Add(verdi);
                 }
-                avstand.ItemsSource = result;     
+                avstand.ItemsSource = result;
+                schools.IsVisible = false;     
             } else
             {
                 GetCoords.Text = "Vis nærmeste";
                 schools.ItemsSource = allSchools;
-                avstand.IsVisible = false;   
+                avstand.IsVisible = false;
+                schools.IsVisible = true;  
             }
         }
 
@@ -160,10 +162,27 @@ namespace skolerute.Views
             {
                 return; //ItemSelected is called on deselection, which results in SelectedItem being set to null
             }
-            School school = (School)e.SelectedItem;
-            string skolenavn = school.name;
 
-            var list = (ListView)sender;
+            string skolenavn = "";
+            School school = null;
+
+            
+
+            if ((e.SelectedItem).GetType() == typeof(string))
+            {
+                skolenavn = (string)(e.SelectedItem);
+                int index = skolenavn.IndexOf(':');
+                skolenavn = skolenavn.Remove(index, (skolenavn.Length)-index);
+                school = allSchools.Find(y => y.name == skolenavn);
+            }
+
+            else
+            {
+                school = (School)e.SelectedItem;
+                skolenavn = school.name;
+            }
+          
+            //var list = (ListView)sender;
 
             var action = await DisplayActionSheet("Du valgte: " + skolenavn, "Legg til", "Avbryt");
 
