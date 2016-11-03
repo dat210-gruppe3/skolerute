@@ -26,8 +26,10 @@ namespace skolerute.Views
 
 		//protected override void OnAppearing()
 		//{
-			
-		//	DependencyService.Get<INotification>().SendCalendarNotification("testTittel", "dette er en test", DateTime.Now.AddSeconds(10));
+		//	string DBUG = "hei";
+		//	//DependencyService.Get<INotification>().SendCalendarNotification("testTittel", "dette er en test", DateTime.Now.AddSeconds(10));
+		//	//DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now.AddSeconds(10));
+
 		//}
 
         async Task OnOfflineModeChanged(object sender, EventArgs ea)
@@ -37,7 +39,8 @@ namespace skolerute.Views
             if (offlineMode.On == true)
             {
                 await SettingsManager.SavePreferenceAsync(Constants.OfflineMode, true);
-                //TODO: Start parsing all data from csv file into database
+				//TODO: Start parsing all data from csv file into database
+				//DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now.AddSeconds(10));
             }
             else if(!offlineMode.On)
             {

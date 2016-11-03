@@ -7,12 +7,10 @@
         <OnPlatform x:TypeArguments="Thickness"
                     iOS="0, 20, 0, 0" />
      </ContentPage.Padding>
-    
-    <StackLayout Spacing="10">
+    <StackLayout Spacing="10"  x:Name="faren">
         <ProgressBar x:Name="progressBar" Progress="0" />
         <StackLayout>
-            
-            <Label Text="Mine skoler:" HorizontalOptions="Center" FontSize="Large" />
+            <Label Text="Mine skoler" HorizontalOptions="Center" FontSize="Large" />
             <ListView x:Name="mineskoler" ItemSelected="OnDeletion">
                 <ListView.ItemTemplate >
                     <DataTemplate>
@@ -21,17 +19,26 @@
                 </ListView.ItemTemplate>
             </ListView>
         </StackLayout>
-      <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-      <Label Text="Legg til skole" HorizontalOptions="Center" VerticalOptions="Center" FontSize="Large" />
+      <StackLayout Orientation="Horizontal" Padding="30,0,30,0">
+      <Label Text="Legg til skole" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Large" />
         <Button x:Name="GetCoords" Text="Vis nærmeste" Clicked="GetClosest" HorizontalOptions="End"/>
       </StackLayout>
-      <SearchBar x:Name="searchSchool" Placeholder="Søk etter skoler" TextChanged="TextChanged" SearchButtonPressed="TextChanged"/>
-        <ListView x:Name="schools" ItemSelected="OnSelection">
+      <SearchBar x:Name="searchSchool" Placeholder="Søk etter skoler" TextChanged="TextChanged" SearchButtonPressed="TextChanged"/>   
+      <StackLayout Orientation="Horizontal">
+        <ListView x:Name="schools" ItemSelected="OnSelection" SeparatorVisibility="None">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextCell Text="{Binding name}" />
+                  <TextCell Text="{Binding name}"/>              
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <ListView x:Name="avstand" IsVisible="false" SeparatorVisibility="None" ItemSelected="OnSelection">
+          <ListView.ItemTemplate>
+            <DataTemplate>
+              <TextCell Text="{Binding}" />
+            </DataTemplate>
+          </ListView.ItemTemplate>
+        </ListView>      
+      </StackLayout>  
 	</StackLayout>
 </ContentPage>

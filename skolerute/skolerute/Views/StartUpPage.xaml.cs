@@ -24,6 +24,7 @@ namespace skolerute.Views
         public StartUpPage()
         {
             InitializeComponent();
+            
         }
 
         protected override async void OnAppearing()
@@ -43,9 +44,11 @@ namespace skolerute.Views
             {
                 mySchools = await getFavSchools();
                 mineskoler.ItemsSource = mySchools;
+
             }
 
-            DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now);
+
+            //DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now);
         }
 
         private void GetClosest()
@@ -62,10 +65,22 @@ namespace skolerute.Views
                     ads.Add(allSchools.Find(y => y.ID == x));
                 }
                 schools.ItemsSource = ads;
+                avstand.IsVisible = true;
+                //avstand.WidthRequest = 100;
+                List<string> result = new List<string>();
+                for(int a=0;a<distances.Count;a++)
+                {
+                    string verdi = ads.ElementAt(a).name + ": " + Math.Round(distances.ElementAt(a), 2).ToString()+ " km";
+                    result.Add(verdi);
+                }
+                avstand.ItemsSource = result;
+                schools.IsVisible = false;     
             } else
             {
                 GetCoords.Text = "Vis nærmeste";
                 schools.ItemsSource = allSchools;
+                avstand.IsVisible = false;
+                schools.IsVisible = true;  
             }
         }
 
@@ -147,10 +162,27 @@ namespace skolerute.Views
             {
                 return; //ItemSelected is called on deselection, which results in SelectedItem being set to null
             }
-            School school = (School)e.SelectedItem;
-            string skolenavn = school.name;
 
-            var list = (ListView)sender;
+            string skolenavn = "";
+            School school = null;
+
+            
+
+            if ((e.SelectedItem).GetType() == typeof(string))
+            {
+                skolenavn = (string)(e.SelectedItem);
+                int index = skolenavn.IndexOf(':');
+                skolenavn = skolenavn.Remove(index, (skolenavn.Length)-index);
+                school = allSchools.Find(y => y.name == skolenavn);
+            }
+
+            else
+            {
+                school = (School)e.SelectedItem;
+                skolenavn = school.name;
+            }
+          
+            //var list = (ListView)sender;
 
             var action = await DisplayActionSheet("Du valgte: " + skolenavn, "Legg til", "Avbryt");
 

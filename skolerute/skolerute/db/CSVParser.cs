@@ -77,6 +77,7 @@ namespace skolerute.db
                     oldschool = schname;
                     data.School school = new data.School(cols[1], null);
                     schools.Add(school);
+
                     RetrievePosition(school);
                     connection.Insert(schools.Last());
                 }
@@ -176,10 +177,10 @@ namespace skolerute.db
                 cols = Splitter(rows[i]);
                 string schname = cols[9];
 
-                if (schname == sch.name)
+				if (schname.ToLower() == sch.name.ToLower())
                 {
-                    sch.latitude = StringToFloat(cols[2]);
-                    sch.longitude = StringToFloat(cols[3]);
+                    sch.latitude = Convert.ToDouble(cols[2]);
+                    sch.longitude = Convert.ToDouble(cols[3]);
                     sch.address = cols[10];
                     sch.website = cols[11];
                 }

@@ -58,8 +58,8 @@ namespace skolerute.db
 
 		public async Task<List<CalendarDay>> GetOnlyCalendar(int schoolID)
 		{
-			return await connection.QueryAsync<CalendarDay>("SELECT * FROM CalendarDay WHERE schoolID=?", schoolID);
-		}
+            return await connection.QueryAsync<CalendarDay>("SELECT * FROM CalendarDay WHERE schoolID=?", schoolID);
+        }
 
         public async Task<School> GetSchool(int id)
         {
@@ -88,7 +88,7 @@ namespace skolerute.db
 
         public async Task UpdateSingle(object obj)
         {
-            await connection.InsertOrReplaceAsync(obj);
+            await connection.InsertOrReplaceWithChildrenAsync(obj);
         }
     }
 }
