@@ -28,7 +28,7 @@ namespace skolerute.Droid.notifications
 
             var builder = new NotificationCompat.Builder(context)
                 .SetContentIntent(contentIntent)
-                .SetSmallIcon(Resource.Drawable.ic_pause_light) // TODO: Add launcher image here
+                .SetSmallIcon(Resource.Drawable.icon) // TODO: Add launcher image here
                 .SetContentTitle(title)
                 .SetContentText(description)
                 .SetStyle(style)

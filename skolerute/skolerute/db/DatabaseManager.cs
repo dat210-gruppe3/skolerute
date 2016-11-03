@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +7,7 @@ using SQLite.Net;
 using Xamarin.Forms;
 using skolerute.data;
 using System.IO;
+using SQLiteNetExtensions.Extensions;
 
 namespace skolerute.db
 {
@@ -71,11 +72,19 @@ namespace skolerute.db
             }
         }
 
-        public int InsertSingle(object obj)
+        public void InsertSingle(object obj)
         {
             lock (locker)
             {
-                return database.Insert(obj);
+                database.Insert(obj);
+            }
+        }
+
+        public void UpdateSingle(object obj)
+        {
+            lock (locker)
+            {
+                database.InsertOrReplaceWithChildren(obj);
             }
         }
 
