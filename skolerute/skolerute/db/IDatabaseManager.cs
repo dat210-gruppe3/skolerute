@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +14,8 @@ namespace skolerute.db
         IEnumerable<CalendarDay> GetCalendarDays();
         School GetSchool(int id);
         CalendarDay GetCalendarDay(int id);
-        int InsertSingle(object obj);
+        void InsertSingle(object obj);
+        void UpdateSingle(object obj);
         int InsertList<T>(List<T> objList);
         int DeleteSchool(int id);
         int DeleteCalendarDay(int id);

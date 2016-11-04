@@ -10,6 +10,7 @@ namespace skolerute.db
 {
     interface IDatabaseManagerAsync
     {
+        SQLiteAsyncConnection GetConnection();
         void CreateNewDatabase();
         Task<List<School>> GetSchools();
         Task<List<CalendarDay>> GetCalendarDays();

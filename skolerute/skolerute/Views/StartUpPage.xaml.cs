@@ -20,10 +20,10 @@ namespace skolerute.Views
         List<double> distances = new List<double>();
         List<int> bestMatches = new List<int>();
 
-
         public StartUpPage()
         {
             InitializeComponent();
+            
         }
 
         protected override async void OnAppearing()
@@ -46,6 +46,7 @@ namespace skolerute.Views
 
             }
 
+
             //DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now);
         }
 
@@ -63,10 +64,22 @@ namespace skolerute.Views
                     ads.Add(allSchools.Find(y => y.ID == x));
                 }
                 schools.ItemsSource = ads;
+                avstand.IsVisible = true;
+                //avstand.WidthRequest = 100;
+                List<string> result = new List<string>();
+                for(int a=0;a<distances.Count;a++)
+                {
+                    string verdi = ads.ElementAt(a).name + ": " + Math.Round(distances.ElementAt(a), 2).ToString()+ " km";
+                    result.Add(verdi);
+                }
+                avstand.ItemsSource = result;
+                schools.IsVisible = false;     
             } else
             {
                 GetCoords.Text = "Vis nærmeste";
                 schools.ItemsSource = allSchools;
+                avstand.IsVisible = false;
+                schools.IsVisible = true;  
             }
         }
 
@@ -148,10 +161,22 @@ namespace skolerute.Views
             {
                 return; //ItemSelected is called on deselection, which results in SelectedItem being set to null
             }
-            School school = (School)e.SelectedItem;
-            string skolenavn = school.name;
 
-            var list = (ListView)sender;
+            string skolenavn = "";
+            School school = null;
+
+            if ((e.SelectedItem).GetType() == typeof(string))
+            {
+                skolenavn = (string)(e.SelectedItem);
+                int index = skolenavn.IndexOf(':');
+                skolenavn = skolenavn.Remove(index, (skolenavn.Length)-index);
+                school = allSchools.Find(y => y.name == skolenavn);
+            }
+            else
+            {
+                school = (School)e.SelectedItem;
+                skolenavn = school.name;
+            }
 
             var action = await DisplayActionSheet("Du valgte: " + skolenavn, "Legg til", "Avbryt");
 
@@ -163,7 +188,6 @@ namespace skolerute.Views
                     // Get calendar for chosen school
                     if (!mySchools.Contains(skolenavn))
                     {
-
                         mySchools.Add(skolenavn);
                         mineskoler.ItemsSource = mySchools;
                         if (SettingsManager.GetPreference("i") == null)
@@ -179,16 +203,18 @@ namespace skolerute.Views
                         {
                             await SettingsManager.SavePreferenceAsync(school.ID.ToString(), true);
                         }
-
                     }
 
                     db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
                     skolerute.db.CSVParser parser = new db.CSVParser(Constants.URL, database);
+                    ((ListView)sender).SelectedItem = null;
 
                     await parser.RetrieveCalendar(school);
                     MessagingCenter.Send<StartUpPage, School>(this, "choosenSch", school);
+                    
                 }
             }
+            ((ListView)sender).SelectedItem = null;
         }
 
         public async void OnDeletion(object sender, SelectedItemChangedEventArgs e)
@@ -199,7 +225,6 @@ namespace skolerute.Views
             }
 
             string skolenavn = (string)e.SelectedItem;
-
             var action = await DisplayActionSheet("Du valgte: " + skolenavn, "Slett", "Avbryt");
 
             if (action != null)
@@ -213,11 +238,10 @@ namespace skolerute.Views
                         mySchools.Remove(skolenavn);
                         mineskoler.ItemsSource = mySchools;
                     }
-
                     MessagingCenter.Send<StartUpPage, string>(this, "deleteSch", skolenavn);
-
                 }
             }
+            ((ListView)sender).SelectedItem = null;
         }
 
         private async Task<ObservableCollection<string>> getFavSchools()
@@ -235,7 +259,6 @@ namespace skolerute.Views
                     MessagingCenter.Send<StartUpPage, School>(this, "choosenSch", currentschool);
                 }
             }
-
             return list;
         }
 
