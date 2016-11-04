@@ -47,5 +47,30 @@ namespace skolerute.iOS
 
 			return base.FinishedLaunching(application, launchOptions);
 		}
+
+		public override void ReceivedLocalNotification(UIApplication application, UILocalNotification notification)
+		{
+			//TODO: show an alert
+			/*UIAlertController okayAlertController = UIAlertController.Create(notification.AlertAction, notification.AlertBody, UIAlertControllerStyle.Alert);
+			okayAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
+
+			Window.RootViewController.PresentViewController(okayAlertController, true, null);*/
+
+			UIAlertView alert = new UIAlertView()
+			{
+				Title = notification.AlertTitle,
+				Message = notification.AlertBody,
+			};
+			alert.AddButton("OK");
+			alert.Show();
+			// reset badge
+			UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
+		}
+
+		public override void DidEnterBackground(UIApplication application)
+		{
+			// reset badge
+			UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
+		}
     }
 }

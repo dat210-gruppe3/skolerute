@@ -13,19 +13,21 @@ namespace skolerute.iOS
 {
 	public class Notification : INotification
 	{
+		//https://github.com/xamarin/ios-samples/blob/master/LocalNotifications/Notifications/AppDelegate.cs
+		//https://developer.xamarin.com/guides/ios/application_fundamentals/notifications/local_notifications_in_ios_walkthrough/
 
-		public async void SendCalendarNotification(string title, string description, DateTime triggerTime)
+		public /*async*/ void SendCalendarNotification(string title, string description, DateTime triggerTime)
 		{
 			// create the notification
 			var notification = new UILocalNotification();
 
-			// set the fire date (the date time in which it will fire)
-			notification.FireDate = NSDate.FromTimeIntervalSinceNow(5);
-			//notification.FireDate = triggerTime.ToNSDate();
+			// set the fire date (triggerTime)
+			//notification.FireDate = NSDate.FromTimeIntervalSinceNow(5);
+			notification.FireDate = triggerTime.ToUniversalTime().ToNSDate();
 
 			// configure the alert
 			notification.AlertAction = "View Alert";
-			notification.AlertBody = "Your 10 second alert has fired!";
+			notification.AlertBody = description;
 
 			// modify the badge
 			//int currentNr = (int)(SettingsManager.GetPreference("badge"));
