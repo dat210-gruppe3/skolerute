@@ -48,7 +48,7 @@ namespace skolerute.Views
                     //Handle vacations
                     else if (currentDay.comment.Substring(Math.Max(0, currentDay.comment.Length - 5)) == "ferie")
                     {
-                        FreeDayGroup = new GroupedFreeDayModel() { LongName = currentDay.comment };
+                        FreeDayGroup = new GroupedFreeDayModel() { LongName = currentDay.comment, ShortName="" };
                         DateTime startDate = skole.calendar[i].date;
 
                         if (i + 1 < skole.calendar.Count)
@@ -71,7 +71,7 @@ namespace skolerute.Views
                     //Handle summer vacation
                     else if (skole.calendar[i].isFreeDay && skole.calendar[i].comment == "")
                     {
-                        FreeDayGroup = new GroupedFreeDayModel() { LongName = "Sommerferie" };
+                        FreeDayGroup = new GroupedFreeDayModel() { LongName = "Sommerferie", ShortName="" };
                         DateTime startDate = skole.calendar[i].date;
 
                         if (i + 1 < skole.calendar.Count)
@@ -103,7 +103,7 @@ namespace skolerute.Views
                     //Handle other types of freedays
                     else if (skole.calendar[i].isFreeDay)
                     {
-                        FreeDayGroup = new GroupedFreeDayModel() { LongName = skole.calendar[i].comment };
+                        FreeDayGroup = new GroupedFreeDayModel() { LongName = skole.calendar[i].comment, ShortName="" };
 
                         string currentComment = skole.calendar[i].comment;
                         DateTime startDate = skole.calendar[i].date;
