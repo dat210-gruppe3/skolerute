@@ -101,8 +101,7 @@ namespace skolerute.db
 
                     if (cols[1] == sch.name)
                     {
-                        schCalendar.Add(new data.CalendarDay(Convert.ToDateTime(cols[0]),
-                            !WordsToBool(cols[2]), WordsToBool(cols[3]), WordsToBool(cols[4]), cols[5]));
+                        schCalendar.Add(new data.CalendarDay((Convert.ToDateTime(cols[0]).ToLocalTime()), !WordsToBool(cols[2]), WordsToBool(cols[3]), WordsToBool(cols[4]), cols[5]));
                     }
                 }
                 sch.calendar = schCalendar;
