@@ -9,6 +9,10 @@ namespace skolerute.Views
 {
     public partial class SettingsPage : ContentPage
     {
+		int daysBeforeNotification = 0;
+		DateTime nextFreeDay = new DateTime(2016, 11, 07);
+		DateTime notificationDate;
+
         public SettingsPage()
         {
             InitializeComponent();
@@ -29,26 +33,33 @@ namespace skolerute.Views
 			// Add days in picker (user chooses when to get notified)
 			for (int i = 1; i < 31; i++)
 			{
-				daysBeforeNotification.Items.Add(i.ToString());
+				listOfPickerDays.Items.Add(i.ToString());
 			}
 
 			//https://developer.xamarin.com/api/type/Xamarin.Forms.Picker/
-			daysBeforeNotification.SelectedIndexChanged += (sender, args) =>
+			listOfPickerDays.SelectedIndexChanged += (sender, args) =>
 				{
-					if (daysBeforeNotification.SelectedIndex == -1)
+				if (listOfPickerDays.SelectedIndex == -1)
 					{
-						//boxView.Color = Color.Default;
 						string DBUG = "e";
 					}
 					else
 					{
-					string notificationDaySelected = daysBeforeNotification.Items[daysBeforeNotification.SelectedIndex];
-						//boxView.Color = nameToColor[colorName];
+					daysBeforeNotification = int.Parse(listOfPickerDays.Items[listOfPickerDays.SelectedIndex]);
 					}
 				};
 
 
+
         }
+
+		private static DateTime calculateDateOfNotification(DateTime nextFreeDay, int daysBeforeNotification)
+		{
+			DateTime notificationDate = nextFreeDay.AddDays(-daysBeforeNotification);
+			// Add an universal (static) point of time 
+			notificationDate.AddHours(9);
+			return notificationDate;
+		}
 
         async Task OnOfflineModeChanged(object sender, EventArgs ea)
         {
@@ -69,7 +80,9 @@ namespace skolerute.Views
 		{
 			if (notification.On == true)
 			{
-				DependencyService.Get<INotification>().SendCalendarNotification("No tittel på ios", "dette er en test", DateTime.Now.AddSeconds(10));
+				//TODO: få neste fridag for alle favorittskole og send notifikasjon
+				DependencyService.Get<INotification>().SendCalendarNotification("No tittel på ios", "Det nærmer seg fri for en favorittskole", DateTime.Now.AddSeconds(10));
+				DependencyService.Get<INotification>().SendCalendarNotification("No tittel på ios", "Det nærmer seg fri for en favorittskole", calculateDateOfNotification(nextFreeDay, daysBeforeNotification));
 				await SettingsManager.SavePreferenceAsync(Constants.Notify, true);
 			}
 			else {

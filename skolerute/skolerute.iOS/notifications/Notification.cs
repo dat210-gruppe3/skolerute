@@ -30,10 +30,6 @@ namespace skolerute.iOS
 			notification.AlertBody = description;
 
 			// modify the badge
-			//int currentNr = (int)(SettingsManager.GetPreference("badge"));
-			//notification.ApplicationIconBadgeNumber = currentNr + 1;
-			//await SettingsManager.SavePreferenceAsync("badge", currentNr + 1);
-
 			nint badge = UIApplication.SharedApplication.ApplicationIconBadgeNumber + 1;
 			notification.ApplicationIconBadgeNumber = badge;
 
