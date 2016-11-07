@@ -1,11 +1,11 @@
-﻿using System;
-using skolerute.notifications;
+using System;
 using UserNotifications;
 using Xamarin.Forms.Platform.iOS;
 using Foundation;
 using UIKit;
 using Xamarin.Forms;
 using skolerute.utils;
+using skolerute.notifications;
 
 
 [assembly: Dependency(typeof(skolerute.iOS.Notification))]

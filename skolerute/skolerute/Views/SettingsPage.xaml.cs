@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
+using skolerute.data;
 using skolerute.utils;
 using skolerute.notifications;
-
 using Xamarin.Forms;
 
 namespace skolerute.Views

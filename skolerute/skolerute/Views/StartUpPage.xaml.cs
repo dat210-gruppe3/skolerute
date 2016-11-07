@@ -3,13 +3,9 @@ using skolerute.utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using Xamarin.Forms.Internals;
-using skolerute.notifications;
 
 namespace skolerute.Views
 {
@@ -41,7 +37,7 @@ namespace skolerute.Views
             }
             if (SettingsManager.GetPreference("i") != null && (bool)SettingsManager.GetPreference("i"))
             {
-                mySchools = await getFavSchools();
+                mySchools = await GetFavSchools();
                 mineskoler.ItemsSource = mySchools;
 
             }
@@ -57,7 +53,7 @@ namespace skolerute.Views
 
             if (GetCoords.Text == "Vis nærmeste") { 
                 Coordinate userposition = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
-                getNearbySchools(userposition);
+                GetNearbySchools(userposition);
                 GetCoords.Text = "Vis alle";
                 List<School> ads = new List<School>();
                 foreach (int x in bestMatches) {
@@ -204,13 +200,13 @@ namespace skolerute.Views
                             await SettingsManager.SavePreferenceAsync(school.ID.ToString(), true);
                         }
                     }
-
+                    MessagingCenter.Send(this, "newSchoolSelected");
                     db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
-                    skolerute.db.CSVParser parser = new db.CSVParser(Constants.URL, database);
+                    db.CSVParser parser = new db.CSVParser(Constants.URL, database);
                     ((ListView)sender).SelectedItem = null;
 
                     await parser.RetrieveCalendar(school);
-                    MessagingCenter.Send<StartUpPage, School>(this, "choosenSch", school);
+                    MessagingCenter.Send(this, "choosenSch", school);
                     
                 }
             }
@@ -244,7 +240,7 @@ namespace skolerute.Views
             ((ListView)sender).SelectedItem = null;
         }
 
-        private async Task<ObservableCollection<string>> getFavSchools()
+        private async Task<ObservableCollection<string>> GetFavSchools()
         {
             ObservableCollection<string> list = new ObservableCollection<string>();
             db.DatabaseManagerAsync db = new db.DatabaseManagerAsync();
@@ -262,7 +258,7 @@ namespace skolerute.Views
             return list;
         }
 
-        private void getNearbySchools(Coordinate gpsCoordinates)
+        private void GetNearbySchools(Coordinate gpsCoordinates)
         {
             distances = new List<double>();
             bestMatches = new List<int>();

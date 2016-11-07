@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using skolerute.GPS;
 using CoreLocation;
 using UIKit;
@@ -66,7 +63,7 @@ namespace skolerute.iOS.gps
 		{
 			foreach (var loc in locations)
 			{
-				Console.WriteLine(loc);
+				//Console.WriteLine(loc);
 			}
 		}
 	}

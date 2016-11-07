@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace skolerute.data
 {
-	public class Calendar
+	public static class Calendar
 	{
 		public static int DayOfWeek(DateTime dt)
 		{
@@ -38,7 +38,7 @@ namespace skolerute.data
 
 		/// <summary>
 		/// Supposed to take in values for year and month, and give out whatever necessary to render the
-		/// calender in the GUI. This functiion is to be called upon from the View-model in MVC
+		/// calender in the GUI.
 		/// </summary>
 		/// <param name="year">Year.</param>
 		/// <param name="month">Month.</param>
@@ -125,7 +125,7 @@ namespace skolerute.data
                         lastMonth = new DateTime(dt.Year, dt.Month - 1, calendar.ElementAt(0));
                 }
 
-                hasGottenToCorrectDay = currentDay.date.CompareTo(lastMonth) >= 0;
+                hasGottenToCorrectDay = currentDay.Date.CompareTo(lastMonth) >= 0;
 
                 if (hasGottenToCorrectDay)
                 {
