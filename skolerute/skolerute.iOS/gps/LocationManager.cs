@@ -2,7 +2,9 @@ using skolerute.GPS;
 using CoreLocation;
 using UIKit;
 using skolerute.data;
+using Xamarin.Forms;
 
+[assembly: Dependency(typeof(skolerute.iOS.gps.LocationManager))]
 namespace skolerute.iOS.gps
 {
     public class LocationManager : IGPSservice

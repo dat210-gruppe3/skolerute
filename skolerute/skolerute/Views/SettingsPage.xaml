@@ -2,12 +2,23 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="skolerute.Views.SettingsPage"
-             Title="Innstillinger">
+             Title="Innstillinger"
+		     xmlns:local="clr-namespace:skolerute.utils;assembly=skolerute"
+>
   <StackLayout x:Name="layout">
     <TableView Intent="Settings">
       <TableRoot>
         <TableSection>
-          <SwitchCell x:Name="offlineMode" Text="Offline modus" On="false" OnChanged="OnOfflineModeChanged"/>
+			<!--<StackLayout>-->
+          	<SwitchCell x:Name="offlineMode" Text="Offline modus" On="false" OnChanged="OnOfflineModeChanged"/>
+			<SwitchCell x:Name="notification" Text="Notifikasjon" On="false" OnChanged="OnNotificationChanged"/>
+			<ViewCell>
+				<Picker x:Name="listOfPickerDays" SelectedIndex="{Binding Industry}" HorizontalOptions="FillAndExpand">
+        			<Picker.Items>
+        			</Picker.Items>
+    			</Picker>
+			</ViewCell>
+			<!--</StackLayout>-->
         </TableSection>
       </TableRoot>
     </TableView>

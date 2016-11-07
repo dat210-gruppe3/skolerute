@@ -25,6 +25,7 @@ namespace skolerute.data
         public static readonly List<Color> colors = new List<Color>() { yellow, blue, purple, teal, maroon, lime };
 
         // Settings
-        public const string OfflineMode = "offline"; 
+        public const string OfflineMode = "offline";
+		public const string Notify = "Notify";
     }
 }
