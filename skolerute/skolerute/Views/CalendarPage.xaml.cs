@@ -15,11 +15,13 @@ namespace skolerute.Views
         static List<School> favoriteSchools;
         static Grid cal;
         static StackLayout MS;
-        private bool isLoading;
+        private bool isLoading = false;
 
         public CalendarPage()
         {
             InitializeComponent();
+
+
 
             MS = MonthSelect;
             current = DateTime.Now;
@@ -29,9 +31,13 @@ namespace skolerute.Views
             ObservableCollection<string> favoriteSchoolNames = new ObservableCollection<string>();
             favoriteSchools = new List<School>();
 
+            LoadingIndicator.BindingContext = isLoading;
+
             MessagingCenter.Subscribe<StartUpPage>(this, "newSchoolSelected", (sender) =>
             {
                 isLoading = true;
+                LoadingIndicator.IsRunning = true;
+                LoadingIndicator.IsVisible = true;
             });
             
             MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
@@ -41,11 +47,13 @@ namespace skolerute.Views
                 {
                     favoriteSchools.Add(args);
                     favoriteSchoolNames.Add(args.name);
-                    SchoolPicker.ItemsSource = favoriteSchoolNames;
 
                     ResetAllIndicators();
                     DisplayCalendar(cal, MS);
+
                     isLoading = false;
+                    LoadingIndicator.IsRunning = false;
+                    LoadingIndicator.IsVisible = false;
                 }
 			});
 
@@ -55,8 +63,6 @@ namespace skolerute.Views
                 favoriteSchoolNames.Remove(args);
                 await SettingsManager.SavePreferenceAsync("" + (favoriteSchools.Find(x => x.name.Contains(args)).ID), false);
                 favoriteSchools.Remove(favoriteSchools.Find(x => x.name.Contains(args)));
-                SchoolPicker.ItemsSource = favoriteSchoolNames;
-                
             });
 
 
