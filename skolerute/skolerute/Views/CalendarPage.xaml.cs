@@ -121,9 +121,9 @@ namespace skolerute.Views
                     {
                         for (int j = 0; j < selectedSchoolsCalendars.Count && j < favoriteSchoolsTrimmed.Count; j++)
                         {
-                            boxes.Children.ElementAt(j).IsVisible = true;
+							boxes.Children.ElementAt(j).IsVisible = true;
                             boxes.Children.ElementAt(j).BackgroundColor = Constants.colors.ElementAt(j);
-                            if (selectedSchoolsCalendars.ElementAt(j).ElementAt(i).isFreeDay) { 
+							if (selectedSchoolsCalendars.ElementAt(j).ElementAt(i).isFreeDay && ((int)selectedSchoolsCalendars.ElementAt(j).ElementAt(i).date.DayOfWeek) % 6 != 0 && ((int)selectedSchoolsCalendars.ElementAt(j).ElementAt(i).date.DayOfWeek) % 7 != 0) { 
                                 boxes.Children.ElementAt(j).Opacity = 1.0;
                             } else {
                                 boxes.Children.ElementAt(j).Opacity = 0.0;

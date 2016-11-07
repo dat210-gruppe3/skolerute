@@ -44,12 +44,30 @@ namespace skolerute.iOS.gps
             {
                 LocManager.DesiredAccuracy = 100; // In meters
 
-                LocManager.RequestLocation();
+                
 
-                return new Coordinate(LocManager.Location.Coordinate.Latitude, LocManager.Location.Coordinate.Longitude);
+				var mgr = new CLLocationManager();
+				mgr.Delegate = new MyLocationDelegate();
+				mgr.StartUpdatingLocation();
+
+				//LocManager.RequestLocation();
+
+				//return new Coordinate(0, 0);
+				return new Coordinate(LocManager.Location.Coordinate.Latitude, LocManager.Location.Coordinate.Longitude);
             }
 
             return null;
         }
     }
+
+	public class MyLocationDelegate : CLLocationManagerDelegate
+	{
+		public override void LocationsUpdated(CLLocationManager manager, CLLocation[] locations)
+		{
+			foreach (var loc in locations)
+			{
+				Console.WriteLine(loc);
+			}
+		}
+	}
 }
