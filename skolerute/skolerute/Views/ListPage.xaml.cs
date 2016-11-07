@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Xamarin.Forms;
@@ -92,20 +92,20 @@ namespace skolerute.Views
             {
                 CalendarDay currentDay = skole.calendar[i];
                 //Ignore weekends
-                if(skole.calendar[i].date.DayOfWeek == DayOfWeek.Saturday || skole.calendar[i].date.DayOfWeek == DayOfWeek.Sunday)
+                if(skole.calendar[i].Date.DayOfWeek == DayOfWeek.Saturday || skole.calendar[i].Date.DayOfWeek == DayOfWeek.Sunday)
                 {
                     i++;
                 }
                 //Handle vacations
-                else if(currentDay.comment.Substring(Math.Max(0, currentDay.comment.Length - 5)) == "ferie")
+                else if(currentDay.Comment.Substring(Math.Max(0, currentDay.Comment.Length - 5)) == "ferie")
                 {
-                    FreeDayGroup = new GroupedFreeDayModel() { LongName = currentDay.comment };
-                    DateTime startDate = skole.calendar[i].date;
+                    FreeDayGroup = new GroupedFreeDayModel() { LongName = currentDay.Comment };
+                    DateTime startDate = skole.calendar[i].Date;
                     string dateInterval;
 
                     if (i + 1 < skole.calendar.Count)
                     {
-                        while (skole.calendar[i].isFreeDay)
+                        while (skole.calendar[i].IsFreeDay)
                         {
                             i++;
 
@@ -116,7 +116,7 @@ namespace skolerute.Views
                         }
                     }
 
-                    DateTime endDate = skole.calendar[i].date;
+                    DateTime endDate = skole.calendar[i].Date;
                     //Check if end of dataset is reached
                     if (i == skole.calendar.Count - 1)
                     {
@@ -132,15 +132,15 @@ namespace skolerute.Views
                     grouped.Add(FreeDayGroup);
                 }
                 //Handle summer vacation
-                else if (skole.calendar[i].isFreeDay && skole.calendar[i].comment == "")
+                else if (skole.calendar[i].IsFreeDay && skole.calendar[i].Comment == "")
                 {
                     FreeDayGroup = new GroupedFreeDayModel() { LongName = "Sommerferie" };
-                    DateTime startDate = skole.calendar[i].date;
+                    DateTime startDate = skole.calendar[i].Date;
                     string dateInterval;
 
                     if (i + 1 < skole.calendar.Count)
                     {
-                        while (skole.calendar[i].isFreeDay)
+                        while (skole.calendar[i].IsFreeDay)
                         {
                             i++;
 
@@ -151,7 +151,7 @@ namespace skolerute.Views
                         }
                     }
 
-                    DateTime endDate = skole.calendar[i].date;
+                    DateTime endDate = skole.calendar[i].Date;
                     //Check if end of dataset is reached
                     if (i == skole.calendar.Count-1)
                     {
@@ -167,12 +167,12 @@ namespace skolerute.Views
                     grouped.Add(FreeDayGroup);
                 }
                 //Handle other types of freedays
-                else if (skole.calendar[i].isFreeDay)
+                else if (skole.calendar[i].IsFreeDay)
                 {
-                    FreeDayGroup = new GroupedFreeDayModel() { LongName = skole.calendar[i].comment };
+                    FreeDayGroup = new GroupedFreeDayModel() { LongName = skole.calendar[i].Comment };
                     
-                    string currentComment = skole.calendar[i].comment;
-                    DateTime startDate = skole.calendar[i].date;
+                    string currentComment = skole.calendar[i].Comment;
+                    DateTime startDate = skole.calendar[i].Date;
 
                     /*
                     if(i+1 < skole.calendar.Count)

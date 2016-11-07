@@ -1,18 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using skolerute.GPS;
-using skolerute.db;
 using skolerute.data;
-
-using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using Android.Locations;
 using Xamarin.Forms;
 
@@ -26,20 +17,20 @@ namespace skolerute.Droid.GPS
         {
             LocationManager mgr = (LocationManager)Forms.Context.GetSystemService(Context.LocationService);
 
-            var LC = new Criteria();
-            LC.Accuracy = Accuracy.Coarse;
-            LC.PowerRequirement = Power.Medium;
+            var criteria = new Criteria();
+            criteria.Accuracy = Accuracy.Coarse;
+            criteria.PowerRequirement = Power.Medium;
 
-            LocationListener LL = new LocationListener();
-            string LP = mgr.GetBestProvider(LC, true);
+            LocationListener locationListener = new LocationListener();
+            string bestProvider = mgr.GetBestProvider(criteria, true);
 
-            mgr.RequestLocationUpdates(LP, 500, 100, LL);
+            mgr.RequestLocationUpdates(bestProvider, 500, 100, locationListener);
 
             System.Threading.Thread.Sleep(550);
 
             try
             { 
-                Location location = mgr.GetLastKnownLocation(LP);
+                Location location = mgr.GetLastKnownLocation(bestProvider);
                 return new Coordinate(location.Latitude, location.Longitude);
             }
             catch (Exception e)

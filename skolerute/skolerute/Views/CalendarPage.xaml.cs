@@ -1,12 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Collections;
 using skolerute.data;
-using skolerute.db;
-
 using Xamarin.Forms;
 using System.Collections.ObjectModel;
 using skolerute.utils;
@@ -19,6 +15,8 @@ namespace skolerute.Views
         static List<School> favoriteSchools;
         static Grid cal;
         static StackLayout MS;
+        private bool isLoading;
+
         public CalendarPage()
         {
             InitializeComponent();
@@ -31,7 +29,10 @@ namespace skolerute.Views
             ObservableCollection<string> favoriteSchoolNames = new ObservableCollection<string>();
             favoriteSchools = new List<School>();
 
-            
+            MessagingCenter.Subscribe<StartUpPage>(this, "newSchoolSelected", (sender) =>
+            {
+                isLoading = true;
+            });
             
             MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
 			{
@@ -41,9 +42,11 @@ namespace skolerute.Views
                     favoriteSchools.Add(args);
                     favoriteSchoolNames.Add(args.name);
                     SchoolPicker.ItemsSource = favoriteSchoolNames;
-                }
 
-                
+                    ResetAllIndicators();
+                    DisplayCalendar(cal, MS);
+                    isLoading = false;
+                }
 			});
 
 
@@ -65,10 +68,6 @@ namespace skolerute.Views
         {
             base.OnAppearing();
 
-            ResetAllIndicators();
-
-            var cal = calendar;
-            current = DateTime.Now;
             DisplayCalendar(cal, MonthSelect);
         }
 
@@ -90,7 +89,7 @@ namespace skolerute.Views
 
             var calChildren = cal.Children;
 
-            List<int> consecutiveDays = Calendar.GetCal(current);
+            List<int> consecutiveDays = data.Calendar.GetCal(current);
             IEnumerator enumerator = calChildren.GetEnumerator();
             int i = 0;
 
@@ -103,7 +102,7 @@ namespace skolerute.Views
             if (favoriteSchoolsTrimmed != null && favoriteSchoolsTrimmed.Count > 0) { 
                 foreach (School selected in favoriteSchoolsTrimmed)
                 {
-                    selectedSchoolsCalendars.Add(Calendar.GetRelevantFreeDays(selected.calendar, current));
+                    selectedSchoolsCalendars.Add(data.Calendar.GetRelevantFreeDays(selected.calendar, current));
                 }
             }
 
@@ -123,7 +122,7 @@ namespace skolerute.Views
                         {
                             boxes.Children.ElementAt(j).IsVisible = true;
                             boxes.Children.ElementAt(j).BackgroundColor = Constants.colors.ElementAt(j);
-                            if (selectedSchoolsCalendars.ElementAt(j).ElementAt(i).isFreeDay) { 
+                            if (selectedSchoolsCalendars.ElementAt(j).ElementAt(i).IsFreeDay) { 
                                 boxes.Children.ElementAt(j).Opacity = 1.0;
                             } else {
                                 boxes.Children.ElementAt(j).Opacity = 0.0;

@@ -1,12 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using skolerute.utils;
 using skolerute.data;
-using skolerute.notifications;
-
+using skolerute.utils;
 using Xamarin.Forms;
 
 namespace skolerute.Views

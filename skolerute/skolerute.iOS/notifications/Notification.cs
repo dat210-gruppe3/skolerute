@@ -1,5 +1,4 @@
-﻿using System;
-using skolerute.notifications;
+using System;
 using UserNotifications;
 using Xamarin.Forms.Platform.iOS;
 using Foundation;

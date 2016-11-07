@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using skolerute.GPS;
 using CoreLocation;
 using UIKit;

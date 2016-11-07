@@ -1,13 +1,11 @@
 using System;
-using System.IO;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Net;
-using System.Linq;
-using skolerute.db;
 using System.Globalization;
-using SQLite.Net;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using skolerute.data;
 using SQLiteNetExtensions.Extensions;
 
 namespace skolerute.db
@@ -20,7 +18,7 @@ namespace skolerute.db
         public CSVParser(string url)
         {
             this.url = url;
-            this.database = new DatabaseManagerAsync();
+            database = new DatabaseManagerAsync();
         }
 
         public CSVParser(string url, DatabaseManagerAsync database)
@@ -48,10 +46,10 @@ namespace skolerute.db
             return float.Parse(s, CultureInfo.InvariantCulture.NumberFormat);
         }
 
-        public void InsertToCalAndSch(string[] cols, List<data.School> schoolList)
+        public void InsertToCalAndSch(string[] cols, List<School> schoolList)
         {
-            data.CalendarDay calTemp = new data.CalendarDay(
-                        Convert.ToDateTime(cols[0]), !WordsToBool(cols[2]), WordsToBool(cols[3]), WordsToBool(cols[4]), cols[5]);
+            CalendarDay calTemp = new CalendarDay(
+                        Convert.ToDateTime(cols[0]).ToUniversalTime(), !WordsToBool(cols[2]), WordsToBool(cols[3]), WordsToBool(cols[4]), cols[5]);
 
             schoolList[schoolList.Count - 1].calendar.Add(calTemp);
         }
@@ -59,13 +57,13 @@ namespace skolerute.db
         public async Task RetrieveSchools()
         {
             var csv = await GetContent(Constants.URL);
-            char[] delimiter = new char[] { '\r', '\n' };
+            char[] delimiter = { '\r', '\n' };
             string[] rows = csv.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
             string[] cols = new string[5];
-            List<data.School> schools = new List<data.School>();
+            List<School> schools = new List<School>();
             string oldschool = "";
 
-            await database.GetConnection().RunInTransactionAsync((SQLiteConnection connection) =>
+            await database.GetConnection().RunInTransactionAsync(connection =>
             {
                 for (int i = 1; i < rows.Length; i++)
                 {
@@ -75,7 +73,7 @@ namespace skolerute.db
                     if (schname != oldschool)
                     {
                         oldschool = schname;
-                        data.School school = new data.School(cols[1], null);
+                        School school = new School(cols[1], null);
                         schools.Add(school);
 
                         RetrievePosition(school).Wait();
@@ -85,15 +83,15 @@ namespace skolerute.db
             });
         }
 
-        public async Task RetrieveCalendar(data.School sch)
+        public async Task RetrieveCalendar(School sch)
         {
             var csv = await GetContent(Constants.URL);
-            char[] delimiter = new char[] { '\r', '\n' };
+            char[] delimiter = { '\r', '\n' };
             string[] rows = csv.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
             string[] cols = new string[5];
-            List<data.CalendarDay> schCalendar = new List<data.CalendarDay>();
+            List<CalendarDay> schCalendar = new List<CalendarDay>();
 
-            await database.GetConnection().RunInTransactionAsync((SQLiteConnection connection) => 
+            await database.GetConnection().RunInTransactionAsync(connection => 
             {
                 for (int i = 1; i < rows.Length; i++)
                 {
@@ -101,7 +99,9 @@ namespace skolerute.db
 
                     if (cols[1] == sch.name)
                     {
-                        schCalendar.Add(new data.CalendarDay((Convert.ToDateTime(cols[0]).ToLocalTime()), !WordsToBool(cols[2]), WordsToBool(cols[3]), WordsToBool(cols[4]), cols[5]));
+                        DateTime date = Convert.ToDateTime(cols[0]);
+                        
+                        schCalendar.Add(new CalendarDay(new DateTime(date.Year, date.Month, date.Day, 12, 0, 0), !WordsToBool(cols[2]), WordsToBool(cols[3]), WordsToBool(cols[4]), cols[5]));
                     }
                 }
                 sch.calendar = schCalendar;
@@ -112,10 +112,10 @@ namespace skolerute.db
         public async Task StringParser()
         {
             var csv = await GetContent(Constants.URL);
-            char[] delimiter = new char[] { '\r', '\n' };
+            char[] delimiter = { '\r', '\n' };
             string[] rows = csv.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
             string[] cols = new string[5];
-            List<data.School> schoolObjs = new List<data.School>();
+            List<School> schoolObjs = new List<School>();
 
             int j = 1;
             while (j < rows.Length)
@@ -123,7 +123,7 @@ namespace skolerute.db
                 cols = Splitter(rows[j]);
                 string sch = cols[1];
 
-                schoolObjs.Add(new data.School(cols[1], new List<data.CalendarDay>()));
+                schoolObjs.Add(new School(cols[1], new List<CalendarDay>()));
 
 
                 while (cols[1] == sch)
@@ -139,7 +139,7 @@ namespace skolerute.db
             //await database.InsertList(schoolObjs);
             //await database.InsertSingle(schoolObjs[schoolObjs.Count - 1]);
 
-            List<data.School> schoolsList = await database.GetSchools();
+            List<School> schoolsList = await database.GetSchools();
             GC.KeepAlive(schoolsList);
             schoolsList[23] = null;
 
@@ -157,17 +157,14 @@ namespace skolerute.db
                 StreamReader stream = new StreamReader(response.GetResponseStream());
                 return stream.ReadToEnd();
             }
-            else
-            {
-                throw new WebException("Could not interact with \n" + Constants.URL);
-            }
+            throw new WebException("Could not interact with \n" + Constants.URL);
         }
 
 
-        public async Task RetrievePosition(data.School sch)
+        public async Task RetrievePosition(School sch)
         {
-            var csv = await GetContent(Constants.PositionURL);
-            char[] delimiter = new char[] { '\r', '\n' };
+            var csv = await GetContent(Constants.positionURL);
+            char[] delimiter = { '\r', '\n' };
             string[] rows = csv.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
             string[] cols = new string[13];
 

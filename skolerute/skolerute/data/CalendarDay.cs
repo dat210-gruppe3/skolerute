@@ -1,10 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SQLite.Net.Attributes;
-using SQLite.Net.Interop;
 using SQLiteNetExtensions.Attributes;
 
 namespace skolerute.data
@@ -14,34 +9,34 @@ namespace skolerute.data
         [PrimaryKey, AutoIncrement]
         public int ID { get; set; }
         
-        public DateTime date { get; set; }
-        public bool isFreeDay { get; set; }
-        public bool isNotWorkDay { get; set; }
-        public bool isSFODay { get; set; }
-        public string comment { get; set; }
+        public DateTime Date { get; set; }
+        public bool IsFreeDay { get; set; }
+        public bool IsNotWorkDay { get; set; }
+        public bool IsSfoDay { get; set; }
+        public string Comment { get; set; }
 
         [ForeignKey(typeof(School))]
         public int schoolID { get; set; }
 
         [ManyToOne(CascadeOperations = CascadeOperation.All)]
-        public School school { get; set; }
+        public School School { get; set; }
 
 		public CalendarDay(DateTime date, bool isFreeDay, bool isNotWorkDay, bool isSFODay, string comment)
 		{
-			this.date = date;
-			this.isFreeDay = isFreeDay;
-			this.isNotWorkDay = isNotWorkDay;
-			this.isSFODay = isSFODay;
-			this.comment = comment;
+			this.Date = date;
+			this.IsFreeDay = isFreeDay;
+			this.IsNotWorkDay = isNotWorkDay;
+			this.IsSfoDay = isSFODay;
+			this.Comment = comment;
 		}
-			
-		public CalendarDay()
-		{
-			this.date = Convert.ToDateTime("2001-01-01");
-			this.isFreeDay = false;
-			this.isNotWorkDay = false;
-			this.isSFODay = false;
-			this.comment = "";
-		}
+
+        public CalendarDay()
+        {
+            this.Date = Convert.ToDateTime("2001-01-01");
+            this.IsFreeDay = false;
+            this.IsNotWorkDay = false;
+            this.IsSfoDay = false;
+            this.Comment = "";
+        }
     } 
 }
