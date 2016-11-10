@@ -30,9 +30,7 @@ namespace skolerute.Droid.GPS
 
             string bestProvider = "";
 
-            if (mgr.IsProviderEnabled("gps") == false) bestProvider = mgr.GetBestProvider(criteria, true);
-
-            else bestProvider = "gps";
+            bestProvider = mgr.IsProviderEnabled("gps") == false ? mgr.GetBestProvider(criteria, true) : "gps";
 
             mgr.RequestSingleUpdate(bestProvider,locationListener,null);
 
@@ -55,13 +53,11 @@ namespace skolerute.Droid.GPS
                     while (location2 == null || location.Time == location2.Time)
                     {
                         location2 = mgr.GetLastKnownLocation(bestProvider);
-                        if (stopWatch.ElapsedMilliseconds > 10000)
-                        {
-                            bestProvider = mgr.GetBestProvider(criteria, true);
-                            mgr.RequestSingleUpdate(bestProvider,locationListener,null);
-                            location = mgr.GetLastKnownLocation(bestProvider);
-                            break;
-                        }
+                        if (stopWatch.ElapsedMilliseconds <= 10000) continue;
+                        bestProvider = mgr.GetBestProvider(criteria, true);
+                        mgr.RequestSingleUpdate(bestProvider,locationListener,null);
+                        location = mgr.GetLastKnownLocation(bestProvider);
+                        break;
                     }
                     if (bestProvider == "gps") location = location2;
                     stopWatch.Stop();
@@ -73,7 +69,7 @@ namespace skolerute.Droid.GPS
                     return null;
                 }
 
-                if (location.Provider == "network") Toast.MakeText(Forms.Context, "Ingen GPS tilgjengelig, avstand tilnærmet", ToastLength.Short).Show();
+                if (location.Provider == "network") Toast.MakeText(Forms.Context, "Ingen GPS tilgjengelig, oppgitt avstand tilnærmet", ToastLength.Short).Show();
 
                 return new Coordinate(location.Latitude, location.Longitude);
 
