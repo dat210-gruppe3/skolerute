@@ -21,7 +21,7 @@ namespace skolerute.Views
         public CalendarPage()
         {
             InitializeComponent();
-
+            
             this.BindingContext = isLoading;
 
             MS = MonthSelect;
@@ -38,8 +38,8 @@ namespace skolerute.Views
                 isLoading = true;
                 LoadingIndicator.IsRunning = isLoading;
                 LoadingIndicator.IsVisible = isLoading;
-                MonthSelect.FindByName<Image>("NextImg").IsEnabled = isLoading;
-                MonthSelect.FindByName<Image>("PrevImg").IsEnabled = isLoading;
+                MonthSelect.FindByName<Image>("NextImg").IsEnabled = !isLoading;
+                MonthSelect.FindByName<Image>("PrevImg").IsEnabled = !isLoading;
             });
             
             MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
@@ -57,8 +57,8 @@ namespace skolerute.Views
                     isLoading = false;
                     LoadingIndicator.IsRunning = isLoading;
                     LoadingIndicator.IsVisible = isLoading;
-                    MonthSelect.FindByName<Image>("NextImg").IsEnabled = isLoading;
-                    MonthSelect.FindByName<Image>("PrevImg").IsEnabled = isLoading;
+                    MonthSelect.FindByName<Image>("NextImg").IsEnabled = !isLoading;
+                    MonthSelect.FindByName<Image>("PrevImg").IsEnabled = !isLoading;
                 }
 			});
 
@@ -81,6 +81,7 @@ namespace skolerute.Views
             base.OnAppearing();
 
             DisplayCalendar(cal, MonthSelect);
+            SetLegends();
         }
 
         private static void DisplayCalendar(Grid cal, StackLayout MonthSelect)
@@ -149,6 +150,31 @@ namespace skolerute.Views
                 {
                     MonthSelect.FindByName<Label>("monthName").Text = string.Empty;
                 }
+            }
+        }
+
+        private void SetLegends()
+        {
+            var children = Legend.Children;
+            var enumerator = children.GetEnumerator();
+            var i = 0;
+            foreach (StackLayout x in children)
+            {
+                var box = x.Children.First() as BoxView;
+                var label = x.Children.Last() as Label;
+                if (i >= favoriteSchools.Count)
+                {
+                    x.Opacity = 0;
+                }
+                else
+                {
+                    var currentschool = favoriteSchools[i];
+                    label.Text = currentschool.name;
+                    box.Color = Constants.colors[i];
+                    x.Opacity = 1;
+                }
+
+                i++;
             }
         }
 
