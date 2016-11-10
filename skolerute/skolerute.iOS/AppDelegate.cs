@@ -1,7 +1,8 @@
 using UserNotifications;
 using Foundation;
 using UIKit;
-//using HockeyApp.IOS;
+using Xamarin;
+
 
 namespace skolerute.iOS
 {
@@ -33,15 +34,6 @@ namespace skolerute.iOS
 
 		public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
 		{
-			//HOCKEYAPP
-			//#if DEBUG
-			//var manager = BITHockeyManager.SharedHockeyManager;
-			//manager.Configure("$Your_App_Id");
-			//manager.StartManager();
-			//manager.Authenticator.AuthenticateInstallation(); // This line is obsolete in crash only builds
-			//#endif
-
-
 			//reset notification badge
 			UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
 
@@ -51,7 +43,12 @@ namespace skolerute.iOS
 			var notifacationSettings = UIUserNotificationSettings.GetSettingsForTypes(UIUserNotificationType.Alert | UIUserNotificationType.Badge | UIUserNotificationType.Sound, null);
 			UIApplication.SharedApplication.RegisterUserNotificationSettings(notifacationSettings);
 
-			return base.FinishedLaunching(application, launchOptions);
+            #if ENABLE_TEST_CLOUD
+                //Requires Xamarin Test Cloud Agent
+		        Xamarin.Calabash.Start();
+            #endif
+
+            return base.FinishedLaunching(application, launchOptions);
 		}
 
 		public override void ReceivedLocalNotification(UIApplication application, UILocalNotification notification)

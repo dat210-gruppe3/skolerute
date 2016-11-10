@@ -53,6 +53,9 @@ namespace skolerute.Views
 
             if (GetCoords.Text == "Vis nærmeste") { 
                 Coordinate userposition = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
+
+                if (userposition == null) return;
+             
                 GetNearbySchools(userposition);
                 GetCoords.Text = "Vis alle";
                 List<School> ads = new List<School>();
