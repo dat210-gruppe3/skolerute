@@ -129,7 +129,7 @@ namespace skolerute.Views
                     
                     label.Text = consecutiveDays.ElementAt(i).ToString();
 
-                    if (selectedSchoolsCalendars.Count > 0)
+                    if (selectedSchoolsCalendars.Count > 0 && favoriteSchoolsTrimmed != null)
                     {
                         for (int j = 0; j < selectedSchoolsCalendars.Count && j < favoriteSchoolsTrimmed.Count; j++)
                         {

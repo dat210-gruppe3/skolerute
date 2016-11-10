@@ -41,9 +41,9 @@ namespace skolerute.db
             return rows;
         }
 
-        private float StringToFloat(string s)
+        private double StringToDouble(string s)
         {
-            return float.Parse(s, CultureInfo.InvariantCulture.NumberFormat);
+			return double.Parse(s, CultureInfo.InvariantCulture);
         }
 
         public void InsertToCalAndSch(string[] cols, List<School> schoolList)
@@ -149,10 +149,11 @@ namespace skolerute.db
 
         public async Task<String> GetContent(String url)
         {
-            WebRequest request = WebRequest.Create(url);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.ContinueTimeout = 20000;
             HttpWebResponse response = await request.GetResponseAsync() as HttpWebResponse;
 
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (response != null && response.StatusCode == HttpStatusCode.OK)
             {
                 StreamReader stream = new StreamReader(response.GetResponseStream());
                 return stream.ReadToEnd();
@@ -175,8 +176,8 @@ namespace skolerute.db
 
 				if (schname.ToLower() == sch.name.ToLower())
                 {
-                    sch.latitude = Convert.ToDouble(cols[2]);
-                    sch.longitude = Convert.ToDouble(cols[3]);
+					sch.latitude = StringToDouble(cols[2]);
+					sch.longitude = StringToDouble(cols[3]);
                     sch.address = cols[10];
                     sch.website = cols[11];
                 }

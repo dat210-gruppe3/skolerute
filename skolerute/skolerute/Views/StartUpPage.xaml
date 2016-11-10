@@ -21,7 +21,7 @@
         </StackLayout>
       <StackLayout Orientation="Horizontal" Padding="30,0,30,0">
       <Label Text="Legg til skole" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Large" />
-        <Button x:Name="GetCoords" Text="Vis nærmeste" Clicked="GetClosest" HorizontalOptions="End"/>
+        <Button x:Name="GetCoords" Text="Vis nærmeste" Clicked="Load" HorizontalOptions="End" IsEnabled="false"/>
       </StackLayout>
       <SearchBar x:Name="searchSchool" Placeholder="Søk etter skoler" TextChanged="TextChanged" SearchButtonPressed="TextChanged"/>   
       <StackLayout Orientation="Horizontal">
