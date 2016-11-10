@@ -1,6 +1,7 @@
 using UserNotifications;
 using Foundation;
 using UIKit;
+using Xamarin;
 
 namespace skolerute.iOS
 {
@@ -41,7 +42,12 @@ namespace skolerute.iOS
 			var notifacationSettings = UIUserNotificationSettings.GetSettingsForTypes(UIUserNotificationType.Alert | UIUserNotificationType.Badge | UIUserNotificationType.Sound, null);
 			UIApplication.SharedApplication.RegisterUserNotificationSettings(notifacationSettings);
 
-			return base.FinishedLaunching(application, launchOptions);
+            #if ENABLE_TEST_CLOUD
+                //Requires Xamarin Test Cloud Agent
+		        Xamarin.Calabash.Start();
+            #endif
+
+            return base.FinishedLaunching(application, launchOptions);
 		}
 
 		public override void ReceivedLocalNotification(UIApplication application, UILocalNotification notification)

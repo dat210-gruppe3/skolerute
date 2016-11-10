@@ -5,6 +5,7 @@ using Foundation;
 using UIKit;
 using Xamarin.Forms;
 using skolerute.utils;
+using skolerute.notifications;
 
 
 [assembly: Dependency(typeof(skolerute.iOS.Notification))]
@@ -38,6 +39,10 @@ namespace skolerute.iOS
 			// schedule it
 			UIApplication.SharedApplication.ScheduleLocalNotification(notification);
 			Console.WriteLine("Scheduled...");
+		}
+
+		public void RemoveCalendarNotification(int notificationId)
+		{
 		}
 	}
 }

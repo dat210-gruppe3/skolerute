@@ -22,5 +22,9 @@ namespace skolerute.Droid.notifications
             // TODO: Set trigger time to the input trigger time, this is a demo which triggers after 5 seconds
             alarmManager.Set(AlarmType.ElapsedRealtime, SystemClock.ElapsedRealtime() + 10 * 1000, pendingIntent);
         }
+
+		public void RemoveCalendarNotification(int notificationId)
+		{
+		}
     }
 }

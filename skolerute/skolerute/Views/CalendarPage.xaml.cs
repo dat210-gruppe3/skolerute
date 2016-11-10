@@ -15,13 +15,14 @@ namespace skolerute.Views
         static List<School> favoriteSchools;
         static Grid cal;
         static StackLayout MS;
-        private bool isLoading = false;
+
+        public bool isLoading;
 
         public CalendarPage()
         {
             InitializeComponent();
 
-
+            this.BindingContext = isLoading;
 
             MS = MonthSelect;
             current = DateTime.Now;
@@ -31,13 +32,14 @@ namespace skolerute.Views
             ObservableCollection<string> favoriteSchoolNames = new ObservableCollection<string>();
             favoriteSchools = new List<School>();
 
-            LoadingIndicator.BindingContext = isLoading;
-
             MessagingCenter.Subscribe<StartUpPage>(this, "newSchoolSelected", (sender) =>
             {
+                //TODO: Make this binding for better reusability
                 isLoading = true;
-                LoadingIndicator.IsRunning = true;
-                LoadingIndicator.IsVisible = true;
+                LoadingIndicator.IsRunning = isLoading;
+                LoadingIndicator.IsVisible = isLoading;
+                MonthSelect.FindByName<Image>("NextImg").IsEnabled = isLoading;
+                MonthSelect.FindByName<Image>("PrevImg").IsEnabled = isLoading;
             });
             
             MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
@@ -51,9 +53,12 @@ namespace skolerute.Views
                     ResetAllIndicators();
                     DisplayCalendar(cal, MS);
 
+                    //TODO: Make this binding for better reusability
                     isLoading = false;
-                    LoadingIndicator.IsRunning = false;
-                    LoadingIndicator.IsVisible = false;
+                    LoadingIndicator.IsRunning = isLoading;
+                    LoadingIndicator.IsVisible = isLoading;
+                    MonthSelect.FindByName<Image>("NextImg").IsEnabled = isLoading;
+                    MonthSelect.FindByName<Image>("PrevImg").IsEnabled = isLoading;
                 }
 			});
 
@@ -63,6 +68,7 @@ namespace skolerute.Views
                 favoriteSchoolNames.Remove(args);
                 await SettingsManager.SavePreferenceAsync("" + (favoriteSchools.Find(x => x.name.Contains(args)).ID), false);
                 favoriteSchools.Remove(favoriteSchools.Find(x => x.name.Contains(args)));
+                ResetAllIndicators();
             });
 
 
@@ -77,7 +83,7 @@ namespace skolerute.Views
             DisplayCalendar(cal, MonthSelect);
         }
 
-        public static void DisplayCalendar(Grid cal, StackLayout MonthSelect)
+        private static void DisplayCalendar(Grid cal, StackLayout MonthSelect)
         {
             // Makes the buttons transparent if user is at the end of intended month intverval
             if (current.Month != 8) {
@@ -122,13 +128,14 @@ namespace skolerute.Views
                     
                     label.Text = consecutiveDays.ElementAt(i).ToString();
 
-                    if (selectedSchoolsCalendars != null && selectedSchoolsCalendars.Count > 0)
+                    if (selectedSchoolsCalendars.Count > 0)
                     {
                         for (int j = 0; j < selectedSchoolsCalendars.Count && j < favoriteSchoolsTrimmed.Count; j++)
                         {
-                            boxes.Children.ElementAt(j).IsVisible = true;
+							boxes.Children.ElementAt(j).IsVisible = true;
                             boxes.Children.ElementAt(j).BackgroundColor = Constants.colors.ElementAt(j);
-                            if (selectedSchoolsCalendars.ElementAt(j).ElementAt(i).IsFreeDay) { 
+							if (selectedSchoolsCalendars.ElementAt(j).ElementAt(i).IsFreeDay && ((int)selectedSchoolsCalendars.ElementAt(j).ElementAt(i).Date.DayOfWeek) % 6 != 0 && ((int)selectedSchoolsCalendars.ElementAt(j).ElementAt(i).Date.DayOfWeek) % 7 != 0) { 
+
                                 boxes.Children.ElementAt(j).Opacity = 1.0;
                             } else {
                                 boxes.Children.ElementAt(j).Opacity = 0.0;
@@ -142,7 +149,7 @@ namespace skolerute.Views
                 {
                     MonthSelect.FindByName<Label>("monthName").Text = string.Empty;
                 }
-            };
+            }
         }
 
         void NextMonth(object o, EventArgs e)
