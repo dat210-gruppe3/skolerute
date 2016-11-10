@@ -161,12 +161,9 @@ namespace skolerute.Views
             }
             catch (Exception e)
             {
-                List<School> lista = new List<School>();
-                lista.Add(new School(e.Message, null));
-                schools.ItemsSource = lista;
                 await DisplayActionSheet("Feil", "En feil oppstod, prøv igjen.", "Ok");
                 progressBar.IsVisible = false;
-                return lista;
+                return null;
             }
         }
 

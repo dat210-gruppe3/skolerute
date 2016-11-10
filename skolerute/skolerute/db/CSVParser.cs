@@ -149,8 +149,8 @@ namespace skolerute.db
 
         public async Task<String> GetContent(String url)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.ContinueTimeout = 20000;
+            WebRequest request = WebRequest.Create(url);
+
             HttpWebResponse response = await request.GetResponseAsync() as HttpWebResponse;
 
             if (response != null && response.StatusCode == HttpStatusCode.OK)
