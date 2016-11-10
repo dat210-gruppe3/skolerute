@@ -41,9 +41,9 @@ namespace skolerute.db
             return rows;
         }
 
-        private float StringToFloat(string s)
+        private double StringToDouble(string s)
         {
-            return float.Parse(s, CultureInfo.InvariantCulture.NumberFormat);
+			return double.Parse(s, CultureInfo.InvariantCulture);
         }
 
         public void InsertToCalAndSch(string[] cols, List<School> schoolList)
@@ -175,8 +175,8 @@ namespace skolerute.db
 
 				if (schname.ToLower() == sch.name.ToLower())
                 {
-                    sch.latitude = Convert.ToDouble(cols[2]);
-                    sch.longitude = Convert.ToDouble(cols[3]);
+					sch.latitude = StringToDouble(cols[2]);
+					sch.longitude = StringToDouble(cols[3]);
                     sch.address = cols[10];
                     sch.website = cols[11];
                 }

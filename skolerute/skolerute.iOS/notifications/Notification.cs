@@ -43,6 +43,7 @@ namespace skolerute.iOS
 
 		public void RemoveCalendarNotification(int notificationId)
 		{
+			UIApplication.SharedApplication.CancelAllLocalNotifications();
 		}
 	}
 }
