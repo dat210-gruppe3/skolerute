@@ -87,9 +87,9 @@ namespace skolerute.Views
 			}
 			else {
 				await SettingsManager.SavePreferenceAsync(Constants.Notify, false);
-				//TODO: clear all notifications (if needed)
+				//TODO: clear all notifications
+				DependencyService.Get<INotification>().RemoveCalendarNotification(1);
 			}
 		}
     }
-
 }

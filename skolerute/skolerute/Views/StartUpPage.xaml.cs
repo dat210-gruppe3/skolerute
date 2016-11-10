@@ -34,7 +34,7 @@ namespace skolerute.Views
             {
                 schools.ItemsSource = allSchools;
             }
-            if (SettingsManager.GetPreference("i") != null && (bool)SettingsManager.GetPreference("i"))
+            if (SettingsManager.GetPreference("i") != null && (bool) SettingsManager.GetPreference("i"))
             {
                 mySchools = await GetFavSchools();
                 mineskoler.ItemsSource = mySchools;
@@ -57,21 +57,27 @@ namespace skolerute.Views
         {
             //Called in xaml if button to get closest schools is pressed. Gets user global position and compares it
             //to school positions and displays these schools in the GUI school list.
+
             if (GetCoords.Text == "Vis nærmeste")
             {               
+
                 Coordinate userposition = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
 
                 if (userposition == null) return;
 
                 GetNearbySchools(userposition);
                 GetCoords.Text = "Vis alle";
+
                 List<School> ads = bestMatches.Select(x => allSchools.Find(y => y.ID == x)).ToList();
+
                 schools.ItemsSource = ads;
                 avstand.IsVisible = true;
                 List<string> result = new List<string>();
                 for (int a = 0; a < distances.Count; a++)
                 {
+
                     string verdi = ads.ElementAt(a).name + ": " + Math.Round(distances.ElementAt(a), 2).ToString() + " km";
+
                     result.Add(verdi);
                 }
                 avstand.ItemsSource = result;
@@ -126,7 +132,8 @@ namespace skolerute.Views
             var progressBar = this.FindByName<ProgressBar>("progressBar");
             progressBar.IsVisible = true;
 
-            if (!await db.DatabaseManagerAsync.TableExists<School>(database.connection) || !await db.DatabaseManagerAsync.TableExists<CalendarDay>(database.connection))
+            if (!await db.DatabaseManagerAsync.TableExists<School>(database.connection) ||
+                !await db.DatabaseManagerAsync.TableExists<CalendarDay>(database.connection))
             {
                 await progressBar.ProgressTo(0.3, 100, Easing.Linear);
                 database.CreateNewDatabase();
@@ -147,12 +154,17 @@ namespace skolerute.Views
                 GetCoords.IsEnabled = true;
                 return allSchools;
             }
+            catch (System.Net.WebException e)
+            {
+                await DisplayAlert("Internett problemer", "Kunne ikke hente ned skolene, prøv igjen senere.", "Ok");
+                return null;
+            }
             catch (Exception e)
             {
                 List<School> lista = new List<School>();
                 lista.Add(new School(e.Message, null));
                 schools.ItemsSource = lista;
-                await DisplayActionSheet("En feil oppstod i GetListContent()", "", "");
+                await DisplayActionSheet("Feil", "En feil oppstod, prøv igjen.", "Ok");
                 progressBar.IsVisible = false;
                 return lista;
             }
@@ -173,14 +185,14 @@ namespace skolerute.Views
 
             if ((e.SelectedItem).GetType() == typeof(string))
             {
-                skolenavn = (string)(e.SelectedItem);
+                skolenavn = (string) (e.SelectedItem);
                 int index = skolenavn.IndexOf(':');
                 skolenavn = skolenavn.Remove(index, (skolenavn.Length) - index);
                 school = allSchools.Find(y => y.name == skolenavn);
             }
             else
             {
-                school = (School)e.SelectedItem;
+                school = (School) e.SelectedItem;
                 skolenavn = school.name;
             }
 
@@ -213,10 +225,20 @@ namespace skolerute.Views
                     MessagingCenter.Send(this, "newSchoolSelected");
                     db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
                     db.CSVParser parser = new db.CSVParser(Constants.URL, database);
-                    ((ListView)sender).SelectedItem = null;
+                    ((ListView) sender).SelectedItem = null;
 
-                    await parser.RetrieveCalendar(school);
-                    MessagingCenter.Send(this, "choosenSch", school);
+
+                    try
+                    {
+                        await parser.RetrieveCalendar(school);
+                        MessagingCenter.Send(this, "choosenSch", school);
+                    }
+                    catch (System.Net.WebException exception)
+                    {
+                        await DisplayAlert("Problem med internett", "Kunne ikke laste ned skoleruten, prøv igjen senere", "Ok");
+                    }
+                    
+                    
 
                 }
             }
