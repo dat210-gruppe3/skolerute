@@ -1,12 +1,17 @@
 using System;
 using skolerute.GPS;
+using skolerute.db;
 using skolerute.data;
+using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
+using Android.Views;
+using Android.Widget;
 using Android.Locations;
 using Xamarin.Forms;
-
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 [assembly: Xamarin.Forms.Dependency(typeof(skolerute.Droid.GPS.GPSserviceAndroid))]
 namespace skolerute.Droid.GPS
@@ -22,16 +27,56 @@ namespace skolerute.Droid.GPS
             criteria.PowerRequirement = Power.Medium;
 
             LocationListener locationListener = new LocationListener();
-            string bestProvider = mgr.GetBestProvider(criteria, true);
 
-            mgr.RequestLocationUpdates(bestProvider, 500, 100, locationListener);
+            string bestProvider = "";
 
-            System.Threading.Thread.Sleep(550);
+            if (mgr.IsProviderEnabled("gps") == false) bestProvider = mgr.GetBestProvider(criteria, true);
+
+            else bestProvider = "gps";
+
+            mgr.RequestSingleUpdate(bestProvider,locationListener,null);
 
             try
-            { 
+            {   
                 Location location = mgr.GetLastKnownLocation(bestProvider);
+
+                if (bestProvider == "gps")
+                {          
+                    Stopwatch stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                    Location location2 = mgr.GetLastKnownLocation(bestProvider);
+
+                    if (location == null)
+                    {
+                        Toast.MakeText(Forms.Context, "Fikk ingen lokasjon, prøv igjen", ToastLength.Short).Show();
+                        return null;
+                    }
+
+                    while (location2 == null || location.Time == location2.Time)
+                    {
+                        location2 = mgr.GetLastKnownLocation(bestProvider);
+                        if (stopWatch.ElapsedMilliseconds > 10000)
+                        {
+                            bestProvider = mgr.GetBestProvider(criteria, true);
+                            mgr.RequestSingleUpdate(bestProvider,locationListener,null);
+                            location = mgr.GetLastKnownLocation(bestProvider);
+                            break;
+                        }
+                    }
+                    if (bestProvider == "gps") location = location2;
+                    stopWatch.Stop();
+                }
+
+                if (location == null)
+                {
+                    Toast.MakeText(Forms.Context, "Fikk ingen lokasjon, prøv igjen", ToastLength.Short).Show();
+                    return null;
+                }
+
+                if (location.Provider == "network") Toast.MakeText(Forms.Context, "Ingen GPS tilgjengelig, avstand tilnærmet", ToastLength.Short).Show();
+
                 return new Coordinate(location.Latitude, location.Longitude);
+
             }
             catch (Exception e)
             {
@@ -39,7 +84,7 @@ namespace skolerute.Droid.GPS
                 // TODO: Error handling here
             }
 
-            return null; 
+            return null;
         }
     }
 
@@ -47,7 +92,7 @@ namespace skolerute.Droid.GPS
     {
         public void Dispose()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void OnLocationChanged(Location location)
@@ -57,17 +102,17 @@ namespace skolerute.Droid.GPS
 
         public void OnProviderDisabled(string provider)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void OnProviderEnabled(string provider)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void OnStatusChanged(string provider, [GeneratedEnum] Availability status, Bundle extras)
         {
-            
+
         }
     }
 }
