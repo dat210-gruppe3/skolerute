@@ -18,8 +18,11 @@ namespace skolerute.Views
 
         public StartUpPage()
         {
-            InitializeComponent();
-            
+			InitializeComponent();
+			searchSchool.Unfocused += (sender, args) =>
+			{
+				return;
+			};
         }
 
         protected override async void OnAppearing()
@@ -100,6 +103,10 @@ namespace skolerute.Views
             if (sValue == "")
             {
                 schools.ItemsSource = allSchools;
+				if (Device.OS == TargetPlatform.iOS)
+				{
+					searchSchool.Unfocus();
+				}
             }
             else
             {

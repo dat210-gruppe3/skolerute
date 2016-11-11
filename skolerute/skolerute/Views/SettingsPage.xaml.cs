@@ -48,6 +48,7 @@ namespace skolerute.Views
 					daysBeforeNotification = int.Parse(listOfPickerDays.Items[listOfPickerDays.SelectedIndex]);
 					}
 				};
+			
 
 
 
