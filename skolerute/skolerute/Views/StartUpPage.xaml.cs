@@ -18,11 +18,7 @@ namespace skolerute.Views
 
         public StartUpPage()
         {
-			InitializeComponent();
-			searchSchool.Unfocused += (sender, args) =>
-			{
-				return;
-			};
+            InitializeComponent();
         }
 
         protected override async void OnAppearing()
@@ -38,7 +34,7 @@ namespace skolerute.Views
             {
                 schools.ItemsSource = allSchools;
             }
-            if (SettingsManager.GetPreference("i") != null && (bool)SettingsManager.GetPreference("i"))
+            if (SettingsManager.GetPreference("i") != null && (bool) SettingsManager.GetPreference("i"))
             {
                 mySchools = await GetFavSchools();
                 mineskoler.ItemsSource = mySchools;
@@ -49,39 +45,50 @@ namespace skolerute.Views
             //DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now);
         }
 
+        private async Task Load()
+        {
+            GetCoords.IsEnabled = false;
+            await Task.Yield();
+            GetClosest();
+            GetCoords.IsEnabled = true;
+        }
+
         private void GetClosest()
         {
             //Called in xaml if button to get closest schools is pressed. Gets user global position and compares it
             //to school positions and displays these schools in the GUI school list.
 
-            if (GetCoords.Text == "Vis nærmeste") { 
+            if (GetCoords.Text == "Vis nærmeste")
+            {               
+
                 Coordinate userposition = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
 
                 if (userposition == null) return;
-             
+
                 GetNearbySchools(userposition);
                 GetCoords.Text = "Vis alle";
-                List<School> ads = new List<School>();
-                foreach (int x in bestMatches) {
-                    ads.Add(allSchools.Find(y => y.ID == x));
-                }
+
+                List<School> ads = bestMatches.Select(x => allSchools.Find(y => y.ID == x)).ToList();
+
                 schools.ItemsSource = ads;
                 avstand.IsVisible = true;
-                //avstand.WidthRequest = 100;
                 List<string> result = new List<string>();
-                for(int a=0;a<distances.Count;a++)
+                for (int a = 0; a < distances.Count; a++)
                 {
-                    string verdi = ads.ElementAt(a).name + ": " + Math.Round(distances.ElementAt(a), 2).ToString()+ " km";
+
+                    string verdi = ads.ElementAt(a).name + ": " + Math.Round(distances.ElementAt(a), 2).ToString() + " km";
+
                     result.Add(verdi);
                 }
                 avstand.ItemsSource = result;
-                schools.IsVisible = false;     
-            } else
+                schools.IsVisible = false;
+            }
+            else
             {
                 GetCoords.Text = "Vis nærmeste";
                 schools.ItemsSource = allSchools;
                 avstand.IsVisible = false;
-                schools.IsVisible = true;  
+                schools.IsVisible = true;
             }
         }
 
@@ -129,7 +136,8 @@ namespace skolerute.Views
             var progressBar = this.FindByName<ProgressBar>("progressBar");
             progressBar.IsVisible = true;
 
-            if (!await db.DatabaseManagerAsync.TableExists<School>(database.connection) || !await db.DatabaseManagerAsync.TableExists<CalendarDay>(database.connection))
+            if (!await db.DatabaseManagerAsync.TableExists<School>(database.connection) ||
+                !await db.DatabaseManagerAsync.TableExists<CalendarDay>(database.connection))
             {
                 await progressBar.ProgressTo(0.3, 100, Easing.Linear);
                 database.CreateNewDatabase();
@@ -147,18 +155,23 @@ namespace skolerute.Views
                 await progressBar.ProgressTo(1, 250, Easing.Linear);
                 schools.ItemsSource = allSchools;
                 progressBar.IsVisible = false;
+                GetCoords.IsEnabled = true;
                 return allSchools;
+            }
+            catch (System.Net.WebException e)
+            {
+                await DisplayAlert("Internett problemer", "Kunne ikke hente ned skolene, prøv igjen senere.", "Ok");
+                return null;
             }
             catch (Exception e)
             {
-                List<School> lista = new List<School>();
-                lista.Add(new School(e.Message, null));
-                schools.ItemsSource = lista;
-                await DisplayActionSheet("En feil oppstod i GetListContent()", "", "");
+                await DisplayActionSheet("Feil", "En feil oppstod, prøv igjen.", "Ok");
                 progressBar.IsVisible = false;
-                return lista;
+                return null;
             }
         }
+
+
 
         // Event triggered when a school in the list is selected
         public async void OnSelection(object sender, SelectedItemChangedEventArgs e)
@@ -173,14 +186,14 @@ namespace skolerute.Views
 
             if ((e.SelectedItem).GetType() == typeof(string))
             {
-                skolenavn = (string)(e.SelectedItem);
+                skolenavn = (string) (e.SelectedItem);
                 int index = skolenavn.IndexOf(':');
-                skolenavn = skolenavn.Remove(index, (skolenavn.Length)-index);
+                skolenavn = skolenavn.Remove(index, (skolenavn.Length) - index);
                 school = allSchools.Find(y => y.name == skolenavn);
             }
             else
             {
-                school = (School)e.SelectedItem;
+                school = (School) e.SelectedItem;
                 skolenavn = school.name;
             }
 
@@ -213,11 +226,21 @@ namespace skolerute.Views
                     MessagingCenter.Send(this, "newSchoolSelected");
                     db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
                     db.CSVParser parser = new db.CSVParser(Constants.URL, database);
-                    ((ListView)sender).SelectedItem = null;
+                    ((ListView) sender).SelectedItem = null;
 
-                    await parser.RetrieveCalendar(school);
-                    MessagingCenter.Send(this, "choosenSch", school);
+
+                    try
+                    {
+                        await parser.RetrieveCalendar(school);
+                        MessagingCenter.Send(this, "choosenSch", school);
+                    }
+                    catch (System.Net.WebException exception)
+                    {
+                        await DisplayAlert("Problem med internett", "Kunne ikke laste ned skoleruten, prøv igjen senere", "Ok");
+                    }
                     
+                    
+
                 }
             }
             ((ListView)sender).SelectedItem = null;
@@ -304,10 +327,10 @@ namespace skolerute.Views
                     }
                 }
             }
-            
+
             List<double> avs = new List<double>(5);
             List<int> ids = new List<int>(5);
-            for (int j=5; j>0;j--)
+            for (int j = 5; j > 0; j--)
             {
                 double min = distances.Min();
                 int minindex = distances.FindIndex(0, j, y => y == min);
@@ -319,6 +342,7 @@ namespace skolerute.Views
             bestMatches = ids;
             distances = avs;
         }
+
     }
 }
 

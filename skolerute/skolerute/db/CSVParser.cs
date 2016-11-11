@@ -150,9 +150,10 @@ namespace skolerute.db
         public async Task<String> GetContent(String url)
         {
             WebRequest request = WebRequest.Create(url);
+
             HttpWebResponse response = await request.GetResponseAsync() as HttpWebResponse;
 
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (response != null && response.StatusCode == HttpStatusCode.OK)
             {
                 StreamReader stream = new StreamReader(response.GetResponseStream());
                 return stream.ReadToEnd();
