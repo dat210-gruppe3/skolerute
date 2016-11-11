@@ -110,6 +110,10 @@ namespace skolerute.Views
             if (sValue == "")
             {
                 schools.ItemsSource = allSchools;
+				if (Device.OS == TargetPlatform.iOS)
+				{
+					searchSchool.Unfocus();
+				}
             }
             else
             {

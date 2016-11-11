@@ -5,6 +5,10 @@
              x:Class="skolerute.Views.CalendarPage"
              xmlns:local="clr-namespace:skolerute.utils;assembly=skolerute"
              Title="Kalender">
+	<ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness"
+                    iOS="0, 20, 0, 0" />
+     </ContentPage.Padding>
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="days" TargetType="Button">

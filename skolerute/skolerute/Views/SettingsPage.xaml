@@ -13,10 +13,14 @@
           	<SwitchCell x:Name="offlineMode" Text="Offline modus" On="false" OnChanged="OnOfflineModeChanged"/>
 			<SwitchCell x:Name="notification" Text="Notifikasjon" On="false" OnChanged="OnNotificationChanged"/>
 			<ViewCell>
-				<Picker x:Name="listOfPickerDays" SelectedIndex="{Binding Industry}" HorizontalOptions="FillAndExpand">
-        			<Picker.Items>
-        			</Picker.Items>
-    			</Picker>
+				<StackLayout Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="StartAndExpand" Padding="20,0,20,0">
+					<Label Text="Antall dager før varsel" VerticalOptions="Center"></Label>
+					
+					<Picker x:Name="listOfPickerDays" SelectedIndex="{Binding Industry}" HorizontalOptions="EndAndExpand" VerticalOptions="Center">
+	        			<Picker.Items>
+	        			</Picker.Items>
+	    			</Picker>
+				</StackLayout>
 			</ViewCell>
 			<!--</StackLayout>-->
         </TableSection>

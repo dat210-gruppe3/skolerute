@@ -97,7 +97,7 @@ namespace skolerute.Views
             } else {
                 MonthSelect.FindByName<Image>("NextImg").Opacity = 0.3;
             }
-            MonthSelect.FindByName<Label>("monthName").Text = MonthToString(current.Month);
+            MonthSelect.FindByName<Label>("monthName").Text = Calendar.MonthToString(current.Month);
             MonthSelect.FindByName<Label>("year").Text = current.Year.ToString();
 
             var calChildren = cal.Children;
@@ -196,37 +196,7 @@ namespace skolerute.Views
             }
         }
 
-        public static string MonthToString(int i)
-        {
-            switch (i)
-            {
-                case 1:
-                    return "Januar";
-                case 2:
-                    return "Februar";
-                case 3:
-                    return "Mars";
-                case 4:
-                    return "April";
-                case 5:
-                    return "Mai";
-                case 6:
-                    return "Juni";
-                case 7:
-                    return "Juli";
-                case 8:
-                    return "August";
-                case 9:
-                    return "September";
-                case 10:
-                    return "Oktober";
-                case 11:
-                    return "November";
-                case 12:
-                    return "Desember";
-            }
-            return "";
-        }
+        
 
         void ResetAllIndicators()
         {
