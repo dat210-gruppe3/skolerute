@@ -58,9 +58,8 @@ namespace skolerute.Views
             //to school positions and displays these schools in the GUI school list.
 
             if (GetCoords.Text == "Vis nærmeste")
-            {               
-
-                Coordinate userposition = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
+            {
+				Coordinate userposition = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
 
                 if (userposition == null) return;
 

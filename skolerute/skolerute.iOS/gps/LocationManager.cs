@@ -30,28 +30,29 @@ namespace skolerute.iOS.gps
             {
                 locationManager.RequestWhenInUseAuthorization(); // Only in foreground
                 // locationManager.RequestAlwaysAuthorization would work in the background
+				if (UIDevice.CurrentDevice.CheckSystemVersion(9, 0))
+				{
+					locationManager.AllowsBackgroundLocationUpdates = true;
+				}
+
+				if (CLLocationManager.LocationServicesEnabled)
+				{
+					LocManager.DesiredAccuracy = 100; // In meters
+
+
+
+					var mgr = new CLLocationManager();
+					mgr.Delegate = new MyLocationDelegate();
+					mgr.StartUpdatingLocation();
+
+					//LocManager.RequestLocation();
+
+					//return new Coordinate(0, 0);
+					return new Coordinate(LocManager.Location.Coordinate.Latitude, LocManager.Location.Coordinate.Longitude);
+				}
             }
 
-            if (UIDevice.CurrentDevice.CheckSystemVersion(9, 0))
-            {
-                locationManager.AllowsBackgroundLocationUpdates = true;
-            }
-
-            if (CLLocationManager.LocationServicesEnabled)
-            {
-                LocManager.DesiredAccuracy = 100; // In meters
-
-                
-
-				var mgr = new CLLocationManager();
-				mgr.Delegate = new MyLocationDelegate();
-				mgr.StartUpdatingLocation();
-
-				//LocManager.RequestLocation();
-
-				//return new Coordinate(0, 0);
-				return new Coordinate(LocManager.Location.Coordinate.Latitude, LocManager.Location.Coordinate.Longitude);
-            }
+            
 
             return null;
         }

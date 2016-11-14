@@ -48,19 +48,8 @@ namespace skolerute.Views
 					daysBeforeNotification = int.Parse(listOfPickerDays.Items[listOfPickerDays.SelectedIndex]);
 					}
 				};
-			
-
-
 
         }
-
-		private static DateTime calculateDateOfNotification(DateTime nextFreeDay, int daysBeforeNotification)
-		{
-			DateTime notificationDate = nextFreeDay.AddDays(-daysBeforeNotification);
-			// Add an universal (static) point of time 
-			notificationDate.AddHours(9);
-			return notificationDate;
-		}
 
         async Task OnOfflineModeChanged(object sender, EventArgs ea)
         {
@@ -83,7 +72,7 @@ namespace skolerute.Views
 			{
 				//TODO: få neste fridag for alle favorittskole og send notifikasjon
 				DependencyService.Get<INotification>().SendCalendarNotification("No tittel på ios", "Det nærmer seg fri for en favorittskole", DateTime.Now.AddSeconds(10));
-				DependencyService.Get<INotification>().SendCalendarNotification("No tittel på ios", "Det nærmer seg fri for en favorittskole", calculateDateOfNotification(nextFreeDay, daysBeforeNotification));
+				//DependencyService.Get<INotification>().SendCalendarNotification("No tittel på ios", "Det nærmer seg fri for en favorittskole", calculateDateOfNotification(nextFreeDay, daysBeforeNotification));
 				await SettingsManager.SavePreferenceAsync(Constants.Notify, true);
 			}
 			else {
