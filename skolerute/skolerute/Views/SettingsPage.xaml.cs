@@ -4,14 +4,14 @@ using skolerute.data;
 using skolerute.utils;
 using skolerute.notifications;
 using Xamarin.Forms;
+using System.Collections.Generic;
 
 namespace skolerute.Views
 {
     public partial class SettingsPage : ContentPage
     {
 		int daysBeforeNotification = 0;
-		DateTime nextFreeDay = new DateTime(2016, 11, 07);
-		DateTime notificationDate;
+		List<School> favoriteSchools = new List<School>();
 
         public SettingsPage()
         {
@@ -30,6 +30,16 @@ namespace skolerute.Views
 				
 			}
 
+			MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
+			{
+				favoriteSchools.Add(args);
+				DependencyService.Get<INotification>().RemoveCalendarNotification();
+				if (notification.On)
+				{
+					NotificationUtils.SendNotifications(Calendar.AddSchoolToList(favoriteSchools), daysBeforeNotification);
+				}
+			});
+
 			// Add days in picker (user chooses when to get notified)
 			for (int i = 1; i < 31; i++)
 			{
@@ -45,7 +55,9 @@ namespace skolerute.Views
 					}
 					else
 					{
+					DependencyService.Get<INotification>().RemoveCalendarNotification();
 					daysBeforeNotification = int.Parse(listOfPickerDays.Items[listOfPickerDays.SelectedIndex]);
+					NotificationUtils.SendNotifications(Calendar.AddSchoolToList(favoriteSchools), daysBeforeNotification);
 					}
 				};
 
@@ -70,15 +82,12 @@ namespace skolerute.Views
 		{
 			if (notification.On == true)
 			{
-				//TODO: få neste fridag for alle favorittskole og send notifikasjon
-				DependencyService.Get<INotification>().SendCalendarNotification("No tittel på ios", "Det nærmer seg fri for en favorittskole", DateTime.Now.AddSeconds(10));
-				//DependencyService.Get<INotification>().SendCalendarNotification("No tittel på ios", "Det nærmer seg fri for en favorittskole", calculateDateOfNotification(nextFreeDay, daysBeforeNotification));
+				NotificationUtils.SendNotifications(Calendar.AddSchoolToList(favoriteSchools), daysBeforeNotification);
 				await SettingsManager.SavePreferenceAsync(Constants.Notify, true);
 			}
 			else {
 				await SettingsManager.SavePreferenceAsync(Constants.Notify, false);
-				//TODO: clear all notifications
-				DependencyService.Get<INotification>().RemoveCalendarNotification(1);
+				DependencyService.Get<INotification>().RemoveCalendarNotification();
 			}
 		}
     }
