@@ -196,8 +196,15 @@ namespace skolerute.Views
                 skolenavn = school.name;
             }
 
-            var action = await DisplayActionSheet("Du valgte: " + skolenavn, "Avbryt", null, "Legg til");
+			var action = "";
 
+			if (Device.OS == TargetPlatform.iOS)
+			{
+				action = await DisplayActionSheet("Du valgte: " + skolenavn, "Avbryt", null, "Legg til");
+			}
+			else {
+				action = await DisplayActionSheet("Du valgte: " + skolenavn, "Avbryt", "Legg til");
+			}
 
             if (action != null)
             {
