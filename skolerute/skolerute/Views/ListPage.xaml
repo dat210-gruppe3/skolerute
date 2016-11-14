@@ -9,18 +9,13 @@
 	      <OnPlatform.iOS>
 	        0, 20, 0, 0
 	      </OnPlatform.iOS>
-	      <OnPlatform.Android>
-	        0, 0, 0, 0
-	      </OnPlatform.Android>
-	      <OnPlatform.WinPhone>
-	        0, 0, 0, 0
-	      </OnPlatform.WinPhone>
     	</OnPlatform>
 	</ContentPage.Padding>
 	
 	<ContentPage.Content>
 		
-		<ListView x:Name ="lstView" IsGroupingEnabled="true" GroupDisplayBinding="{Binding LongName}" GroupShortNameBinding="{Binding ShortName}">
+		<ListView x:Name ="lstView" IsGroupingEnabled="true" GroupDisplayBinding="{Binding LongName}"
+              GroupShortNameBinding="{Binding ShortName}" AutomationId="freeDaysList">
 			<ListView.ItemTemplate>
 				<DataTemplate><TextCell Text="{Binding Name}" Detail = "{Binding Comment}" /></DataTemplate>
 			</ListView.ItemTemplate>

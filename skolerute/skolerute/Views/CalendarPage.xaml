@@ -37,27 +37,28 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
-      <ScrollView HorizontalOptions="CenterAndExpand">
+      <ScrollView HorizontalOptions="CenterAndExpand" AutomationId="calendarScrollView">
         <AbsoluteLayout HorizontalOptions="CenterAndExpand" VerticalOptions="FillAndExpand">
             <StackLayout Padding="0" Spacing="0" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                          AbsoluteLayout.LayoutFlags="All">
                 <Label x:Name="year" Font="5" WidthRequest="110" Text="År" FontSize="Large" HorizontalOptions="Center"
-                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center" AutomationId="yearLabel" />
 
                 <!--ImageButtons to iterate forward or backward by months-->
                 <StackLayout x:Name="MonthSelect" Orientation="Horizontal" HorizontalOptions="Center">
                     <Image x:Name="PrevImg" BindingContext="this" Rotation="180" RotationX="180" HeightRequest="100" WidthRequest="100"
                            IsEnabled="{Binding isLoading}"
-                           Source="http://www.pngmart.com/files/3/Right-Arrow-Transparent-PNG.png">
+                           Source="http://www.pngmart.com/files/3/Right-Arrow-Transparent-PNG.png"
+                           AutomationId="previousMonthButton">
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer x:Name="Prev" Tapped="PrevMonth" />
                         </Image.GestureRecognizers>
                     </Image>
                     <Label x:Name="monthName" Font="5" WidthRequest="110" Text="Måned" FontSize="Large"
                            HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
-                           VerticalOptions="FillAndExpand" />
+                           VerticalOptions="FillAndExpand"  AutomationId="monthLabel"/>
                     <Image x:Name="NextImg" BindingContext="this" HeightRequest="100" WidthRequest="100" IsEnabled="{Binding isLoading}"
-                           Source="http://www.pngmart.com/files/3/Right-Arrow-Transparent-PNG.png">
+                           Source="http://www.pngmart.com/files/3/Right-Arrow-Transparent-PNG.png" AutomationId="nextMonthButton" >
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer x:Name="Next" Tapped="NextMonth" />
                         </Image.GestureRecognizers>
@@ -65,7 +66,7 @@
                 </StackLayout>
                 <StackLayout>
                     <Grid x:Name="weekDays" Margin="0" Padding="0" RowSpacing="0" ColumnSpacing="0"
-                          HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand">
+                          HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand" AutomationId="weekDaysGrid">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
@@ -107,7 +108,7 @@
 
 
                     <Grid x:Name="calendar" Margin="0" Padding="0" RowSpacing="0" ColumnSpacing="0"
-                          HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand">
+                          HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand" AutomationId="calendarGrid">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
                             <RowDefinition Height="*" />
@@ -614,33 +615,34 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <StackLayout Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
-                            <BoxView BackgroundColor="Lime" Rotation="45" HeightRequest="5" WidthRequest="5" HorizontalOptions="Center" VerticalOptions="Center" />
-                            <Label Text="Lenden skole og resusrserser" LineBreakMode="TailTruncation" />
+                            <BoxView BackgroundColor="Lime" Rotation="45" HeightRequest="5" WidthRequest="5" HorizontalOptions="Center"
+                                     VerticalOptions="Center"/>
+                            <Label Text="Lenden skole og resusrserser" LineBreakMode="TailTruncation" AutomationId="legendLabel1"/>
                         </StackLayout>
                         <StackLayout Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
                             <BoxView BackgroundColor="Lime" Rotation="45" HeightRequest="5" WidthRequest="5"
                                      HorizontalOptions="Center" VerticalOptions="Center" />
-                            <Label Text="Lenden skole og resusrserser" LineBreakMode="TailTruncation"  VerticalTextAlignment="Center"/>
+                            <Label Text="Lenden skole og resusrserser" LineBreakMode="TailTruncation" AutomationId="legendLabel2"/>
                         </StackLayout>
                         <StackLayout Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
                             <BoxView BackgroundColor="Lime" Rotation="45" HeightRequest="5" WidthRequest="5"
                                      HorizontalOptions="Center" VerticalOptions="Center" />
-                            <Label Text="Lenden skole og resusrserser" LineBreakMode="TailTruncation" />
+                            <Label Text="Lenden skole og resusrserser" LineBreakMode="TailTruncation" AutomationId="legendLabel3"/>
                         </StackLayout>
                         <StackLayout Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
                             <BoxView BackgroundColor="Lime" Rotation="45" HeightRequest="5" WidthRequest="5"
                                      HorizontalOptions="Center" VerticalOptions="Center" />
-                            <Label Text="Lenden skole og resusrserser" LineBreakMode="TailTruncation" />
+                            <Label Text="Lenden skole og resusrserser" LineBreakMode="TailTruncation" AutomationId="legendLabel4"/>
                         </StackLayout>
                         <StackLayout Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
                             <BoxView BackgroundColor="Lime" Rotation="45" HeightRequest="5" WidthRequest="5"
                                      HorizontalOptions="Center" VerticalOptions="Center" />
-                            <Label Text="Lenden skole og resusrserser" LineBreakMode="TailTruncation" />
+                            <Label Text="Lenden skole og resusrserser" LineBreakMode="TailTruncation" AutomationId="legendLabel5"/>
                         </StackLayout>
                         <StackLayout Grid.Row="1" Grid.Column="2" Orientation="Horizontal">
                             <BoxView BackgroundColor="Lime" Rotation="45" HeightRequest="5" WidthRequest="5"
                                      HorizontalOptions="Center" VerticalOptions="Center" />
-                            <Label Text="Lenden skole og resusrserser" LineBreakMode="TailTruncation" />
+                            <Label Text="Lenden skole og resusrserser" LineBreakMode="TailTruncation" AutomationId="legendLabel6"/>
                         </StackLayout>
                     </Grid>
                 </StackLayout>
@@ -654,7 +656,8 @@
                 HorizontalOptions="CenterAndExpand"
                 VerticalOptions="CenterAndExpand"
                 AbsoluteLayout.LayoutBounds="0.5, 0.5, 0.5, 0.5"
-                AbsoluteLayout.LayoutFlags="All" />
+                AbsoluteLayout.LayoutFlags="All" 
+                AutomationId="calendarLoadingIndicator"/>
         </AbsoluteLayout>
       </ScrollView>
     </ContentPage.Content>
