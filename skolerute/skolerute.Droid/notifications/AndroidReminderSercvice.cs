@@ -25,6 +25,7 @@ namespace skolerute.Droid.notifications
 
 		public void RemoveCalendarNotification(int notificationId)
 		{
+			//pendingIntent.Cancel();
 		}
     }
 }

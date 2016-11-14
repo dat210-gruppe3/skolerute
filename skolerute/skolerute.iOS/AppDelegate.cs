@@ -4,6 +4,7 @@ using UIKit;
 using Xamarin;
 
 
+
 namespace skolerute.iOS
 {
     // The UIApplicationDelegate for the application. This class is responsible for launching the 
