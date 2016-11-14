@@ -41,7 +41,6 @@ namespace skolerute.Views
 
             }
 
-
             //DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now);
         }
 
@@ -197,7 +196,15 @@ namespace skolerute.Views
                 skolenavn = school.name;
             }
 
-            var action = await DisplayActionSheet("Du valgte: " + skolenavn, "Legg til", "Avbryt");
+			var action = "";
+
+			if (Device.OS == TargetPlatform.iOS)
+			{
+				action = await DisplayActionSheet("Du valgte: " + skolenavn, "Avbryt", null, "Legg til");
+			}
+			else {
+				action = await DisplayActionSheet("Du valgte: " + skolenavn, "Avbryt", "Legg til");
+			}
 
             if (action != null)
             {
@@ -254,7 +261,7 @@ namespace skolerute.Views
             }
 
             string skolenavn = (string)e.SelectedItem;
-            var action = await DisplayActionSheet("Du valgte: " + skolenavn, "Slett", "Avbryt");
+            var action = await DisplayActionSheet("Du valgte: " + skolenavn, "Avbryt", "Slett");
 
             if (action != null)
             {
