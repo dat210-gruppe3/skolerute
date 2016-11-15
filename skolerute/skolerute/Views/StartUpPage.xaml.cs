@@ -44,14 +44,6 @@ namespace skolerute.Views
             //DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now);
         }
 
-        private async Task Load()
-        {
-            GetCoords.IsEnabled = false;
-            await Task.Yield();
-            GetClosest();
-            GetCoords.IsEnabled = true;
-        }
-
         private void GetClosest()
         {
             //Called in xaml if button to get closest schools is pressed. Gets user global position and compares it
@@ -74,13 +66,13 @@ namespace skolerute.Views
                 List<string> result = new List<string>();
                 for (int a = 0; a < distances.Count; a++)
                 {
-
                     string verdi = ads.ElementAt(a).name + ": " + Math.Round(distances.ElementAt(a), 2).ToString() + " km";
 
                     result.Add(verdi);
                 }
                 avstand.ItemsSource = result;
                 schools.IsVisible = false;
+                
             }
             else
             {

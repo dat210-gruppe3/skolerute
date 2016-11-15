@@ -84,6 +84,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="StartUpPage\CoordinateDistanceTest.cs" />
     <Compile Include="Calendar\DayOfWeekTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
