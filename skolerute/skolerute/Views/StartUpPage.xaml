@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="skolerute.Views.StartUpPage"
@@ -10,8 +10,8 @@
     <StackLayout Spacing="10">
         <ProgressBar x:Name="progressBar" Progress="0" />
         <StackLayout>
-            <Label Text="Mine skoler" HorizontalOptions="Center" FontSize="Large" />
-            <ListView x:Name="mineskoler" ItemSelected="OnDeletion" SeparatorVisibility="None">
+            <Label Text="Mine skoler" HorizontalOptions="Center" FontSize="Large" AutomationId="mySchoolsLabel"/>
+            <ListView x:Name="mineskoler" ItemSelected="OnDeletion" SeparatorVisibility="None" AutomationId="favoriteSchoolsList">
                 <ListView.ItemTemplate >
                     <DataTemplate>
                         <TextCell Text="{Binding}"/>
@@ -20,19 +20,23 @@
             </ListView>
         </StackLayout>
       <StackLayout Orientation="Horizontal" Padding="30,0,30,0">
-      <Label Text="Legg til skole" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Large" />
-        <Button x:Name="GetCoords" Text="Vis nærmeste" Clicked="GetClosest" HorizontalOptions="End" IsEnabled="false"/>
+	<Label Text="Legg til skole" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Large" 
+             AutomationId="addSchoolLabel"/>
+        <Button x:Name="GetCoords" Text="Vis nærmeste" Clicked="GetClosest" HorizontalOptions="End" IsEnabled="false"
+                AutomationId="closestSchoolsButton"/>
       </StackLayout>
-      <SearchBar x:Name="searchSchool" Placeholder="Søk etter skoler" TextChanged="TextChanged" SearchButtonPressed="TextChanged"/>   
+      <SearchBar x:Name="searchSchool" Placeholder="Søk etter skoler" TextChanged="TextChanged" SearchButtonPressed="TextChanged"
+                 AutomationId="schoolSearchField"/>   
       <StackLayout Orientation="Horizontal">
-        <ListView x:Name="schools" ItemSelected="OnSelection" SeparatorVisibility="None">
+        <ListView x:Name="schools" ItemSelected="OnSelection" SeparatorVisibility="None" AutomationId="allSchoolsList">
             <ListView.ItemTemplate>
                 <DataTemplate>
                   <TextCell Text="{Binding name}"/>              
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <ListView x:Name="avstand" IsVisible="false" SeparatorVisibility="None" ItemSelected="OnSelection">
+        <ListView x:Name="avstand" IsVisible="false" SeparatorVisibility="None" ItemSelected="OnSelection" 
+                  AutomationId="closestSchoolsList">
           <ListView.ItemTemplate>
             <DataTemplate>
               <TextCell Text="{Binding}"/>

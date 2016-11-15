@@ -70,6 +70,7 @@
     </Compile>
     <Compile Include="ViewModel\freeDayModel.cs" />
     <Compile Include="exportCalendar\IExportCalendar.cs" />
+    <Compile Include="notifications\NotificationUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -41,7 +41,7 @@ namespace skolerute.iOS
 			Console.WriteLine("Scheduled...");
 		}
 
-		public void RemoveCalendarNotification(int notificationId)
+		public void RemoveCalendarNotification()
 		{
 			UIApplication.SharedApplication.CancelAllLocalNotifications();
 		}
