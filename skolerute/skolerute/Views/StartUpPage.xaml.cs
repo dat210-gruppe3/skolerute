@@ -15,15 +15,18 @@ namespace skolerute.Views
         ObservableCollection<string> mySchools = new ObservableCollection<string>();
         List<double> distances = new List<double>();
         List<int> bestMatches = new List<int>();
+        Coordinate userposition = new Coordinate(0.0,0.0);
 
         public StartUpPage()
         {
             InitializeComponent();
+            userposition = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
         }
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            
 
             if (schools.ItemsSource == null)
             {
@@ -51,7 +54,7 @@ namespace skolerute.Views
 
             if (GetCoords.Text == "Vis nærmeste")
             {
-				Coordinate userposition = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
+				userposition = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates(); 
 
                 if (userposition == null) return;
 
@@ -306,7 +309,7 @@ namespace skolerute.Views
             {
                 if (i < 5)
                 {
-                    bestMatches.Add(i);
+                    bestMatches.Add(i+1);
                     distances.Add(gpsCoordinates.HaversineDistance(latitudes.ElementAt(i), longitudes.ElementAt(i)));
                 }
 
