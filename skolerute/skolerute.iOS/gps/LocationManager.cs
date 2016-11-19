@@ -47,13 +47,9 @@ namespace skolerute.iOS.gps
 
 					//LocManager.RequestLocation();
 
-					//return new Coordinate(0, 0);
 					return new Coordinate(LocManager.Location.Coordinate.Latitude, LocManager.Location.Coordinate.Longitude);
 				}
             }
-
-            
-
             return null;
         }
     }
