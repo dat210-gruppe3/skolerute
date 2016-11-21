@@ -44,6 +44,7 @@
     <Compile Include="db\IDatabaseManager.cs" />
     <Compile Include="db\IDatabaseManagerAsync.cs" />
     <Compile Include="db\ISQLite.cs" />
+    <Compile Include="exportCalendar\MyCalendar.cs" />
     <Compile Include="GPS\IGPSservice.cs" />
     <Compile Include="notifications\INotification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -5,6 +5,7 @@ using System.Collections;
 using skolerute.data;
 using Xamarin.Forms;
 using System.Collections.ObjectModel;
+using skolerute.ExportCalendar;
 using skolerute.utils;
 
 namespace skolerute.Views
@@ -210,6 +211,47 @@ namespace skolerute.Views
             }
         }
 
+        private async void ExportCalendarButtonClicked(object sender, EventArgs e)
+        {
+            List<MyCalendar> myCalendars = DependencyService.Get<IExportCalendar>().GetCalendarInfo();
+            if (myCalendars == null || myCalendars.Count == 0)
+            {
+                await DisplayAlert("Eksporter kalender", "Du har ingen tilgjengelige kalendere i kalender appen din.", "Avbryt");
+            }
+            else if (myCalendars.Count == 1) // Do this to not bother the user with popup messages when it is unnecessary
+            {
+                await DependencyService.Get<IExportCalendar>()
+                    .ExportToCalendar(Calendar.AddSchoolToList(favoriteSchools), myCalendars.FirstOrDefault());
+            }
+            else
+            {
+                List<string> calendarLabels = new List<string>(myCalendars.Count);
+
+                foreach (MyCalendar myCalendar in myCalendars)
+                {
+                    calendarLabels.Add($"{myCalendar.Name} - {myCalendar.Accout}");
+                }
+
+                string choice = await DisplayActionSheet("Eksporter kalender", "Avbryt", null, calendarLabels.ToArray());
+                string choiceName = choice.Split(' ').First();
+                MyCalendar chosenCalendar = null;
+
+                foreach (MyCalendar myCalendar in myCalendars)
+                {
+                    if (choiceName == myCalendar.Name)
+                    {
+                        chosenCalendar = myCalendar;
+                        break;
+                    }
+                }
+
+                if (chosenCalendar != null)
+                {
+                    await DependencyService.Get<IExportCalendar>()
+                        .ExportToCalendar(Calendar.AddSchoolToList(favoriteSchools), chosenCalendar);
+                }
+            }
+        }
     }
 }
 

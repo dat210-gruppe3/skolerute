@@ -162,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="db\SQLiteAndroid.cs" />
+    <Compile Include="ExportCalendar\ExportCalendar.cs" />
     <Compile Include="GPS\GPSserviceAndroid.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="notifications\AlarmReciever.cs" />

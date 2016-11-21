@@ -646,6 +646,7 @@
                         </StackLayout>
                     </Grid>
                 </StackLayout>
+              <Button Clicked="ExportCalendarButtonClicked" Text="Eksporter kalender" />
             </StackLayout>
             
             <ActivityIndicator
