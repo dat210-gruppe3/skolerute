@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 
 namespace skolerute.data
@@ -145,6 +146,17 @@ namespace skolerute.data
                 relevantDays.Add(calendarDays.ElementAt(i + j));
             }
             return relevantDays;
+        }
+
+        public static int GetWeekNumber(DateTime date)
+        {
+            CultureInfo myCultureInfo = new CultureInfo("nb-NO");
+            System.Globalization.Calendar myCalendar = myCultureInfo.Calendar;
+
+            CalendarWeekRule myCalendarWeekRule = myCultureInfo.DateTimeFormat.CalendarWeekRule;
+            System.DayOfWeek myFirstDayOfWeek = myCultureInfo.DateTimeFormat.FirstDayOfWeek;
+
+            return myCalendar.GetWeekOfYear(date, myCalendarWeekRule, myFirstDayOfWeek);
         }
 
         public static string MonthToString(int i)

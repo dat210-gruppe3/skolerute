@@ -73,6 +73,7 @@
     <Compile Include="AppInitializer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -80,10 +81,6 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\skolerute\skolerute.Droid\skolerute.Droid.csproj">
-      <Project>{b7dbf6d9-236d-4f45-9a07-b3bb45cd517e}</Project>
-      <Name>skolerute.Droid</Name>
-    </ProjectReference>
     <ProjectReference Include="..\skolerute\skolerute.iOS\skolerute.iOS.csproj">
       <Project>{fc4bc4d2-e390-4b66-827d-fd0bd1a66331}</Project>
       <Name>skolerute.iOS</Name>

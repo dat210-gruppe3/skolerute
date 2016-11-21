@@ -66,12 +66,19 @@
                     </Image>
                 </StackLayout>
                 <StackLayout>
-                    <Grid x:Name="weekDays" Margin="0" Padding="0" RowSpacing="0" ColumnSpacing="0"
-                          HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand" AutomationId="weekDaysGrid">
+                      <Grid x:Name="calendar" Margin="0" Padding="0" RowSpacing="0" ColumnSpacing="0"
+                          HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand" AutomationId="calendarGrid">
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.5*"/>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
@@ -83,53 +90,35 @@
 
                         <!-- weekdays -->
                         <StackLayout Grid.Row="0" Grid.Column="0">
-                            <Label Text="Man" HorizontalTextAlignment="Center" />
+                            <Label Text="Uke" HorizontalTextAlignment="Center" Opacity="0.5" />
                         </StackLayout>
                         <StackLayout Grid.Row="0" Grid.Column="1">
-                            <Label Text="Tirs" HorizontalTextAlignment="Center" />
+                            <Label Text="Man" HorizontalTextAlignment="Center" />
                         </StackLayout>
                         <StackLayout Grid.Row="0" Grid.Column="2">
-                            <Label Text="Ons" HorizontalTextAlignment="Center" />
+                            <Label Text="Tirs" HorizontalTextAlignment="Center" />
                         </StackLayout>
                         <StackLayout Grid.Row="0" Grid.Column="3">
-                            <Label Text="Tors" HorizontalTextAlignment="Center" />
+                            <Label Text="Ons" HorizontalTextAlignment="Center" />
                         </StackLayout>
                         <StackLayout Grid.Row="0" Grid.Column="4">
-                            <Label Text="Fre" HorizontalTextAlignment="Center" />
+                            <Label Text="Tors" HorizontalTextAlignment="Center" />
                         </StackLayout>
                         <StackLayout Grid.Row="0" Grid.Column="5">
-                            <Label Text="Lør" HorizontalTextAlignment="Center" Opacity="0.5" />
+                            <Label Text="Fre" HorizontalTextAlignment="Center" />
                         </StackLayout>
                         <StackLayout Grid.Row="0" Grid.Column="6">
+                            <Label Text="Lør" HorizontalTextAlignment="Center" Opacity="0.5" />
+                        </StackLayout>
+                        <StackLayout Grid.Row="0" Grid.Column="7">
                             <Label Text="Søn" HorizontalTextAlignment="Center" TextColor="Red" Opacity="0.5" />
                         </StackLayout>
-
-                        <StackLayout Grid.Row="1" Grid.Column="0" />
-                    </Grid>
-
-
-                    <Grid x:Name="calendar" Margin="0" Padding="0" RowSpacing="0" ColumnSpacing="0"
-                          HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand" AutomationId="calendarGrid">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
+                        
                         <!-- Week1 -->
-                        <StackLayout Grid.Row="0" Grid.Column="0">
+                        <StackLayout Grid.Row="1" Grid.Column="0">
+                          <Label Text="1" Opacity="0.5" HorizontalTextAlignment="Center"/>
+                        </StackLayout>
+                        <StackLayout Grid.Row="1" Grid.Column="1">
                             <Label Text="1" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -140,7 +129,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="0" Grid.Column="1">
+                        <StackLayout Grid.Row="1" Grid.Column="2">
                             <Label Text="2" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -151,7 +140,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="0" Grid.Column="2">
+                        <StackLayout Grid.Row="1" Grid.Column="3">
                             <Label Text="3" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -162,7 +151,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="0" Grid.Column="3">
+                        <StackLayout Grid.Row="1" Grid.Column="4">
                             <Label Text="4" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -173,7 +162,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="0" Grid.Column="4">
+                        <StackLayout Grid.Row="1" Grid.Column="5">
                             <Label Text="5" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -184,7 +173,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="0" Grid.Column="5">
+                        <StackLayout Grid.Row="1" Grid.Column="6">
                             <Label Text="6" HorizontalTextAlignment="Center" Opacity="0.5" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -195,7 +184,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="0" Grid.Column="6">
+                        <StackLayout Grid.Row="1" Grid.Column="7">
                             <Label Text="7" HorizontalTextAlignment="Center" Opacity="0.5" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -208,7 +197,10 @@
                         </StackLayout>
 
                         <!-- Week2 -->
-                        <StackLayout Grid.Row="1" Grid.Column="0">
+                        <StackLayout Grid.Row="2" Grid.Column="0">
+                          <Label Text="2" Opacity="0.5" HorizontalTextAlignment="Center"/>
+                        </StackLayout>
+                        <StackLayout Grid.Row="2" Grid.Column="1">
                             <Label Text="8" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -219,7 +211,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="1" Grid.Column="1">
+                        <StackLayout Grid.Row="2" Grid.Column="2">
                             <Label Text="9" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -230,7 +222,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="1" Grid.Column="2">
+                        <StackLayout Grid.Row="2" Grid.Column="3">
                             <Label Text="10" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -241,7 +233,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="1" Grid.Column="3">
+                        <StackLayout Grid.Row="2" Grid.Column="4">
                             <Label Text="11" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -252,7 +244,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="1" Grid.Column="4">
+                        <StackLayout Grid.Row="2" Grid.Column="5">
                             <Label Text="12" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -263,7 +255,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="1" Grid.Column="5">
+                        <StackLayout Grid.Row="2" Grid.Column="6">
                             <Label Text="13" HorizontalTextAlignment="Center" Opacity="0.5" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -274,7 +266,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="1" Grid.Column="6">
+                        <StackLayout Grid.Row="2" Grid.Column="7">
                             <Label Text="14" HorizontalTextAlignment="Center" Opacity="0.5" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -287,7 +279,10 @@
                         </StackLayout>
 
                         <!-- Week3 -->
-                        <StackLayout Grid.Row="2" Grid.Column="0">
+                        <StackLayout Grid.Row="3" Grid.Column="0">
+                          <Label Text="3" Opacity="0.5" HorizontalTextAlignment="Center"/>
+                        </StackLayout>
+                        <StackLayout Grid.Row="3" Grid.Column="1">
                             <Label Text="15" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -298,7 +293,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="2" Grid.Column="1">
+                        <StackLayout Grid.Row="3" Grid.Column="2">
                             <Label Text="16" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -309,7 +304,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="2" Grid.Column="2">
+                        <StackLayout Grid.Row="3" Grid.Column="3">
                             <Label Text="17" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -320,7 +315,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="2" Grid.Column="3">
+                        <StackLayout Grid.Row="3" Grid.Column="4">
                             <Label Text="18" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -331,7 +326,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="2" Grid.Column="4">
+                        <StackLayout Grid.Row="3" Grid.Column="5">
                             <Label Text="19" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -342,7 +337,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="2" Grid.Column="5">
+                        <StackLayout Grid.Row="3" Grid.Column="6">
                             <Label Text="20" HorizontalTextAlignment="Center" Opacity="0.5" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -353,7 +348,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="2" Grid.Column="6">
+                        <StackLayout Grid.Row="3" Grid.Column="7">
                             <Label Text="21" HorizontalTextAlignment="Center" Opacity="0.5" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -366,7 +361,10 @@
                         </StackLayout>
 
                         <!-- Week4 -->
-                        <StackLayout Grid.Row="3" Grid.Column="0">
+                        <StackLayout Grid.Row="4" Grid.Column="0">
+                          <Label Text="4" Opacity="0.5" HorizontalTextAlignment="Center"/>
+                        </StackLayout>
+                        <StackLayout Grid.Row="4" Grid.Column="1">
                             <Label Text="22" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -377,7 +375,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="3" Grid.Column="1">
+                        <StackLayout Grid.Row="4" Grid.Column="2">
                             <Label Text="23" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -388,7 +386,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="3" Grid.Column="2">
+                        <StackLayout Grid.Row="4" Grid.Column="3">
                             <Label Text="24" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -399,7 +397,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="3" Grid.Column="3">
+                        <StackLayout Grid.Row="4" Grid.Column="4">
                             <Label Text="25" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -410,7 +408,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="3" Grid.Column="4">
+                        <StackLayout Grid.Row="4" Grid.Column="5">
                             <Label Text="26" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -421,7 +419,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="3" Grid.Column="5">
+                        <StackLayout Grid.Row="4" Grid.Column="6">
                             <Label Text="27" HorizontalTextAlignment="Center" Opacity="0.5" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -432,7 +430,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="3" Grid.Column="6">
+                        <StackLayout Grid.Row="4" Grid.Column="7">
                             <Label Text="28" HorizontalTextAlignment="Center" Opacity="0.5" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -445,7 +443,10 @@
                         </StackLayout>
 
                         <!--Week 5-->
-                        <StackLayout Grid.Row="4" Grid.Column="0">
+                        <StackLayout Grid.Row="5" Grid.Column="0">
+                          <Label Text="5" Opacity="0.5" HorizontalTextAlignment="Center"/>
+                        </StackLayout>
+                        <StackLayout Grid.Row="5" Grid.Column="1">
                             <Label Text="29" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -456,7 +457,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="4" Grid.Column="1">
+                        <StackLayout Grid.Row="5" Grid.Column="2">
                             <Label Text="30" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -467,7 +468,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="4" Grid.Column="2">
+                        <StackLayout Grid.Row="5" Grid.Column="3">
                             <Label Text="31" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -478,7 +479,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="4" Grid.Column="3">
+                        <StackLayout Grid.Row="5" Grid.Column="4">
                             <Label Text="32" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -489,7 +490,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="4" Grid.Column="4">
+                        <StackLayout Grid.Row="5" Grid.Column="5">
                             <Label Text="33" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -500,7 +501,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="4" Grid.Column="5">
+                        <StackLayout Grid.Row="5" Grid.Column="6">
                             <Label Text="34" HorizontalTextAlignment="Center" Opacity="0.5" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -511,7 +512,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="4" Grid.Column="6">
+                        <StackLayout Grid.Row="5" Grid.Column="7">
                             <Label Text="35" HorizontalTextAlignment="Center" Opacity="0.5" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -524,7 +525,10 @@
                         </StackLayout>
 
                         <!--Week 6-->
-                        <StackLayout Grid.Row="5" Grid.Column="0">
+                        <StackLayout Grid.Row="6" Grid.Column="0">
+                          <Label Text="6" Opacity="0.5" HorizontalTextAlignment="Center"/>
+                        </StackLayout>
+                        <StackLayout Grid.Row="6" Grid.Column="1">
                             <Label Text="36" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -535,7 +539,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="5" Grid.Column="1">
+                        <StackLayout Grid.Row="6" Grid.Column="2">
                             <Label Text="37" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -546,7 +550,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="5" Grid.Column="2">
+                        <StackLayout Grid.Row="6" Grid.Column="3">
                             <Label Text="38" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -557,7 +561,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="5" Grid.Column="3">
+                        <StackLayout Grid.Row="6" Grid.Column="4">
                             <Label Text="39" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -568,7 +572,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="5" Grid.Column="4">
+                        <StackLayout Grid.Row="6" Grid.Column="5">
                             <Label Text="40" HorizontalTextAlignment="Center" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -579,7 +583,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="5" Grid.Column="5">
+                        <StackLayout Grid.Row="6" Grid.Column="6">
                             <Label Text="41" HorizontalTextAlignment="Center" Opacity="0.5" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -590,7 +594,7 @@
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout Grid.Row="5" Grid.Column="6">
+                        <StackLayout Grid.Row="6" Grid.Column="7">
                             <Label Text="42" HorizontalTextAlignment="Center" Opacity="0.5" />
                             <StackLayout Spacing="3">
                                 <BoxView WidthRequest="1" HeightRequest="1" IsVisible="false" />
@@ -647,6 +651,7 @@
                         </StackLayout>
                     </Grid>
                 </StackLayout>
+              <Button Clicked="ExportCalendarButtonClicked" Text="Eksporter kalender" />
             </StackLayout>
             
             <ActivityIndicator
