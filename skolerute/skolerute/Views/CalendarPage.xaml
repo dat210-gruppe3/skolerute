@@ -4,6 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="skolerute.Views.CalendarPage"
              xmlns:local="clr-namespace:skolerute.utils;assembly=skolerute"
+             xmlns:extensions="clr-namespace:skolerute.Extensions;assembly=skolerute"
              Title="Kalender">
 	<ContentPage.Padding>
         <OnPlatform x:TypeArguments="Thickness"
@@ -37,7 +38,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
-      <ScrollView HorizontalOptions="CenterAndExpand" AutomationId="calendarScrollView">
+      <ScrollView x:Name="thescrolleview" HorizontalOptions="CenterAndExpand" AutomationId="calendarScrollView">
         <AbsoluteLayout HorizontalOptions="CenterAndExpand" VerticalOptions="FillAndExpand">
             <StackLayout Padding="0" Spacing="0" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                          AbsoluteLayout.LayoutFlags="All">
@@ -46,9 +47,9 @@
 
                 <!--ImageButtons to iterate forward or backward by months-->
                 <StackLayout x:Name="MonthSelect" Orientation="Horizontal" HorizontalOptions="Center">
-                    <Image x:Name="PrevImg" BindingContext="this" Rotation="180" RotationX="180" HeightRequest="100" WidthRequest="100"
+                    <Image x:Name="PrevImg" BindingContext="this"  
                            IsEnabled="{Binding isLoading}"
-                           Source="http://www.pngmart.com/files/3/Right-Arrow-Transparent-PNG.png"
+                           Source ="{extensions:ImageResource skolerute.Resources.arrow.png}"
                            AutomationId="previousMonthButton">
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer x:Name="Prev" Tapped="PrevMonth" />
@@ -57,8 +58,8 @@
                     <Label x:Name="monthName" Font="5" WidthRequest="110" Text="Måned" FontSize="Large"
                            HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
                            VerticalOptions="FillAndExpand"  AutomationId="monthLabel"/>
-                    <Image x:Name="NextImg" BindingContext="this" HeightRequest="100" WidthRequest="100" IsEnabled="{Binding isLoading}"
-                           Source="http://www.pngmart.com/files/3/Right-Arrow-Transparent-PNG.png" AutomationId="nextMonthButton" >
+                    <Image x:Name="NextImg" BindingContext="this" Rotation="180" RotationX="180"  IsEnabled="{Binding isLoading}"
+                           Source="{extensions:ImageResource skolerute.Resources.arrow.png}" AutomationId="nextMonthButton" >
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer x:Name="Next" Tapped="NextMonth" />
                         </Image.GestureRecognizers>
