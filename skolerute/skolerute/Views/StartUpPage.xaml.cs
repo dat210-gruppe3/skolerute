@@ -136,6 +136,7 @@ namespace skolerute.Views
                 database.CreateNewDatabase();
                 skolerute.db.CSVParser parser = new db.CSVParser(Constants.URL, database);
 
+                // TODO: Try and catch this line
                 await parser.RetrieveSchools();
                 await progressBar.ProgressTo(0.7, 250, Easing.Linear);
             }
