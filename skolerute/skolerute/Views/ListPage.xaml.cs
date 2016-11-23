@@ -1,8 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Linq;
+using NUnit.Framework.Internal;
 using Xamarin.Forms;
 using skolerute.data;
+using Xamarin.Forms.Internals;
+using Xamarin.Forms.Xaml;
+using Calendar = skolerute.data.Calendar;
 
 namespace skolerute.Views
 {
@@ -11,18 +17,20 @@ namespace skolerute.Views
         private ObservableCollection<GroupedFreeDayModel> grouped { get; set; }
         List<School> favoriteSchools = new List<School>();
         List<string> favoriteSchoolNames = new List<string>();
+        DateTime today = DateTime.Now;
 
         public ListPage()
         {
             MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
             {
-                if(!favoriteSchoolNames.Contains(args.name))
+                if (!favoriteSchoolNames.Contains(args.name))
                 {
                     favoriteSchools.Add(args);
                     favoriteSchoolNames.Add(args.name);
                     grouped = Calendar.AddSchoolToList(favoriteSchools);
 
                     lstView.ItemsSource = grouped;
+                    FindNext();
                 }
 
             });
@@ -34,10 +42,37 @@ namespace skolerute.Views
                 grouped.Clear();
                 grouped = Calendar.AddSchoolToList(favoriteSchools);
                 lstView.ItemsSource = grouped;
+                FindNext();
             });
 
             InitializeComponent();
 
+        }
+
+        private void FindNext()
+        {
+            ObservableCollection<GroupedFreeDayModel> a = lstView.ItemsSource as ObservableCollection<GroupedFreeDayModel>;
+            var cont = true;
+            foreach (var group in a)
+            {
+                foreach (var item in group)
+                {
+                    try
+                    {
+                        if (item.GetEndDate() >= DateTime.Now && cont)
+                        {
+                            lstView.ScrollTo(item, group, ScrollToPosition.Center, true);
+                            cont = false;
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+                
+            }
+            
         }
     }
 }
