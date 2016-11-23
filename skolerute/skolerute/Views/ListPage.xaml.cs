@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using NUnit.Framework.Internal;
 using Xamarin.Forms;
 using skolerute.data;
 using Xamarin.Forms.Internals;

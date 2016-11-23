@@ -72,6 +72,7 @@
     <Compile Include="ViewModel\freeDayModel.cs" />
     <Compile Include="exportCalendar\IExportCalendar.cs" />
     <Compile Include="notifications\NotificationUtils.cs" />
+    <Compile Include="Extensions\ImageResourceExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -139,6 +140,7 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\arrow.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\SettingsPage.xaml">

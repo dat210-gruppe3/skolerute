@@ -3,12 +3,14 @@ using EventKit;
 using UIKit;
 using Foundation;
 using EventKitUI;
+using System.Collections.ObjectModel;
+using skolerute.ExportCalendar;
 namespace skolerute.iOS
 {
-	public class ExportCalendar : IExportCalendar
+	public class ExportCalendar //: IExportCalendar
 	{
 
-		public void ExportToCalendar(string title, string description, string reminder)
+		public void ExportToCalendar(ObservableCollection<GroupedFreeDayModel> groupedFreedays, MyCalendar chosenCalendar)
 		{
 
 		}
