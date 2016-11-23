@@ -160,7 +160,7 @@ namespace skolerute.Views
                     }
                     else
                     {
-                        if (label.Text.Length <= 2 && selectedSchoolsCalendars.Count != 0)
+                        if (label.Text.Length <= 2 && selectedSchoolsCalendars != null && selectedSchoolsCalendars.Count != 0)
                         {
                             label.Text = Calendar.GetWeekNumber(selectedSchoolsCalendars.ElementAt(0).ElementAt(i).Date).ToString();
                         }

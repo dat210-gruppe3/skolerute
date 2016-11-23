@@ -27,7 +27,7 @@ namespace skolerute.Droid.ExportCalendar
         {
             if (chosenCalendar != null)
             {
-                calendarId = chosenCalendar.Id;
+                calendarId = int.Parse(chosenCalendar.Id);
                 RemoveFromCalendar();
 
                 foreach (GroupedFreeDayModel group in groupedFreedays)
@@ -92,7 +92,7 @@ namespace skolerute.Droid.ExportCalendar
                     calendarName = cursor.GetString(nameCol);
                     calendarAccount = cursor.GetString(accountCol);
 
-                    myCalendars.Add(new MyCalendar(calendarId, calendarName, calendarAccount));
+                    myCalendars.Add(new MyCalendar(calendarId.ToString(), calendarName, calendarAccount));
                     i++;
                 } while (cursor.MoveToNext());
                 cursor.Close();
