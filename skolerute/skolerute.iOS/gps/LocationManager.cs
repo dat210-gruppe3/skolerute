@@ -28,7 +28,7 @@ namespace skolerute.iOS.gps
             // iOS 8 has additional permissions requirements
             if (UIDevice.CurrentDevice.CheckSystemVersion(8, 0))
             {
-                //locationManager.RequestWhenInUseAuthorization(); // Only in foreground
+                locationManager.RequestWhenInUseAuthorization(); // Only in foreground
                 // locationManager.RequestAlwaysAuthorization would work in the background
 				if (UIDevice.CurrentDevice.CheckSystemVersion(9, 0))
 				{
