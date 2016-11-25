@@ -88,7 +88,9 @@
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ExportCalendar\App.cs" />
     <Compile Include="db\SQLiteIOS.cs" />
+    <Compile Include="ExportCalendar\ExportCalendar.cs" />
     <Compile Include="gps\LocationManager.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />

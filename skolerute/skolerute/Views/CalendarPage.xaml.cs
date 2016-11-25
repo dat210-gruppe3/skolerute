@@ -103,7 +103,7 @@ namespace skolerute.Views
 
             var calChildren = cal.Children;
 
-            List<int> consecutiveDays = data.Calendar.GetCal(current);
+            List<int> consecutiveDays = data.Calendar.GetShownCalendarDays(current);
             IEnumerator enumerator = calChildren.GetEnumerator();
             int i = 0;
 
@@ -116,7 +116,7 @@ namespace skolerute.Views
             if (favoriteSchoolsTrimmed != null && favoriteSchoolsTrimmed.Count > 0) { 
                 foreach (School selected in favoriteSchoolsTrimmed)
                 {
-                    selectedSchoolsCalendars.Add(data.Calendar.GetRelevantFreeDays(selected.calendar, current));
+                    selectedSchoolsCalendars.Add(Calendar.GetRelevantFreeDays(selected.calendar, current));
                 }
             }
 
@@ -235,30 +235,42 @@ namespace skolerute.Views
 
         private async void ExportCalendarButtonClicked(object sender, EventArgs e)
         {
-            List<MyCalendar> myCalendars = DependencyService.Get<IExportCalendar>().GetCalendarInfo();
-            if (myCalendars == null || myCalendars.Count == 0)
+
+            if (Device.OS == TargetPlatform.iOS)
             {
-                await DisplayAlert("Eksporter kalender", "Du har ingen tilgjengelige kalendere i kalender appen din.", "Avbryt");
-            }
-            else if (myCalendars.Count == 1) // Do this to not bother the user with popup messages when it is unnecessary
-            {
-                await DependencyService.Get<IExportCalendar>()
-                    .ExportToCalendar(Calendar.AddSchoolToList(favoriteSchools), myCalendars.FirstOrDefault());
+                DependencyService.Get<IExportCalendar>()
+                    .ExportToCalendar(Calendar.AddSchoolToList(favoriteSchools), null);
             }
             else
             {
-                List<string> calendarLabels = new List<string>(myCalendars.Count);
-                calendarLabels.AddRange(myCalendars.Select(myCalendar => $"{myCalendar.Name} - {myCalendar.Accout}"));
-
-                string choice = await DisplayActionSheet("Eksporter kalender", "Avbryt", null, calendarLabels.ToArray());
-                string choiceName = choice.Split(' ').First();
-
-                MyCalendar chosenCalendar = myCalendars.FirstOrDefault(myCalendar => choiceName == myCalendar.Name);
-
-                if (chosenCalendar != null)
+                List<MyCalendar> myCalendars = DependencyService.Get<IExportCalendar>().GetCalendarInfo();
+                if (myCalendars == null || myCalendars.Count == 0)
                 {
-                    await DependencyService.Get<IExportCalendar>()
-                        .ExportToCalendar(Calendar.AddSchoolToList(favoriteSchools), chosenCalendar);
+                    await
+                        DisplayAlert("Eksporter kalender", "Du har ingen tilgjengelige kalendere i kalender appen din.",
+                            "Avbryt");
+                }
+                else if (myCalendars.Count == 1) // Do this to not bother the user with popup messages when it is unnecessary
+                {
+                    DependencyService.Get<IExportCalendar>()
+                        .ExportToCalendar(Calendar.AddSchoolToList(favoriteSchools), myCalendars.FirstOrDefault());
+                }
+                else
+                {
+                    List<string> calendarLabels = new List<string>(myCalendars.Count);
+                    calendarLabels.AddRange(myCalendars.Select(myCalendar => $"{myCalendar.Name} - {myCalendar.Accout}"));
+
+                    string choice =
+                        await DisplayActionSheet("Eksporter kalender", "Avbryt", null, calendarLabels.ToArray());
+                    string choiceName = choice.Split(' ').First();
+
+                    MyCalendar chosenCalendar = myCalendars.FirstOrDefault(myCalendar => choiceName == myCalendar.Name);
+
+                    if (chosenCalendar != null)
+                    {
+                        DependencyService.Get<IExportCalendar>()
+                            .ExportToCalendar(Calendar.AddSchoolToList(favoriteSchools), chosenCalendar);
+                    }
                 }
             }
         }

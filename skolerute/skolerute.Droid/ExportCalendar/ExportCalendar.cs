@@ -23,7 +23,7 @@ namespace skolerute.Droid.ExportCalendar
     {
         private int calendarId;
 
-        public async Task ExportToCalendar(ObservableCollection<GroupedFreeDayModel> groupedFreedays, MyCalendar chosenCalendar)
+        public void ExportToCalendar(ObservableCollection<GroupedFreeDayModel> groupedFreedays, MyCalendar chosenCalendar)
         {
             if (chosenCalendar != null)
             {
