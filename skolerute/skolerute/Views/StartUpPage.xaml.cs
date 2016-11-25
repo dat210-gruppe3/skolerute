@@ -20,7 +20,7 @@ namespace skolerute.Views
         public StartUpPage()
         {
             InitializeComponent();
-            //userposition = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
+            userposition = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
         }
 
         protected override async void OnAppearing()
