@@ -23,6 +23,7 @@ namespace skolerute.iOS.ExportCalendar
     {
         private string calendarId;
         private DateTime startDate;
+		private ObservableCollection<GroupedFreeDayModel> freeDays;
 
         public void ExportToCalendar(ObservableCollection<GroupedFreeDayModel> groupedFreedays,
             MyCalendar chosenCalendar)
@@ -31,7 +32,8 @@ namespace skolerute.iOS.ExportCalendar
             {
                 if (granted)
                 {
-                    chosenCalendar = AskWhichCalendarToUse();
+					freeDays = groupedFreedays;
+                    AskWhichCalendarToUse();
 
                     if (chosenCalendar != null)
                     {
@@ -40,43 +42,62 @@ namespace skolerute.iOS.ExportCalendar
                 }
                 else
                 {
-                    new UIAlertView("Tilgang nektet",
-                        "Brukeren har ikke gitt tilgang til kalenderen, dette kan endres i instillinger",
-                        null, "Ok").Show();
+					Device.BeginInvokeOnMainThread(() =>
+					{
+						new UIAlertView("Tilgang nektet",
+							"Brukeren har ikke gitt tilgang til kalenderen, dette kan endres i instillinger",
+							null, "Ok").Show();
+					});
                 }
             });
         }
 
-        private MyCalendar AskWhichCalendarToUse()
+        private void AskWhichCalendarToUse()
         {
             List<MyCalendar> myCalendars = GetCalendarInfo();
             MyCalendar chosenCalendar = null;
 
             if (myCalendars == null || myCalendars.Count == 0)
             {
-                UIAlertController ac = UIAlertController.Create("Eksporter kalender", "Du har ingen tilgjengelige kalendere i kalender appen din.",
-                    UIAlertControllerStyle.Alert);
+				Device.BeginInvokeOnMainThread(() =>
+				{
+	                UIAlertController alert = UIAlertController.Create("Eksporter kalender", "Du har ingen tilgjengelige kalendere i kalender appen din.",
+	                    UIAlertControllerStyle.Alert);
+
+
+					UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController(alert, true, () => { });
+				});
             }
             else if (myCalendars.Count == 1) // Do this to not bother the user with popup messages when it is unnecessary
             {
-                chosenCalendar = myCalendars.First();
+				InsertIntoChosenCalendar(freeDays, myCalendars.First());
             }
             else
             {
-                UIAlertController chooseCalendarUI = UIAlertController.Create("Eksporter kalender", null, UIAlertControllerStyle.ActionSheet);
-                chooseCalendarUI.AddAction(UIAlertAction.Create("Avbryt", UIAlertActionStyle.Cancel, action => {}));
+				Device.BeginInvokeOnMainThread(() =>
+				{
+	                UIAlertController chooseCalendarUI = UIAlertController.Create("Eksporter kalender", null, UIAlertControllerStyle.ActionSheet);
+	                chooseCalendarUI.AddAction(UIAlertAction.Create("Avbryt", UIAlertActionStyle.Cancel, action => {}));
 
-                foreach (MyCalendar calendar in myCalendars)
-                {
-                    chooseCalendarUI.AddAction(UIAlertAction.Create(calendar.Name + " - " + calendar.Accout, UIAlertActionStyle.Default,
-                        action =>
-                        {
-                            chosenCalendar = calendar;
-                        }));
-                }
-            }
+	                foreach (MyCalendar calendar in myCalendars)
+	                {
+						var calId = App.Current.EventStore.GetCalendar(calendar.Id);
+						if (calId.AllowsContentModifications && calId.AllowedEntityTypes == EKEntityMask.Event)
+						{
+							chooseCalendarUI.AddAction(UIAlertAction.Create(calendar.Name + " - " + calendar.Accout, UIAlertActionStyle.Default,
+								action =>
+								{
+								
+									InsertIntoChosenCalendar(freeDays, calendar);
+								}));
+						}
+	                }
 
-            return chosenCalendar;
+					UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController(chooseCalendarUI, true, () => {
+						
+					});
+				});
+			}
         }
 
         private void InsertIntoChosenCalendar(ObservableCollection<GroupedFreeDayModel> groupedFreedays, MyCalendar chosenCalendar)
@@ -94,6 +115,8 @@ namespace skolerute.iOS.ExportCalendar
                         "", school.GetStartDate(), school.GetEndDate());
                 }
             }
+			NSError error;
+			App.Current.EventStore.SaveCalendar(App.Current.EventStore.GetCalendar(calendarId), true, out error);
         }
 
         private void ExportEvent(string title, string description, string reminder, DateTime stardDate, DateTime endDate)
@@ -132,6 +155,7 @@ namespace skolerute.iOS.ExportCalendar
                 calendarsToQuery);
 
             EKCalendarItem[] events = App.Current.EventStore.EventsMatching(query);
+			if (events == null || events.Count() == 0 ) return;
             foreach (EKEvent calendarEvent in events)
             {
                 // HACK: To avoid deleting all events in a calendar we check for a string that will always be in the title
