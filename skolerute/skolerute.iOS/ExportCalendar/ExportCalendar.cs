@@ -22,11 +22,11 @@ namespace skolerute.iOS.ExportCalendar
     public class ExportCalendar : IExportCalendar
     {
         private string calendarId;
+        private MyCalendar pickedCalendar;
         private DateTime startDate;
 		private ObservableCollection<GroupedFreeDayModel> freeDays;
 
-        public void ExportToCalendar(ObservableCollection<GroupedFreeDayModel> groupedFreedays,
-            MyCalendar chosenCalendar)
+        public void ExportToCalendar(ObservableCollection<GroupedFreeDayModel> groupedFreedays, MyCalendar chosenCalendar)
         {
             App.Current.EventStore.RequestAccess(EKEntityType.Event, (bool granted, NSError error) =>
             {
@@ -34,11 +34,6 @@ namespace skolerute.iOS.ExportCalendar
                 {
 					freeDays = groupedFreedays;
                     AskWhichCalendarToUse();
-
-                    if (chosenCalendar != null)
-                    {
-                        InsertIntoChosenCalendar(groupedFreedays, chosenCalendar);
-                    }
                 }
                 else
                 {
@@ -55,7 +50,6 @@ namespace skolerute.iOS.ExportCalendar
         private void AskWhichCalendarToUse()
         {
             List<MyCalendar> myCalendars = GetCalendarInfo();
-            MyCalendar chosenCalendar = null;
 
             if (myCalendars == null || myCalendars.Count == 0)
             {

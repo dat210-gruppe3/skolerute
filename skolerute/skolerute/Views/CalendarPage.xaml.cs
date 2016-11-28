@@ -5,8 +5,10 @@ using System.Collections;
 using skolerute.data;
 using Xamarin.Forms;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using skolerute.ExportCalendar;
 using skolerute.utils;
+using Calendar = skolerute.data.Calendar;
 
 namespace skolerute.Views
 {
@@ -14,22 +16,17 @@ namespace skolerute.Views
     {
         static DateTime current;
         static List<School> favoriteSchools;
-        static Grid cal;
-        static StackLayout MS;
 
         public bool isLoading;
 
         public CalendarPage()
         {
             InitializeComponent();
-            
-            this.BindingContext = isLoading;
 
-            MS = MonthSelect;
             current = DateTime.Now;
-            cal = calendar;
-            DisplayCalendar(cal, MS);
-            // Placeholder liste over favoritt-skoler
+
+            DisplayCalendar();
+
             ObservableCollection<string> favoriteSchoolNames = new ObservableCollection<string>();
             favoriteSchools = new List<School>();
 
@@ -39,8 +36,8 @@ namespace skolerute.Views
                 isLoading = true;
                 LoadingIndicator.IsRunning = isLoading;
                 LoadingIndicator.IsVisible = isLoading;
-                MonthSelect.FindByName<Image>("NextImg").IsEnabled = !isLoading;
-                MonthSelect.FindByName<Image>("PrevImg").IsEnabled = !isLoading;
+                NextImg.IsEnabled = !isLoading;
+                PrevImg.IsEnabled = !isLoading;
             });
             
             MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
@@ -51,15 +48,15 @@ namespace skolerute.Views
                     favoriteSchools.Add(args);
                     favoriteSchoolNames.Add(args.name);
 
-                    ResetAllIndicators();
-                    DisplayCalendar(cal, MS);
+                    DisplayCalendar();
+                    SetLegends();
 
                     //TODO: Make this binding for better reusability
                     isLoading = false;
                     LoadingIndicator.IsRunning = isLoading;
                     LoadingIndicator.IsVisible = isLoading;
-                    MonthSelect.FindByName<Image>("NextImg").IsEnabled = !isLoading;
-                    MonthSelect.FindByName<Image>("PrevImg").IsEnabled = !isLoading;
+                    NextImg.IsEnabled = !isLoading;
+                    PrevImg.IsEnabled = !isLoading;
                 }
 			});
 
@@ -75,111 +72,89 @@ namespace skolerute.Views
 
         }
 
-
-
-        protected override void OnAppearing()
+        private void SetUpCalendar()
         {
-            base.OnAppearing();
+            DateTime currentDateTime = Calendar.GetFirstRelevantDateTime(current);
 
-            DisplayCalendar(cal, MonthSelect);
-            SetLegends();
+            foreach (var calendarElement in CalendarGrid.Children)
+            {
+                StackLayout contentContainer = (StackLayout) calendarElement;
+
+                if (contentContainer.ClassId == "WeekDay" || contentContainer.ClassId == "WeekendDay")
+                {
+                    Label dayNumber = contentContainer.Children.First() as Label;
+                    dayNumber.Text = currentDateTime.Day.ToString();
+                    currentDateTime = currentDateTime.AddDays(1);
+                }
+                else if (contentContainer.ClassId == "WeekNumber")
+                {
+                    Label weekNumber = contentContainer.Children.First() as Label;
+                    weekNumber.Text = Calendar.GetWeekNumber(currentDateTime).ToString();
+                }
+            }
         }
 
-        private static void DisplayCalendar(Grid cal, StackLayout MonthSelect)
+        private void DisplayCalendar()
         {
-            // Makes the buttons transparent if user is at the end of intended month intverval
-            if (current.Month != 8) {
-                MonthSelect.FindByName<Image>("PrevImg").Opacity = 1;
-            } else {
-                MonthSelect.FindByName<Image>("PrevImg").Opacity = 0.3;
-            }
-            if (current.Month != 6) {
-                MonthSelect.FindByName<Image>("NextImg").Opacity = 1;
-            } else {
-                MonthSelect.FindByName<Image>("NextImg").Opacity = 0.3;
-            }
-            MonthSelect.FindByName<Label>("monthName").Text = Calendar.MonthToString(current.Month);
-            MonthSelect.FindByName<Label>("year").Text = current.Year.ToString();
-
-            var calChildren = cal.Children;
-
-            List<int> consecutiveDays = data.Calendar.GetShownCalendarDays(current);
-            IEnumerator enumerator = calChildren.GetEnumerator();
-            int i = 0;
-
-            List<School> favoriteSchoolsTrimmed = favoriteSchools;
-            List<List<CalendarDay>> selectedSchoolsCalendars = new List<List<CalendarDay>>();
-            if (favoriteSchoolsTrimmed != null && favoriteSchoolsTrimmed.Count > Constants.MaximumSelectedSchools)
-                favoriteSchoolsTrimmed = favoriteSchools.GetRange(0, Constants.MaximumSelectedSchools);
-
-            // TODO: Change from favorite schools to selected schools to enable the user to choose schools to be displayed
-            if (favoriteSchoolsTrimmed != null && favoriteSchoolsTrimmed.Count > 0) { 
-                foreach (School selected in favoriteSchoolsTrimmed)
-                {
-                    selectedSchoolsCalendars.Add(Calendar.GetRelevantFreeDays(selected.calendar, current));
-                }
-            }
-
-            while (enumerator.MoveNext())
+            SetUpCalendar();
+            UpdateCalendarControls();
+            if (favoriteSchools != null && favoriteSchools.Count != 0)
             {
-                try
+                ResetAllIndicators();
+                UpdateIndicators();
+            }        
+        }
+
+        private void UpdateIndicators()
+        {
+            List<List<CalendarDay>> freeDays = Calendar.GetAllRelevantCalendarDays(favoriteSchools, current);
+
+            int currentCalendarDayIndex = 0;
+            foreach (var view in CalendarGrid.Children)
+            {
+                var calendarElement = (StackLayout) view;
+                if (calendarElement.ClassId == "WeekDay")
                 {
-                    StackLayout sl = enumerator.Current as StackLayout;
-                    Label label = sl.Children.First() as Label;
-                    StackLayout boxes = sl.Children.Last() as StackLayout;
+                    StackLayout indicatorContainer = calendarElement.Children.Last() as StackLayout;
 
-                    // HACK: Separate all days in the calendar from other elements like week days 
-                    // or week numbers based on the elements they contain
-                    if (sl.Children.Last().GetType() == typeof(StackLayout))
-                    {
-                        if (label != null) label.Text = consecutiveDays.ElementAt(i).ToString();
-
-                        if (selectedSchoolsCalendars.Count > 0 && favoriteSchoolsTrimmed != null)
+                    int schoolIndex = 0;
+                    if (indicatorContainer != null)
+                        foreach (var view1 in indicatorContainer.Children)
                         {
-                            for (int j = 0; j < selectedSchoolsCalendars.Count && j < favoriteSchoolsTrimmed.Count; j++)
+                            if(schoolIndex >= freeDays.Count) break;
+                            var indicator = (BoxView) view1;
+                            if (freeDays[schoolIndex][currentCalendarDayIndex].IsFreeDay)
                             {
-                                if (boxes != null)
-                                {
-                                    boxes.Children.ElementAt(j).IsVisible = true;
-                                    boxes.Children.ElementAt(j).BackgroundColor = Constants.colors.ElementAt(j);
-                                    if (selectedSchoolsCalendars.ElementAt(j).ElementAt(i).IsFreeDay &&
-                                        ((int) selectedSchoolsCalendars.ElementAt(j).ElementAt(i).Date.DayOfWeek)%6 != 0 &&
-                                        ((int) selectedSchoolsCalendars.ElementAt(j).ElementAt(i).Date.DayOfWeek)%7 != 0)
-                                    {
-
-                                        boxes.Children.ElementAt(j).Opacity = 1.0;
-                                    }
-                                    else
-                                    {
-                                        boxes.Children.ElementAt(j).Opacity = 0.0;
-                                    }
-                                }
+                                indicator.Opacity = 1;
+                                indicator.Color = Constants.colors[schoolIndex];
                             }
+                            schoolIndex++;
                         }
-                        i++;
-                    }
-                    else
-                    {
-                        if (label.Text.Length <= 2 && selectedSchoolsCalendars != null && selectedSchoolsCalendars.Count != 0)
-                        {
-                            label.Text = Calendar.GetWeekNumber(selectedSchoolsCalendars.ElementAt(0).ElementAt(i).Date).ToString();
-                        }
-                    }
+                    currentCalendarDayIndex++;
                 }
-                catch (Exception e)
+                else if (calendarElement.ClassId == "WeekendDay")
                 {
-                    MonthSelect.FindByName<Label>("monthName").Text = string.Empty;
+                    currentCalendarDayIndex++;
                 }
             }
+        }
+
+        private void UpdateCalendarControls()
+        {
+            PrevImg.Opacity = current.Month != 8 ? 1 : 0.3;
+            NextImg.Opacity = current.Month != 6 ? 1 : 0.3;
+
+            MonthLabel.Text = Calendar.MonthToString(current.Month);
+            YearLabel.Text = current.Year.ToString();
         }
 
         private void SetLegends()
         {
             var children = Legend.Children;
-            var enumerator = children.GetEnumerator();
             var i = 0;
-            foreach (StackLayout x in children)
+            foreach (var view in children)
             {
+                var x = (StackLayout) view;
                 var box = x.Children.First() as BoxView;
                 var label = x.Children.Last() as Label;
                 if (i >= favoriteSchools.Count)
@@ -198,12 +173,26 @@ namespace skolerute.Views
             }
         }
 
+        void ResetAllIndicators()
+        {
+            foreach (var calendarElement in CalendarGrid.Children)
+            {
+                if (calendarElement.ClassId == "WeekDay")
+                {
+                    StackLayout indicatorContainer = ((StackLayout) calendarElement).Children.Last() as StackLayout;
+                    foreach (BoxView indicator in indicatorContainer.Children)
+                    {
+                        indicator.Opacity = 0;
+                    }
+                }
+            }
+        }
         void NextMonth(object o, EventArgs e)
         {
             if (current.Month != 6)
             {
                 current = current.AddMonths(1);
-                DisplayCalendar(cal, MS);
+                DisplayCalendar();
             }
         }
 
@@ -212,34 +201,27 @@ namespace skolerute.Views
             if (current.Month != 8)
             {
                 current = current.AddMonths(-1);
-                DisplayCalendar(cal, MS);
+                DisplayCalendar();
             }
-        }
+        }     
 
         
-
-        void ResetAllIndicators()
-        {
-            foreach (var child in cal.Children)
-            {
-                var day = (StackLayout) child;
-                StackLayout boxContainer = day.Children.Last() as StackLayout;
-                if (boxContainer != null)
-                    foreach (var view in boxContainer.Children)
-                    {
-                        var box = (BoxView) view;
-                        box.IsVisible = false;
-                    }
-            }
-        }
-
+        /*
+         * The reason why this method contains device specific code is because of the permission system for ios when asking for permission.
+         * It would not wait for the user to give or deny permission, and therefore return. It then calls an anonymous method when an answer is
+         * recieved. Unfortunately, at this point the ExportToCalendar method has returned long ago, so it is no use. That is the reason
+         * why we had to handle everything in the callback code for iOS. Since we couldn't make it how we wanted, we tried doing the same
+         * in the android code, but this was not an easy feat. You would have to make a custom layout and inflate it into an AlertDialog.
+         * Xamarin comes to the rescue, making it easy to display an action sheet for both platforms, although we only use it for android
+         * in this case. This is the explanation as to why this handler is a little messy.
+         * */
         private async void ExportCalendarButtonClicked(object sender, EventArgs e)
         {
 
             if (Device.OS == TargetPlatform.iOS)
             {
                 DependencyService.Get<IExportCalendar>()
-                    .ExportToCalendar(Calendar.AddSchoolToList(favoriteSchools), null);
+                    .ExportToCalendar(data.Calendar.AddSchoolToList(favoriteSchools), null);
             }
             else
             {
@@ -253,7 +235,7 @@ namespace skolerute.Views
                 else if (myCalendars.Count == 1) // Do this to not bother the user with popup messages when it is unnecessary
                 {
                     DependencyService.Get<IExportCalendar>()
-                        .ExportToCalendar(Calendar.AddSchoolToList(favoriteSchools), myCalendars.FirstOrDefault());
+                        .ExportToCalendar(data.Calendar.AddSchoolToList(favoriteSchools), myCalendars.FirstOrDefault());
                 }
                 else
                 {
@@ -269,7 +251,7 @@ namespace skolerute.Views
                     if (chosenCalendar != null)
                     {
                         DependencyService.Get<IExportCalendar>()
-                            .ExportToCalendar(Calendar.AddSchoolToList(favoriteSchools), chosenCalendar);
+                            .ExportToCalendar(data.Calendar.AddSchoolToList(favoriteSchools), chosenCalendar);
                     }
                 }
             }

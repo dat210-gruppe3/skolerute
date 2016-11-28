@@ -15,6 +15,7 @@ using Android.Provider;
 using Java.Util;
 using Xamarin.Forms;
 using skolerute.ExportCalendar;
+using skolerute.Views;
 
 [assembly: Dependency(typeof(skolerute.Droid.ExportCalendar.ExportCalendar))]
 namespace skolerute.Droid.ExportCalendar
