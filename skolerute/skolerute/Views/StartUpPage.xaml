@@ -2,47 +2,45 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="skolerute.Views.StartUpPage"
-             Title="Hovedside">
+             Title="Hovedside"
+             Icon="search.png">
 	<ContentPage.Padding>
         <OnPlatform x:TypeArguments="Thickness"
                     iOS="0, 20, 0, 0" />
-     </ContentPage.Padding>
+  </ContentPage.Padding>
     <StackLayout Spacing="10">
-        <ProgressBar x:Name="progressBar" Progress="0" />
-        <StackLayout>
-            <Label Text="Mine skoler" HorizontalOptions="Center" FontSize="Large" AutomationId="mySchoolsLabel"/>
-            <ListView x:Name="mineskoler" ItemSelected="OnDeletion" SeparatorVisibility="None" AutomationId="favoriteSchoolsList">
-                <ListView.ItemTemplate >
-                    <DataTemplate>
-                        <TextCell Text="{Binding}"/>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackLayout>
+      
+      <ProgressBar x:Name="progressBar" Progress="0" />
       <StackLayout Orientation="Horizontal" Padding="30,0,30,0">
-	<Label Text="Legg til skole" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Large" 
+	      <Label Text="Legg til skole" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Large" 
              AutomationId="addSchoolLabel"/>
         <Button x:Name="GetCoords" Text="Vis nærmeste" Clicked="GetClosest" HorizontalOptions="End" IsEnabled="false"
                 AutomationId="closestSchoolsButton"/>
       </StackLayout>
+      
       <SearchBar x:Name="searchSchool" Placeholder="Søk etter skoler" TextChanged="TextChanged" SearchButtonPressed="TextChanged"
                  AutomationId="schoolSearchField"/>   
-      <StackLayout Orientation="Horizontal">
-        <ListView x:Name="schools" ItemSelected="OnSelection" SeparatorVisibility="None" AutomationId="allSchoolsList">
+        <ListView x:Name="schools" SeparatorVisibility="None" AutomationId="allSchoolsList">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                  <TextCell Text="{Binding name}"/>              
+                  <ViewCell>
+                    <Grid>
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*"/>
+                      </Grid.ColumnDefinitions>
+                      <!-- TODO replace placeholder image -->
+                      <Image Grid.Column="0" Source="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Check_Box_Noun_project_10759.svg/200px-Check_Box_Noun_project_10759.svg.png" 
+                             Margin="5" IsVisible="{Binding IsChecked}" />
+                      <Image Grid.Column="0" Source="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Ic_check_box_outline_blank_48px.svg/200px-Ic_check_box_outline_blank_48px.svg.png" 
+                             Margin="5" IsVisible="{Binding UnChecked}" />
+                      <Label Grid.Column="1" Margin="5" Text="{Binding Item.name}" />
+                      <Label Grid.Column="2" Margin="5" Text="{Binding Distance}" IsVisible="{Binding DistanceVisible}" />
+                    </Grid>
+                  </ViewCell>       
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <ListView x:Name="avstand" IsVisible="false" SeparatorVisibility="None" ItemSelected="OnSelection" 
-                  AutomationId="closestSchoolsList">
-          <ListView.ItemTemplate>
-            <DataTemplate>
-              <TextCell Text="{Binding}"/>
-            </DataTemplate>
-          </ListView.ItemTemplate>
-        </ListView>      
-      </StackLayout>  
-	</StackLayout>
+    </StackLayout>  
 </ContentPage>

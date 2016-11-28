@@ -5,8 +5,9 @@
              x:Class="skolerute.Views.CalendarPage"
              xmlns:local="clr-namespace:skolerute.utils;assembly=skolerute"
              xmlns:extensions="clr-namespace:skolerute.Extensions;assembly=skolerute"
-             Title="Kalender">
-    <ContentPage.Padding>
+             Title="Kalender"
+             Icon="calendar.png">
+	<ContentPage.Padding>
         <OnPlatform x:TypeArguments="Thickness"
                     iOS="0, 20, 0, 0" />
     </ContentPage.Padding>

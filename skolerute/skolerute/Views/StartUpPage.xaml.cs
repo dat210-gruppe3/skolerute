@@ -11,16 +11,11 @@ namespace skolerute.Views
 {
     public partial class StartUpPage : ContentPage
     {
-        List<School> allSchools = new List<School>();
-        ObservableCollection<string> mySchools = new ObservableCollection<string>();
-        List<double> distances = new List<double>();
-        List<int> bestMatches = new List<int>();
-        Coordinate userposition = new Coordinate(0.0,0.0);
+        List<WrappedListItems<School>> WrappedItems = new List<WrappedListItems<School>>();
 
         public StartUpPage()
         {
             InitializeComponent();
-            userposition = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
         }
 
         protected override async void OnAppearing()
@@ -28,20 +23,23 @@ namespace skolerute.Views
             base.OnAppearing();
             
 
+            List<School> allSchools = new List<School>();
+
             if (schools.ItemsSource == null)
             {
                 allSchools = await GetListContent();
-                mineskoler.ItemsSource = mySchools;
+                WrappedItems = allSchools.Select(item => new WrappedListItems<School>() { Item = item, IsChecked = false, UnChecked = true, Distance = 0, DistanceVisible = false }).ToList();
+                schools.ItemsSource = WrappedItems;
             }
-            else
-            {
-                schools.ItemsSource = allSchools;
-            }
-            if (SettingsManager.GetPreference("i") != null && (bool) SettingsManager.GetPreference("i"))
-            {
-                mySchools = await GetFavSchools();
-                mineskoler.ItemsSource = mySchools;
 
+            if (SettingsManager.GetPreference("i") != null && (bool)SettingsManager.GetPreference("i"))
+            {
+                ObservableCollection<string> mySchools = await GetFavSchools();
+                foreach (string school in mySchools) {
+                    WrappedListItems<School> temp = WrappedItems.First(item => item.Item.name == school);
+                    temp.IsChecked = true;
+                    temp.UnChecked = false;
+                }
             }
 
             //DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now);
@@ -54,34 +52,19 @@ namespace skolerute.Views
 
             if (GetCoords.Text == "Vis nærmeste")
             {
-				userposition = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates(); 
-
-                if (userposition == null) return;
-
-                GetNearbySchools(userposition);
                 GetCoords.Text = "Vis alle";
-
-                List<School> ads = bestMatches.Select(x => allSchools.Find(y => y.ID == x)).ToList();
-
-                schools.ItemsSource = ads;
-                avstand.IsVisible = true;
-                List<string> result = new List<string>();
-                for (int a = 0; a < distances.Count; a++)
-                {
-                    string verdi = ads.ElementAt(a).name + ": " + Math.Round(distances.ElementAt(a), 2).ToString() + " km";
-
-                    result.Add(verdi);
-                }
-                avstand.ItemsSource = result;
-                schools.IsVisible = false;
-                
+     
+                //TODO sjekk om denne funker
+                schools.ItemsSource = GPS.GPSservice.GetNearbySchools(WrappedItems);
             }
             else
             {
                 GetCoords.Text = "Vis nærmeste";
-                schools.ItemsSource = allSchools;
-                avstand.IsVisible = false;
-                schools.IsVisible = true;
+                foreach(WrappedListItems<School> item in WrappedItems)
+                {
+                    item.DistanceVisible = false;
+                }
+                schools.ItemsSource = WrappedItems;
             }
         }
 
@@ -91,10 +74,10 @@ namespace skolerute.Views
             // check if any of the school names contains a substring equal to current searchtext, 
             // and display them if they do, if not, display nothing, if string is empty, display all
 
-            List<data.School> newSchList = new List<data.School>();
+            List<WrappedListItems<School>> newSchList = new List<WrappedListItems<School>>();
             if (searchSchool.Text == null)
             {
-                schools.ItemsSource = allSchools;
+                schools.ItemsSource = WrappedItems;
                 return;
             }
 
@@ -102,19 +85,19 @@ namespace skolerute.Views
 
             if (sValue == "")
             {
-                schools.ItemsSource = allSchools;
-				if (Device.OS == TargetPlatform.iOS)
-				{
-					searchSchool.Unfocus();
-				}
+                schools.ItemsSource = WrappedItems;
+                if (Device.OS == TargetPlatform.iOS)
+                {
+                    searchSchool.Unfocus();
+                }
             }
             else
             {
-                for (int i = 0; i < allSchools.Count; i++)
+                for (int i = 0; i < WrappedItems.Count; i++)
                 {
-                    if (allSchools[i].name.Contains(sValue) || allSchools[i].name.ToLower().Contains(sValue))
+                    if (WrappedItems[i].Item.name.ToLower().Contains(sValue) || WrappedItems[i].Item.name.Contains(sValue))
                     {
-                        newSchList.Add(allSchools[i]);
+                        newSchList.Add(WrappedItems[i]);
                     }
                 }
                 schools.ItemsSource = newSchList;
@@ -147,7 +130,6 @@ namespace skolerute.Views
             {
                 allSchools = await database.GetSchools();
                 await progressBar.ProgressTo(1, 250, Easing.Linear);
-                schools.ItemsSource = allSchools;
                 progressBar.IsVisible = false;
                 GetCoords.IsEnabled = true;
                 return allSchools;
@@ -165,8 +147,6 @@ namespace skolerute.Views
             }
         }
 
-
-
         // Event triggered when a school in the list is selected
         public async void OnSelection(object sender, SelectedItemChangedEventArgs e)
         {
@@ -180,108 +160,71 @@ namespace skolerute.Views
 
             if ((e.SelectedItem).GetType() == typeof(string))
             {
-                skolenavn = (string) (e.SelectedItem);
+                skolenavn = (string)(e.SelectedItem);
                 int index = skolenavn.IndexOf(':');
                 skolenavn = skolenavn.Remove(index, (skolenavn.Length) - index);
-                school = allSchools.Find(y => y.name == skolenavn);
+                school = WrappedItems.Find(y => y.Item.name == skolenavn).Item;
             }
             else
             {
-                school = (School) e.SelectedItem;
+                WrappedListItems<School> item = (WrappedListItems<School>)e.SelectedItem;
+                school = item.Item;
                 skolenavn = school.name;
             }
 
-			var action = "";
-
-			if (Device.OS == TargetPlatform.iOS)
-			{
-				action = await DisplayActionSheet("Du valgte: " + skolenavn, "Avbryt", null, "Legg til");
-			}
-			else {
-				action = await DisplayActionSheet("Du valgte: " + skolenavn, "Avbryt", "Legg til");
-			}
-
-            if (action != null)
+            // Get calendar for chosen school
+            WrappedListItems<School> chSchool = WrappedItems.Find(item => item.Item.name == skolenavn);
+            if (chSchool.IsChecked)
             {
-                string actionNavn = action.ToString();
-                if (actionNavn == "Legg til")
+                chSchool.IsChecked = false;
+                chSchool.UnChecked = true;
+                MessagingCenter.Send<StartUpPage, string>(this, "deleteSch", chSchool.Item.name);
+            } else
+            {
+                chSchool.IsChecked = true;
+                chSchool.UnChecked = false;
+
+                if (SettingsManager.GetPreference("i") == null)
                 {
-                    // Get calendar for chosen school
-                    if (!mySchools.Contains(skolenavn))
+                    await SettingsManager.SavePreferenceAsync("i", true);
+                    foreach (School x in WrappedItems.Select(item => item.Item).ToList())
                     {
-                        mySchools.Add(skolenavn);
-                        mineskoler.ItemsSource = mySchools;
-                        if (SettingsManager.GetPreference("i") == null)
-                        {
-                            await SettingsManager.SavePreferenceAsync("i", true);
-                            foreach (School x in allSchools)
-                            {
-                                await SettingsManager.SavePreferenceAsync(x.ID.ToString(), false);
-                            }
-                            await SettingsManager.SavePreferenceAsync(school.ID.ToString(), true);
-                        }
-                        else
-                        {
-                            await SettingsManager.SavePreferenceAsync(school.ID.ToString(), true);
-                        }
+                        await SettingsManager.SavePreferenceAsync(x.ID.ToString(), false);
                     }
-                    MessagingCenter.Send(this, "newSchoolSelected");
-                    db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
-                    db.CSVParser parser = new db.CSVParser(Constants.URL, database);
-                    ((ListView) sender).SelectedItem = null;
+                    await SettingsManager.SavePreferenceAsync(school.ID.ToString(), true);
+                }
+                else
+                {
+                    await SettingsManager.SavePreferenceAsync(school.ID.ToString(), true);
+                }
 
+                MessagingCenter.Send(this, "newSchoolSelected");
+                db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
+                db.CSVParser parser = new db.CSVParser(Constants.URL, database);
 
-                    try
-                    {
-                        await parser.RetrieveCalendar(school);
-                        MessagingCenter.Send(this, "choosenSch", school);
-                    }
-                    catch (System.Net.WebException exception)
-                    {
-                        await DisplayAlert("Problem med internett", "Kunne ikke laste ned skoleruten, prøv igjen senere", "Ok");
-                    }
-                    
-                    
-
+                try
+                {
+                    await parser.RetrieveCalendar(school);
+                    MessagingCenter.Send(this, "choosenSch", school);
+                }
+                catch (System.Net.WebException exception)
+                {
+                    await DisplayAlert("Problem med internett", "Kunne ikke laste ned skoleruten, prøv igjen senere", "Ok");
                 }
             }
+
             ((ListView)sender).SelectedItem = null;
-        }
-
-        public async void OnDeletion(object sender, SelectedItemChangedEventArgs e)
-        {
-            if (e.SelectedItem == null)
-            {
-                return; //ItemSelected is called on deselection, which results in SelectedItem being set to null
-            }
-
-            string skolenavn = (string)e.SelectedItem;
-            var action = await DisplayActionSheet("Du valgte: " + skolenavn, "Avbryt", "Slett");
-
-            if (action != null)
-            {
-
-                string actionNavn = action.ToString();
-                if (actionNavn == "Slett")
-                {
-                    if (mySchools.Contains(skolenavn))
-                    {
-                        mySchools.Remove(skolenavn);
-                        mineskoler.ItemsSource = mySchools;
-                    }
-                    MessagingCenter.Send<StartUpPage, string>(this, "deleteSch", skolenavn);
-                }
-            }
-            ((ListView)sender).SelectedItem = null;
-        }
+    }
 
         private async Task<ObservableCollection<string>> GetFavSchools()
         {
             ObservableCollection<string> list = new ObservableCollection<string>();
             db.DatabaseManagerAsync db = new db.DatabaseManagerAsync();
 
-            foreach (School x in allSchools)
+            School x;
+            for (int i = 0; i < WrappedItems.Count; i++)
             {
+                x = WrappedItems[i].Item;
                 if ((bool)SettingsManager.GetPreference(x.ID.ToString()))
                 {
                     School currentschool = await db.GetSchool(x.ID);
@@ -292,59 +235,6 @@ namespace skolerute.Views
             }
             return list;
         }
-
-        private void GetNearbySchools(Coordinate gpsCoordinates)
-        {
-            distances = new List<double>();
-            bestMatches = new List<int>();
-            List<double> latitudes = new List<double>();
-            List<double> longitudes = new List<double>();
-
-            foreach (School x in allSchools)
-            {
-                latitudes.Add(x.latitude);
-                longitudes.Add(x.longitude);
-            }
-
-            for (int i = 0; i < latitudes.Count; i++)
-            {
-                if (i < 5)
-                {
-                    bestMatches.Add(i+1);
-                    distances.Add(gpsCoordinates.HaversineDistance(latitudes.ElementAt(i), longitudes.ElementAt(i)));
-                }
-
-                else
-                {
-                    double biggest = distances.Max();
-                    int bigindex = distances.FindIndex(0, 5, y => y == biggest);
-                    double ny = gpsCoordinates.HaversineDistance(latitudes.ElementAt(i), longitudes.ElementAt(i));
-
-                    if (ny < distances.ElementAt(bigindex))
-                    {
-                        distances.RemoveAt(bigindex);
-                        distances.Insert(bigindex, ny);
-                        bestMatches.RemoveAt(bigindex);
-                        bestMatches.Insert(bigindex, i + 1);
-                    }
-                }
-            }
-
-            List<double> avs = new List<double>(5);
-            List<int> ids = new List<int>(5);
-            for (int j = 5; j > 0; j--)
-            {
-                double min = distances.Min();
-                int minindex = distances.FindIndex(0, j, y => y == min);
-                avs.Add(distances[minindex]);
-                ids.Add(bestMatches[minindex]);
-                distances.RemoveAt(minindex);
-                bestMatches.RemoveAt(minindex);
-            }
-            bestMatches = ids;
-            distances = avs;
-        }
-
     }
 }
 
