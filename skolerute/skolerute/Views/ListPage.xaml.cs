@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using NUnit.Framework.Internal;
 using Xamarin.Forms;
 using skolerute.data;
 using Xamarin.Forms.Internals;
@@ -30,7 +29,7 @@ namespace skolerute.Views
                     grouped = Calendar.AddSchoolToList(favoriteSchools);
 
                     lstView.ItemsSource = grouped;
-                    FindNext();
+                    //FindNext();
                 }
 
             });
@@ -42,11 +41,17 @@ namespace skolerute.Views
                 grouped.Clear();
                 grouped = Calendar.AddSchoolToList(favoriteSchools);
                 lstView.ItemsSource = grouped;
-                FindNext();
+                //FindNext();
             });
 
             InitializeComponent();
 
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            FindNext();
         }
 
         private void FindNext()
@@ -61,6 +66,7 @@ namespace skolerute.Views
                     {
                         if (item.GetEndDate() >= DateTime.Now && cont)
                         {
+                            lstView.ScrollTo(a[0][0], a[0], ScrollToPosition.Center, false);
                             lstView.ScrollTo(item, group, ScrollToPosition.Center, true);
                             cont = false;
                         }

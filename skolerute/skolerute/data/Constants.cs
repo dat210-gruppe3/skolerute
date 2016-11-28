@@ -6,7 +6,7 @@ namespace skolerute.data
 	public static class Constants
 	{
         // Selecte Schools
-        public const int MaximumSelectedSchools = 6;
+        public const int MaximumSelectedSchools = 3;
 
         // CSV Parser 
 		public const string URL = "http://open.stavanger.kommune.no/dataset/86d3fe44-111e-4d82-be5a-67a9dbfbfcbb/resource/7472239b-e18e-47c4-9810-780240122552/download/skolerute.csv";
