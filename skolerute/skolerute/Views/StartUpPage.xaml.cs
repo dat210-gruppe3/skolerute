@@ -52,10 +52,12 @@ namespace skolerute.Views
 
             if (GetCoords.Text == "Vis nærmeste")
             {
-                GetCoords.Text = "Vis alle";
-     
                 //TODO sjekk om denne funker
-                schools.ItemsSource = GPS.GPSservice.GetNearbySchools(WrappedItems);
+                List<WrappedListItems<School>> newWrappedItems = GPS.GPSservice.GetNearbySchools(WrappedItems);
+                if(newWrappedItems == null) { return; }
+
+                GetCoords.Text = "Vis alle";
+                schools.ItemsSource = newWrappedItems;
             }
             else
             {

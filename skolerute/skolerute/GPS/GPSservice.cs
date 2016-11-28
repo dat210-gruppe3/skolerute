@@ -14,6 +14,7 @@ namespace skolerute.GPS
         public static List<WrappedListItems<School>> GetNearbySchools(List<WrappedListItems<School>> WrappedItems)
         {
             Coordinate gpsCoordinates = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
+            if(gpsCoordinates == null) { return null; }
 
             foreach (WrappedListItems<School> item in WrappedItems)
             {
