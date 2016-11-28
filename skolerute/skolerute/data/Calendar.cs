@@ -184,6 +184,7 @@ namespace skolerute.data
             GroupedFreeDayModel FreeDayGroup = null;
             ObservableCollection<GroupedFreeDayModel> grouped = new ObservableCollection<GroupedFreeDayModel>();
             string dateInterval = "";
+            DateTime today = DateTime.Now;
 
             foreach (School skole in skoler)
             {
@@ -218,6 +219,7 @@ namespace skolerute.data
                         DateTime endDate = skole.calendar[i].Date;
                         dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year
                             + " - " + endDate.Day + "/" + endDate.Month + "/" + endDate.Year;
+                        //dateInterval = startDate.ToString("dd/MM/yy") + " - " + endDate.ToString("dd/MM/yy");
                     }
                     //Handle summer vacation
                     else if (skole.calendar[i].IsFreeDay && skole.calendar[i].Comment == "")
@@ -244,11 +246,13 @@ namespace skolerute.data
                         {
                             FreeDayGroup.LongName = "Starten av sommerferien";
                             dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year;
+                            //dateInterval = startDate.ToString("dd/MM/yy");
                         }
                         else
                         {
                             FreeDayGroup.LongName = "Slutten av sommerferien";
                             dateInterval = endDate.Day + "/" + endDate.Month + "/" + endDate.Year;
+                            //dateInterval = startDate.ToString("dd/MM/yy");
                         }
                     }
                     //Handle other types of freedays
@@ -257,6 +261,7 @@ namespace skolerute.data
                         string currentComment = skole.calendar[i].Comment;
                         DateTime startDate = skole.calendar[i].Date;
                         dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year;
+                        //dateInterval = startDate.ToString("dd/MM/yy");
                         FreeDayGroup = new GroupedFreeDayModel() { LongName = skole.calendar[i].Comment, ShortName = "", Date = dateInterval };
                     }
 
@@ -264,11 +269,20 @@ namespace skolerute.data
                     {
                         //Check if group is already created and add to it if it is
                         bool foundGroup = false;
+                        FreeDayModel model = new FreeDayModel() { Name = skole.name, Comment = dateInterval };
+                        
+                        // Turn text grey if the holiday done
+                        if (model.GetEndDate() < today)
+                        {
+                            model.TextColor = "#808080";
+                        }
+
                         foreach (GroupedFreeDayModel group in grouped)
                         {
                             if (FreeDayGroup.LongName == group.LongName && FreeDayGroup.Date == group.Date)
                             {
-                                group.Add(new FreeDayModel() { Name = skole.name, Comment = dateInterval });
+                                //group.Add(new FreeDayModel() { Name = skole.name, Comment = dateInterval });
+                                group.Add(model);
                                 foundGroup = true;
                             }
                         }
@@ -276,7 +290,8 @@ namespace skolerute.data
                         //If a group was not found then create a new one
                         if (!foundGroup)
                         {
-                            FreeDayGroup.Add(new FreeDayModel() { Name = skole.name, Comment = dateInterval });
+                            //FreeDayGroup.Add(new FreeDayModel() { Name = skole.name, Comment = dateInterval });
+                            FreeDayGroup.Add(model);
                             grouped.Add(FreeDayGroup);
                         }
                     }
@@ -292,7 +307,16 @@ namespace skolerute.data
                 }
                 string tempDate = grouped[i][0].Comment;
                 grouped[i].Clear();
-                grouped[i].Add(new FreeDayModel() { Name = "Alle valgte skoler", Comment = tempDate });
+
+                FreeDayModel model = new FreeDayModel() { Name = "Alle valgte skoler", Comment = tempDate };
+
+                // Turn text grey if the holiday done
+                if (model.GetEndDate() < today)
+                {
+                    model.TextColor = "#808080";
+                }
+
+                grouped[i].Add(model);
             }
             return grouped;
         }

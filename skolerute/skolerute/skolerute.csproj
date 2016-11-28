@@ -39,11 +39,13 @@
     <Compile Include="data\CalendarDay.cs" />
     <Compile Include="data\Coordinate.cs" />
     <Compile Include="data\School.cs" />
+    <Compile Include="data\WrappedListItems.cs" />
     <Compile Include="db\DatabaseManager.cs" />
     <Compile Include="db\DatabaseManagerAsync.cs" />
     <Compile Include="db\IDatabaseManager.cs" />
     <Compile Include="db\IDatabaseManagerAsync.cs" />
     <Compile Include="db\ISQLite.cs" />
+    <Compile Include="GPS\GPSservice.cs" />
     <Compile Include="GPS\IGPSservice.cs" />
     <Compile Include="notifications\INotification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -77,9 +79,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Mono.Android">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\MonoAndroid\v6.0\Mono.Android.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -149,9 +148,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="exportCalendar\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.2.127\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.2.127\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

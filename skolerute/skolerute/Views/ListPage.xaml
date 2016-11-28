@@ -17,7 +17,7 @@
 		<ListView x:Name ="lstView" IsGroupingEnabled="true" GroupDisplayBinding="{Binding LongName}"
               GroupShortNameBinding="{Binding ShortName}" AutomationId="freeDaysList">
 			<ListView.ItemTemplate>
-				<DataTemplate><TextCell Text="{Binding Name}" Detail = "{Binding Comment}" /></DataTemplate>
+				<DataTemplate><TextCell Text="{Binding Name}" Detail = "{Binding Comment}" TextColor="{Binding TextColor}" DetailColor="{Binding TextColor}" /></DataTemplate>
 			</ListView.ItemTemplate>
 		</ListView>
 	</ContentPage.Content>
