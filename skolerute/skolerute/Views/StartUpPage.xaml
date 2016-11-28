@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="skolerute.Views.StartUpPage"
-             Title="Hovedside">
+             Title="Hovedside"
+             Icon="search.png">
 	<ContentPage.Padding>
         <OnPlatform x:TypeArguments="Thickness"
                     iOS="0, 20, 0, 0" />

@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
 		xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
 		x:Class="skolerute.Views.ListPage"
-		Title="Neste fridag">
+		Title="Neste fridag"
+		Icon="list.png">
 	
 	<ContentPage.Padding>
 	    <OnPlatform x:TypeArguments="Thickness">
