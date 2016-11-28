@@ -20,7 +20,7 @@
       
       <SearchBar x:Name="searchSchool" Placeholder="Søk etter skoler" TextChanged="TextChanged" SearchButtonPressed="TextChanged"
                  AutomationId="schoolSearchField"/>   
-        <ListView x:Name="schools" SeparatorVisibility="None" AutomationId="allSchoolsList">
+        <ListView x:Name="schools" SeparatorVisibility="None" ItemSelected="OnSelection" AutomationId="allSchoolsList">
             <ListView.ItemTemplate>
                 <DataTemplate>
                   <ViewCell>

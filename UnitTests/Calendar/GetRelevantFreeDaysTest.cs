@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using NUnit.Core;
 using skolerute.data;
@@ -46,43 +47,13 @@ namespace UnitTests.Calendar
         [Test]
         public void NullValuesTest()
         {
-            Assert.Catch<NullReferenceException>(() => skolerute.data.Calendar.GetRelevantFreeDays(null, DateTime.Now));
+            Assert.Catch<NullReferenceException>(() => skolerute.data.Calendar.GetAllRelevantCalendarDays(null, DateTime.Now));
         }
 
         [Test]
         public void NoElementsInListTest()
         {
-            Assert.Catch<ArgumentException>(() => skolerute.data.Calendar.GetRelevantFreeDays(new List<CalendarDay>(), DateTime.Now));
-        }
-
-        [Test]
-        public void DateOutOfRangeLower()
-        {
-            Assert.Catch<ArgumentOutOfRangeException>(() => skolerute.data.Calendar.GetRelevantFreeDays(testSchool.calendar, DateTime.MinValue));
-        }
-
-        [Test]
-        public void DateOutOfRangeUpper()
-        {
-            Assert.Catch<ArgumentOutOfRangeException>(() => skolerute.data.Calendar.GetRelevantFreeDays(testSchool.calendar, DateTime.MaxValue));
-        }
-
-        [Test]
-        public void DateOutOfRangeLowerEdge()
-        {
-            Assert.Catch<ArgumentOutOfRangeException>(() => skolerute.data.Calendar.GetRelevantFreeDays(testSchool.calendar, new DateTime(2016, 6, 30)));
-        }
-
-        [Test]
-        public void DateOutOfRangeUpperEdge()
-        {
-            Assert.Catch<ArgumentOutOfRangeException>(() => skolerute.data.Calendar.GetRelevantFreeDays(testSchool.calendar, testDate.AddDays(670)));
-        }
-
-        [Test]
-        public void CheckFirstMonth()
-        {
-            
+            Assert.Catch<ArgumentException>(() => skolerute.data.Calendar.GetAllRelevantCalendarDays(new List<School>(), DateTime.Now));
         }
     }
 }
