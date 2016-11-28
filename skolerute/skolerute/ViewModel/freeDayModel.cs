@@ -25,7 +25,7 @@ namespace skolerute
             return DateTime.Parse(Comment.Trim(), culture, System.Globalization.DateTimeStyles.AssumeLocal);
             //return Convert.ToDateTime(Comment.Trim());
         }
-    }
+    
 
 		public DateTime GetStartDate()
 		{
