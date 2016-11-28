@@ -21,6 +21,7 @@ namespace skolerute.Views
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            
 
             List<School> allSchools = new List<School>();
 
@@ -44,14 +45,6 @@ namespace skolerute.Views
             //DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now);
         }
 
-        private async Task Load()
-        {
-            GetCoords.IsEnabled = false;
-            await Task.Yield();
-            GetClosest();
-            GetCoords.IsEnabled = true;
-        }
-
         private void GetClosest()
         {
             //Called in xaml if button to get closest schools is pressed. Gets user global position and compares it
@@ -60,7 +53,7 @@ namespace skolerute.Views
             if (GetCoords.Text == "Vis nærmeste")
             {
                 GetCoords.Text = "Vis alle";
-
+     
                 //TODO sjekk om denne funker
                 schools.ItemsSource = GPS.GPSservice.GetNearbySchools(WrappedItems);
             }
@@ -126,6 +119,7 @@ namespace skolerute.Views
                 database.CreateNewDatabase();
                 skolerute.db.CSVParser parser = new db.CSVParser(Constants.URL, database);
 
+                // TODO: Try and catch this line
                 await parser.RetrieveSchools();
                 await progressBar.ProgressTo(0.7, 250, Easing.Linear);
             }

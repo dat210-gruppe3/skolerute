@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="skolerute.Views.StartUpPage"
-             Title="Hovedside">
+             Title="Hovedside"
+             Icon="search.png">
 	<ContentPage.Padding>
         <OnPlatform x:TypeArguments="Thickness"
                     iOS="0, 20, 0, 0" />
@@ -11,10 +12,10 @@
       
       <ProgressBar x:Name="progressBar" Progress="0" />
       <StackLayout Orientation="Horizontal" Padding="30,0,30,0">
-        <Label Text="Legg til skole" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Large" 
-              AutomationId="addSchoolLabel"/>
-        <Button x:Name="GetCoords" Text="Vis nærmeste" Clicked="Load" HorizontalOptions="End" IsEnabled="false"
-              AutomationId="closestSchoolsButton"/>
+	      <Label Text="Legg til skole" HorizontalOptions="StartAndExpand" VerticalOptions="Center" FontSize="Large" 
+             AutomationId="addSchoolLabel"/>
+        <Button x:Name="GetCoords" Text="Vis nærmeste" Clicked="GetClosest" HorizontalOptions="End" IsEnabled="false"
+                AutomationId="closestSchoolsButton"/>
       </StackLayout>
       
       <SearchBar x:Name="searchSchool" Placeholder="Søk etter skoler" TextChanged="TextChanged" SearchButtonPressed="TextChanged"

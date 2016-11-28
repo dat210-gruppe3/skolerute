@@ -1,3 +1,4 @@
+using System;
 using skolerute.GPS;
 using CoreLocation;
 using UIKit;
@@ -8,63 +9,46 @@ using Xamarin.Forms;
 namespace skolerute.iOS.gps
 {
     public class LocationManager : IGPSservice
-    {
-        protected CLLocationManager locationManager;
-
-        public CLLocationManager LocManager
-        {
-            get { return this.locationManager; }
-        }
-
-        /// <summary>
-        /// This method returns the latitude and longitude values of the device.
-        /// </summary>
-        /// <returns>List<double> { longitude, latitude } or null if location services are not allowed</returns>
-        public Coordinate GetGpsCoordinates()
-        {
-            this.locationManager = new CLLocationManager();
-            this.locationManager.PausesLocationUpdatesAutomatically = true;
-
-            // iOS 8 has additional permissions requirements
-            if (UIDevice.CurrentDevice.CheckSystemVersion(8, 0))
-            {
-                locationManager.RequestWhenInUseAuthorization(); // Only in foreground
-                // locationManager.RequestAlwaysAuthorization would work in the background
-            }
-
-            if (UIDevice.CurrentDevice.CheckSystemVersion(9, 0))
-            {
-                locationManager.AllowsBackgroundLocationUpdates = true;
-            }
-
-            if (CLLocationManager.LocationServicesEnabled)
-            {
-                LocManager.DesiredAccuracy = 100; // In meters
-
-                
-
-				var mgr = new CLLocationManager();
-				mgr.Delegate = new MyLocationDelegate();
-				mgr.StartUpdatingLocation();
-
-				//LocManager.RequestLocation();
-
-				//return new Coordinate(0, 0);
-				return new Coordinate(LocManager.Location.Coordinate.Latitude, LocManager.Location.Coordinate.Longitude);
-            }
-
-            return null;
-        }
-    }
-
-	public class MyLocationDelegate : CLLocationManagerDelegate
 	{
-		public override void LocationsUpdated(CLLocationManager manager, CLLocation[] locations)
+		CLAuthorizationStatus locAuthorized;
+
+		public Coordinate GetGpsCoordinates()
 		{
-			foreach (var loc in locations)
+			var locationManager = new CLLocationManager();
+			locationManager.PausesLocationUpdatesAutomatically = true;
+
+			// iOS 8 has additional permissions requirements
+			if (UIDevice.CurrentDevice.CheckSystemVersion(8, 0))
 			{
-				//Console.WriteLine(loc);
+				locationManager.RequestWhenInUseAuthorization();
+
+				locationManager.AuthorizationChanged += (sender, args) =>
+				{
+					locAuthorized = args.Status;
+				};
+
+				if (locAuthorized == CLAuthorizationStatus.AuthorizedWhenInUse) {
+
+					if (CLLocationManager.LocationServicesEnabled)
+					{
+						locationManager.DesiredAccuracy = 100; // In meters
+						locationManager.StartUpdatingLocation();
+
+						try
+						{
+							return new Coordinate(locationManager.Location.Coordinate.Latitude, locationManager.Location.Coordinate.Longitude);
+						}
+						catch (NullReferenceException e)
+						{
+							Console.WriteLine(e);
+							new UIAlertView("Prøv på nytt",
+							"Det skjedde en feil ved innhenting av din posisjon.",
+							null, "Ok").Show();
+						}
+					}
+				}
 			}
+			return null;
 		}
 	}
 }

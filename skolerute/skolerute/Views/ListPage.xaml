@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
 		xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
 		x:Class="skolerute.Views.ListPage"
-		Title="Neste fridag">
+		Title="Neste fridag"
+		Icon="list.png">
 	
 	<ContentPage.Padding>
 	    <OnPlatform x:TypeArguments="Thickness">
@@ -11,14 +12,16 @@
 	      </OnPlatform.iOS>
     	</OnPlatform>
 	</ContentPage.Padding>
-	
-	<ContentPage.Content>
-		
+  
+  <ContentPage.Content>
+     <StackLayout x:Name="sl">
+       
 		<ListView x:Name ="lstView" IsGroupingEnabled="true" GroupDisplayBinding="{Binding LongName}"
               GroupShortNameBinding="{Binding ShortName}" AutomationId="freeDaysList">
 			<ListView.ItemTemplate>
 				<DataTemplate><TextCell Text="{Binding Name}" Detail = "{Binding Comment}" TextColor="{Binding TextColor}" DetailColor="{Binding TextColor}" /></DataTemplate>
 			</ListView.ItemTemplate>
 		</ListView>
+       </StackLayout>
 	</ContentPage.Content>
 </ContentPage>

@@ -27,6 +27,23 @@ namespace skolerute
         }
     }
 
+		public DateTime GetStartDate()
+		{
+			if (Comment.Contains("-"))
+			{
+				string[] splittedDate = Comment.Split('-');
+				return Convert.ToDateTime(splittedDate[0].Trim());
+			}
+			return Convert.ToDateTime(Comment.Trim());
+		}
+
+		public TimeSpan GetDateInterval()
+		{
+			return GetEndDate().Subtract(GetStartDate());
+		}
+
+	}
+
 	public class GroupedFreeDayModel : ObservableCollection<FreeDayModel>
 	{
 		public string LongName { get; set; }

@@ -53,5 +53,7 @@
 	<string>This application is requesting location data.</string>
 	<key>CFBundleName</key>
 	<string>skolerute</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Skoleruter vil ha tilgang til dine kalendere</string>
 </dict>
 </plist>

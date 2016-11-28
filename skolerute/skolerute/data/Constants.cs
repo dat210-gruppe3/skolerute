@@ -16,13 +16,13 @@ namespace skolerute.data
         public const int ShownCalendarDaysCount = 42;
 
         // Colors
-        static readonly Color yellow = Color.Yellow;
-        static readonly Color blue = Color.FromHex("5555ff");
-        static readonly Color purple = Color.FromHex("aa55ff");
-        static readonly Color teal = Color.Teal;
-        static readonly Color maroon = Color.Maroon;
-        static readonly Color lime = Color.Lime;
-        public static readonly List<Color> colors = new List<Color>() { yellow, blue, purple, teal, maroon, lime };
+		static readonly Color red = Color.FromHsla(0, 1, 0.5);
+		static readonly Color blue = Color.FromHsla(0.667, 0.5, 0.4);
+		static readonly Color green = Color.FromHsla(0.319, 0.75, 0.50);
+		static readonly Color purple = Color.FromHsla(0.836, 0.60, 0.60);
+		static readonly Color teal = Color.FromHsla(0.480, 0.90, 0.45);
+		static readonly Color blood = Color.FromHsla(0, 0.60, 0.50);
+        public static readonly List<Color> colors = new List<Color>() { red, blue, green, purple, teal, blood };
 
         // Settings
         public const string OfflineMode = "offline";

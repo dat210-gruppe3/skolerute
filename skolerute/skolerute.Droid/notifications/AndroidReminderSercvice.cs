@@ -23,9 +23,10 @@ namespace skolerute.Droid.notifications
             alarmManager.Set(AlarmType.ElapsedRealtime, SystemClock.ElapsedRealtime() + 10 * 1000, pendingIntent);
         }
 
-		public void RemoveCalendarNotification(int notificationId)
+		public void RemoveCalendarNotification()
 		{
-			//pendingIntent.Cancel();
-		}
+            Intent alarmIntent = new Intent(Forms.Context, typeof(AlarmReciever));
+            PendingIntent.GetBroadcast(Forms.Context, 0, alarmIntent, PendingIntentFlags.CancelCurrent).Cancel();
+        }
     }
 }

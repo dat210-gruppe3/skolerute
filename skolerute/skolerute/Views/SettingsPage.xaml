@@ -4,7 +4,8 @@
              x:Class="skolerute.Views.SettingsPage"
              Title="Innstillinger"
 		     xmlns:local="clr-namespace:skolerute.utils;assembly=skolerute"
->
+		     Icon="info.png">
+
   <StackLayout x:Name="layout">
     <TableView Intent="Settings">
       <TableRoot>

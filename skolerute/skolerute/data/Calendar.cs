@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 
 namespace skolerute.data
@@ -43,7 +44,7 @@ namespace skolerute.data
         /// </summary>
         /// <param name="year">Year.</param>
         /// <param name="month">Month.</param>
-        public static List<int> GetCal(DateTime dt)
+        public static List<int> GetShownCalendarDays(DateTime dt)
         {
             //insert days from prior month
             List<int> allDaysToBeShown = GetPriorMonth(dt);
@@ -105,7 +106,11 @@ namespace skolerute.data
 
         public static List<CalendarDay> GetRelevantFreeDays(List<CalendarDay> calendarDays, DateTime dt)
         {
-            List<int> calendar = GetCal(dt); //All visible days
+            if (calendarDays.Count == 0)
+            {
+                throw new ArgumentException();
+            }
+            List<int> calendar = GetShownCalendarDays(dt); //All visible days
             List<CalendarDay> relevantDays = new List<CalendarDay>(); //The relevant calendar days in regards to shown days
 
             for (int i = 0; i < calendarDays.Count; i++)
@@ -145,6 +150,17 @@ namespace skolerute.data
                 relevantDays.Add(calendarDays.ElementAt(i + j));
             }
             return relevantDays;
+        }
+
+        public static int GetWeekNumber(DateTime date)
+        {
+            CultureInfo myCultureInfo = new CultureInfo("nb-NO");
+            System.Globalization.Calendar myCalendar = myCultureInfo.Calendar;
+
+            CalendarWeekRule myCalendarWeekRule = myCultureInfo.DateTimeFormat.CalendarWeekRule;
+            System.DayOfWeek myFirstDayOfWeek = myCultureInfo.DateTimeFormat.FirstDayOfWeek;
+
+            return myCalendar.GetWeekOfYear(date, myCalendarWeekRule, myFirstDayOfWeek);
         }
 
         public static string MonthToString(int i)

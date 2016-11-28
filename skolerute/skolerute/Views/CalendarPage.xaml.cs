@@ -5,6 +5,7 @@ using System.Collections;
 using skolerute.data;
 using Xamarin.Forms;
 using System.Collections.ObjectModel;
+using skolerute.ExportCalendar;
 using skolerute.utils;
 
 namespace skolerute.Views
@@ -102,7 +103,7 @@ namespace skolerute.Views
 
             var calChildren = cal.Children;
 
-            List<int> consecutiveDays = data.Calendar.GetCal(current);
+            List<int> consecutiveDays = data.Calendar.GetShownCalendarDays(current);
             IEnumerator enumerator = calChildren.GetEnumerator();
             int i = 0;
 
@@ -115,7 +116,7 @@ namespace skolerute.Views
             if (favoriteSchoolsTrimmed != null && favoriteSchoolsTrimmed.Count > 0) { 
                 foreach (School selected in favoriteSchoolsTrimmed)
                 {
-                    selectedSchoolsCalendars.Add(data.Calendar.GetRelevantFreeDays(selected.calendar, current));
+                    selectedSchoolsCalendars.Add(Calendar.GetRelevantFreeDays(selected.calendar, current));
                 }
             }
 
@@ -126,25 +127,44 @@ namespace skolerute.Views
                     StackLayout sl = enumerator.Current as StackLayout;
                     Label label = sl.Children.First() as Label;
                     StackLayout boxes = sl.Children.Last() as StackLayout;
-                    
-                    label.Text = consecutiveDays.ElementAt(i).ToString();
 
-                    if (selectedSchoolsCalendars.Count > 0 && favoriteSchoolsTrimmed != null)
+                    // HACK: Separate all days in the calendar from other elements like week days 
+                    // or week numbers based on the elements they contain
+                    if (sl.Children.Last().GetType() == typeof(StackLayout))
                     {
-                        for (int j = 0; j < selectedSchoolsCalendars.Count && j < favoriteSchoolsTrimmed.Count; j++)
+                        if (label != null) label.Text = consecutiveDays.ElementAt(i).ToString();
+
+                        if (selectedSchoolsCalendars.Count > 0 && favoriteSchoolsTrimmed != null)
                         {
-							boxes.Children.ElementAt(j).IsVisible = true;
-                            boxes.Children.ElementAt(j).BackgroundColor = Constants.colors.ElementAt(j);
-							if (selectedSchoolsCalendars.ElementAt(j).ElementAt(i).IsFreeDay && ((int)selectedSchoolsCalendars.ElementAt(j).ElementAt(i).Date.DayOfWeek) % 6 != 0 && ((int)selectedSchoolsCalendars.ElementAt(j).ElementAt(i).Date.DayOfWeek) % 7 != 0) { 
+                            for (int j = 0; j < selectedSchoolsCalendars.Count && j < favoriteSchoolsTrimmed.Count; j++)
+                            {
+                                if (boxes != null)
+                                {
+                                    boxes.Children.ElementAt(j).IsVisible = true;
+                                    boxes.Children.ElementAt(j).BackgroundColor = Constants.colors.ElementAt(j);
+                                    if (selectedSchoolsCalendars.ElementAt(j).ElementAt(i).IsFreeDay &&
+                                        ((int) selectedSchoolsCalendars.ElementAt(j).ElementAt(i).Date.DayOfWeek)%6 != 0 &&
+                                        ((int) selectedSchoolsCalendars.ElementAt(j).ElementAt(i).Date.DayOfWeek)%7 != 0)
+                                    {
 
-                                boxes.Children.ElementAt(j).Opacity = 1.0;
-                            } else {
-                                boxes.Children.ElementAt(j).Opacity = 0.0;
+                                        boxes.Children.ElementAt(j).Opacity = 1.0;
+                                    }
+                                    else
+                                    {
+                                        boxes.Children.ElementAt(j).Opacity = 0.0;
+                                    }
+                                }
                             }
-
+                        }
+                        i++;
+                    }
+                    else
+                    {
+                        if (label.Text.Length <= 2 && selectedSchoolsCalendars != null && selectedSchoolsCalendars.Count != 0)
+                        {
+                            label.Text = Calendar.GetWeekNumber(selectedSchoolsCalendars.ElementAt(0).ElementAt(i).Date).ToString();
                         }
                     }
-                    i++;
                 }
                 catch (Exception e)
                 {
@@ -200,16 +220,60 @@ namespace skolerute.Views
 
         void ResetAllIndicators()
         {
-            foreach (StackLayout day in cal.Children)
+            foreach (var child in cal.Children)
             {
+                var day = (StackLayout) child;
                 StackLayout boxContainer = day.Children.Last() as StackLayout;
-                foreach (BoxView box in boxContainer.Children)
-                {
-                    box.IsVisible = false;
-                }
+                if (boxContainer != null)
+                    foreach (var view in boxContainer.Children)
+                    {
+                        var box = (BoxView) view;
+                        box.IsVisible = false;
+                    }
             }
         }
 
+        private async void ExportCalendarButtonClicked(object sender, EventArgs e)
+        {
+
+            if (Device.OS == TargetPlatform.iOS)
+            {
+                DependencyService.Get<IExportCalendar>()
+                    .ExportToCalendar(Calendar.AddSchoolToList(favoriteSchools), null);
+            }
+            else
+            {
+                List<MyCalendar> myCalendars = DependencyService.Get<IExportCalendar>().GetCalendarInfo();
+                if (myCalendars == null || myCalendars.Count == 0)
+                {
+                    await
+                        DisplayAlert("Eksporter kalender", "Du har ingen tilgjengelige kalendere i kalender appen din.",
+                            "Avbryt");
+                }
+                else if (myCalendars.Count == 1) // Do this to not bother the user with popup messages when it is unnecessary
+                {
+                    DependencyService.Get<IExportCalendar>()
+                        .ExportToCalendar(Calendar.AddSchoolToList(favoriteSchools), myCalendars.FirstOrDefault());
+                }
+                else
+                {
+                    List<string> calendarLabels = new List<string>(myCalendars.Count);
+                    calendarLabels.AddRange(myCalendars.Select(myCalendar => $"{myCalendar.Name} - {myCalendar.Accout}"));
+
+                    string choice =
+                        await DisplayActionSheet("Eksporter kalender", "Avbryt", null, calendarLabels.ToArray());
+                    string choiceName = choice.Split(' ').First();
+
+                    MyCalendar chosenCalendar = myCalendars.FirstOrDefault(myCalendar => choiceName == myCalendar.Name);
+
+                    if (chosenCalendar != null)
+                    {
+                        DependencyService.Get<IExportCalendar>()
+                            .ExportToCalendar(Calendar.AddSchoolToList(favoriteSchools), chosenCalendar);
+                    }
+                }
+            }
+        }
     }
 }
 

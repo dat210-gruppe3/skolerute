@@ -22,15 +22,9 @@ namespace skolerute.Droid.GPS
         {
             LocationManager mgr = (LocationManager)Forms.Context.GetSystemService(Context.LocationService);
 
-            var criteria = new Criteria();
-            criteria.Accuracy = Accuracy.Coarse;
-            criteria.PowerRequirement = Power.Medium;
-
             LocationListener locationListener = new LocationListener();
 
-            string bestProvider = "";
-
-            bestProvider = mgr.IsProviderEnabled("gps") == false ? mgr.GetBestProvider(criteria, true) : "gps";
+            string bestProvider = mgr.GetBestProvider(new Criteria(), true);
 
             mgr.RequestSingleUpdate(bestProvider,locationListener,null);
 
@@ -38,38 +32,13 @@ namespace skolerute.Droid.GPS
             {   
                 Location location = mgr.GetLastKnownLocation(bestProvider);
 
-                if (bestProvider == "gps")
-                {          
-                    Stopwatch stopWatch = new Stopwatch();
-                    stopWatch.Start();
-                    Location location2 = mgr.GetLastKnownLocation(bestProvider);
-
-                    if (location == null)
-                    {
-                        Toast.MakeText(Forms.Context, "Fikk ingen lokasjon, prøv igjen", ToastLength.Short).Show();
-                        return null;
-                    }
-
-                    while (location2 == null || location.Time == location2.Time)
-                    {
-                        location2 = mgr.GetLastKnownLocation(bestProvider);
-                        if (stopWatch.ElapsedMilliseconds <= 10000) continue;
-                        bestProvider = mgr.GetBestProvider(criteria, true);
-                        mgr.RequestSingleUpdate(bestProvider,locationListener,null);
-                        location = mgr.GetLastKnownLocation(bestProvider);
-                        break;
-                    }
-                    if (bestProvider == "gps") location = location2;
-                    stopWatch.Stop();
-                }
-
                 if (location == null)
                 {
                     Toast.MakeText(Forms.Context, "Fikk ingen lokasjon, prøv igjen", ToastLength.Short).Show();
                     return null;
                 }
 
-                if (location.Provider == "network") Toast.MakeText(Forms.Context, "Ingen GPS tilgjengelig, oppgitt avstand tilnærmet", ToastLength.Short).Show();
+                if (location.Provider == "network") Toast.MakeText(Forms.Context, "GPS ikke på, oppgitt avstand er tilnærmet", ToastLength.Short).Show();
 
                 return new Coordinate(location.Latitude, location.Longitude);
 
