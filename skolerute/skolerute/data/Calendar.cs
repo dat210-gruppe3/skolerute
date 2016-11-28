@@ -8,144 +8,30 @@ namespace skolerute.data
 {
     public static class Calendar
     {
-        public static int DayOfWeek(DateTime dt)
+        public static DateTime GetFirstRelevantDateTime(DateTime selectedDate)
         {
-            int dow = 100;
-            switch (dt.DayOfWeek)
-            {
-                case System.DayOfWeek.Monday:
-                    dow = 0;
-                    break;
-                case System.DayOfWeek.Tuesday:
-                    dow = 1;
-                    break;
-                case System.DayOfWeek.Wednesday:
-                    dow = 2;
-                    break;
-                case System.DayOfWeek.Thursday:
-                    dow = 3;
-                    break;
-                case System.DayOfWeek.Friday:
-                    dow = 4;
-                    break;
-                case System.DayOfWeek.Saturday:
-                    dow = 5;
-                    break;
-                case System.DayOfWeek.Sunday:
-                    dow = 6;
-                    break;
-            }
-            return dow;
+            DateTime firstDateInMonth = new DateTime(selectedDate.Year, selectedDate.Month, 1);
+            
+            // Need this special case because the weeks start on Sunday in America 
+            if (firstDateInMonth.DayOfWeek == DayOfWeek.Sunday) return firstDateInMonth.AddDays(-6);
+
+            return firstDateInMonth.AddDays(0 - (double)(firstDateInMonth.DayOfWeek - 1));
         }
 
-        /// <summary>
-        /// Supposed to take in values for year and month, and give out whatever necessary to render the
-        /// calender in the GUI.
-        /// </summary>
-        /// <param name="year">Year.</param>
-        /// <param name="month">Month.</param>
-        public static List<int> GetCal(DateTime dt)
+        public static List<List<CalendarDay>> GetAllRelevantCalendarDays(List<School> schools, DateTime selectedDate)
         {
-            //insert days from prior month
-            List<int> allDaysToBeShown = GetPriorMonth(dt);
+            if(schools == null || schools.Count == 0 || schools.First() == null) return null;
+            DateTime startDate = GetFirstRelevantDateTime(selectedDate);
+            
+            int startIndex = schools.First().calendar.FindIndex(day => day.Date.DayOfYear == startDate.DayOfYear);
 
-            //insert days from current month
-            allDaysToBeShown.AddRange(GetCurrentMonth(dt));
+            List<List<CalendarDay>> schoolsCalendarList = new List<List<CalendarDay>>();
 
-
-            //insert days from future month
-            allDaysToBeShown.AddRange(GetDaysInNextMonth(Constants.ShownCalendarDaysCount - allDaysToBeShown.Count));
-            return allDaysToBeShown;
-        }
-
-        private static List<int> GetDaysInNextMonth(int daysLeftToDisplay)
-        {
-            List<int> calendarDaysList = new List<int>();
-            if (daysLeftToDisplay > 0)
+            foreach (School school in schools)
             {
-                for (int i = 1; i <= daysLeftToDisplay; i++)
-                {
-                    calendarDaysList.Add(i);
-                }
+                schoolsCalendarList.Add(school.calendar.GetRange(startIndex, Constants.ShownCalendarDaysCount));
             }
-
-            return calendarDaysList;
-        }
-
-        private static List<int> GetCurrentMonth(DateTime dt)
-        {
-            List<int> calendarDaysList = new List<int>();
-            dt = new DateTime(dt.Year, dt.Month, 1);
-            int daysInMonth = DateTime.DaysInMonth(dt.Year, dt.Month);
-
-            for (int i = 1; i <= daysInMonth; i++)
-            {
-                calendarDaysList.Add(i);
-                dt = new DateTime(dt.Year, dt.Month, i);
-            }
-
-            return calendarDaysList;
-        }
-
-        private static List<int> GetPriorMonth(DateTime dt)
-        {
-            List<int> calendarDaysList = new List<int>();
-
-
-            dt = new DateTime(dt.Year, dt.Month, 1);
-            int dow = DayOfWeek(dt);
-            dt = dt.AddMonths(-1);
-            int daysInPriorMonth = DateTime.DaysInMonth(dt.Year, dt.Month);
-            for (int i = daysInPriorMonth - (dow - 1); i <= daysInPriorMonth; i++)
-            {
-                calendarDaysList.Add(i);
-            }
-
-            return calendarDaysList;
-        }
-
-        public static List<CalendarDay> GetRelevantFreeDays(List<CalendarDay> calendarDays, DateTime dt)
-        {
-            List<int> calendar = GetCal(dt); //All visible days
-            List<CalendarDay> relevantDays = new List<CalendarDay>(); //The relevant calendar days in regards to shown days
-
-            for (int i = 0; i < calendarDays.Count; i++)
-            {
-                CalendarDay currentDay = calendarDays.ElementAt(i);
-                DateTime lastMonth = DateTime.Now;
-                bool hasGottenToCorrectDay = false;
-
-                if (calendar.ElementAt(0) == 1)
-                {
-                    lastMonth = new DateTime(dt.Year, dt.Month, calendar.ElementAt(0));
-                }
-                else
-                {
-                    if (dt.Month <= 1)
-                        lastMonth = new DateTime(dt.Year - 1, 12, calendar.ElementAt(0));
-                    else
-                        lastMonth = new DateTime(dt.Year, dt.Month - 1, calendar.ElementAt(0));
-                }
-
-                hasGottenToCorrectDay = currentDay.Date.CompareTo(lastMonth) >= 0;
-
-                if (hasGottenToCorrectDay)
-                {
-                    //Adds the CalendarDay objects corresponding to the shown months
-                    return GetRelevantCalendarDays(calendarDays, calendar, relevantDays, i);
-                }
-            }
-
-            return relevantDays;
-        }
-
-        private static List<CalendarDay> GetRelevantCalendarDays(List<CalendarDay> calendarDays, List<int> calendar, List<CalendarDay> relevantDays, int i)
-        {
-            for (int j = 0; j < calendar.Count; j++)
-            {
-                relevantDays.Add(calendarDays.ElementAt(i + j));
-            }
-            return relevantDays;
+            return schoolsCalendarList;
         }
 
         public static int GetWeekNumber(DateTime date)
@@ -159,36 +45,11 @@ namespace skolerute.data
             return myCalendar.GetWeekOfYear(date, myCalendarWeekRule, myFirstDayOfWeek);
         }
 
-        public static string MonthToString(int i)
+        public static string MonthToString(int currentMonthNumber)
         {
-            switch (i)
-            {
-                case 1:
-                    return "Januar";
-                case 2:
-                    return "Februar";
-                case 3:
-                    return "Mars";
-                case 4:
-                    return "April";
-                case 5:
-                    return "Mai";
-                case 6:
-                    return "Juni";
-                case 7:
-                    return "Juli";
-                case 8:
-                    return "August";
-                case 9:
-                    return "September";
-                case 10:
-                    return "Oktober";
-                case 11:
-                    return "November";
-                case 12:
-                    return "Desember";
-            }
-            return "";
+            string monthName = new CultureInfo("nb-NO").DateTimeFormat.MonthNames[currentMonthNumber - 1];
+            monthName = monthName[0].ToString().ToUpper() + monthName.Remove(0, 1);
+            return monthName;
         }
 
         public static ObservableCollection<GroupedFreeDayModel> AddSchoolToList(List<School> skoler)
@@ -196,6 +57,7 @@ namespace skolerute.data
             GroupedFreeDayModel FreeDayGroup = null;
             ObservableCollection<GroupedFreeDayModel> grouped = new ObservableCollection<GroupedFreeDayModel>();
             string dateInterval = "";
+            DateTime today = DateTime.Now;
 
             foreach (School skole in skoler)
             {
@@ -230,6 +92,7 @@ namespace skolerute.data
                         DateTime endDate = skole.calendar[i].Date;
                         dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year
                             + " - " + endDate.Day + "/" + endDate.Month + "/" + endDate.Year;
+                        //dateInterval = startDate.ToString("dd/MM/yy") + " - " + endDate.ToString("dd/MM/yy");
                     }
                     //Handle summer vacation
                     else if (skole.calendar[i].IsFreeDay && skole.calendar[i].Comment == "")
@@ -256,11 +119,13 @@ namespace skolerute.data
                         {
                             FreeDayGroup.LongName = "Starten av sommerferien";
                             dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year;
+                            //dateInterval = startDate.ToString("dd/MM/yy");
                         }
                         else
                         {
                             FreeDayGroup.LongName = "Slutten av sommerferien";
                             dateInterval = endDate.Day + "/" + endDate.Month + "/" + endDate.Year;
+                            //dateInterval = startDate.ToString("dd/MM/yy");
                         }
                     }
                     //Handle other types of freedays
@@ -269,6 +134,7 @@ namespace skolerute.data
                         string currentComment = skole.calendar[i].Comment;
                         DateTime startDate = skole.calendar[i].Date;
                         dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year;
+                        //dateInterval = startDate.ToString("dd/MM/yy");
                         FreeDayGroup = new GroupedFreeDayModel() { LongName = skole.calendar[i].Comment, ShortName = "", Date = dateInterval };
                     }
 
@@ -276,11 +142,20 @@ namespace skolerute.data
                     {
                         //Check if group is already created and add to it if it is
                         bool foundGroup = false;
+                        FreeDayModel model = new FreeDayModel() { Name = skole.name, Comment = dateInterval };
+                        
+                        // Turn text grey if the holiday done
+                        if (model.GetEndDate() < today)
+                        {
+                            model.TextColor = "#808080";
+                        }
+
                         foreach (GroupedFreeDayModel group in grouped)
                         {
                             if (FreeDayGroup.LongName == group.LongName && FreeDayGroup.Date == group.Date)
                             {
-                                group.Add(new FreeDayModel() { Name = skole.name, Comment = dateInterval });
+                                //group.Add(new FreeDayModel() { Name = skole.name, Comment = dateInterval });
+                                group.Add(model);
                                 foundGroup = true;
                             }
                         }
@@ -288,7 +163,8 @@ namespace skolerute.data
                         //If a group was not found then create a new one
                         if (!foundGroup)
                         {
-                            FreeDayGroup.Add(new FreeDayModel() { Name = skole.name, Comment = dateInterval });
+                            //FreeDayGroup.Add(new FreeDayModel() { Name = skole.name, Comment = dateInterval });
+                            FreeDayGroup.Add(model);
                             grouped.Add(FreeDayGroup);
                         }
                     }
@@ -304,7 +180,16 @@ namespace skolerute.data
                 }
                 string tempDate = grouped[i][0].Comment;
                 grouped[i].Clear();
-                grouped[i].Add(new FreeDayModel() { Name = "Alle valgte skoler", Comment = tempDate });
+
+                FreeDayModel model = new FreeDayModel() { Name = "Alle valgte skoler", Comment = tempDate };
+
+                // Turn text grey if the holiday done
+                if (model.GetEndDate() < today)
+                {
+                    model.TextColor = "#808080";
+                }
+
+                grouped[i].Add(model);
             }
             return grouped;
         }

@@ -7,7 +7,7 @@ namespace skolerute.ExportCalendar
 {
 	public interface IExportCalendar
 	{
-		Task ExportToCalendar(ObservableCollection<GroupedFreeDayModel> groupedFreedays, MyCalendar chosenCalendar);
+		void ExportToCalendar(ObservableCollection<GroupedFreeDayModel> groupedFreedays, MyCalendar chosenCalendar);
 	    List<MyCalendar> GetCalendarInfo();
 	}
 }

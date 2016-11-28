@@ -56,7 +56,9 @@ namespace skolerute.Views
 
         private void FindNext()
         {
+            
             ObservableCollection<GroupedFreeDayModel> a = lstView.ItemsSource as ObservableCollection<GroupedFreeDayModel>;
+            if (a == null) return;
             var cont = true;
             foreach (var group in a)
             {

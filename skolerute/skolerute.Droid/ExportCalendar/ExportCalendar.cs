@@ -15,6 +15,7 @@ using Android.Provider;
 using Java.Util;
 using Xamarin.Forms;
 using skolerute.ExportCalendar;
+using skolerute.Views;
 
 [assembly: Dependency(typeof(skolerute.Droid.ExportCalendar.ExportCalendar))]
 namespace skolerute.Droid.ExportCalendar
@@ -23,7 +24,7 @@ namespace skolerute.Droid.ExportCalendar
     {
         private int calendarId;
 
-        public async Task ExportToCalendar(ObservableCollection<GroupedFreeDayModel> groupedFreedays, MyCalendar chosenCalendar)
+        public void ExportToCalendar(ObservableCollection<GroupedFreeDayModel> groupedFreedays, MyCalendar chosenCalendar)
         {
             if (chosenCalendar != null)
             {
