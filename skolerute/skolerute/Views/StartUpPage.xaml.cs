@@ -24,7 +24,6 @@ namespace skolerute.Views
 			{
 				userposition = DependencyService.Get<GPS.IGPSservice>().GetGpsCoordinates();
 			}
-            
         }
 
         protected override async void OnAppearing()
