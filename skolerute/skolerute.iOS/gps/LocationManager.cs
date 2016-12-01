@@ -33,9 +33,12 @@ namespace skolerute.iOS.gps
 					{
 						locationManager.DesiredAccuracy = 100; // In meters
 						locationManager.StartUpdatingLocation();
+						//Wait for location-update
+						System.Threading.Thread.Sleep(10);
 
 						try
 						{
+							locationManager.StopUpdatingLocation();
 							return new Coordinate(locationManager.Location.Coordinate.Latitude, locationManager.Location.Coordinate.Longitude);
 						}
 						catch (NullReferenceException e)
