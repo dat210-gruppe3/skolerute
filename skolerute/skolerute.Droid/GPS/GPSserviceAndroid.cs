@@ -50,7 +50,7 @@ namespace skolerute.Droid.GPS
 
         public void OnLocationChanged(Location location)
         {
-            MessagingCenter.Send(location,"locationUpdate");
+            MessagingCenter.Send(new Coordinate(location.Latitude,location.Longitude), "locationUpdate");
         }
 
         public void OnProviderDisabled(string provider)

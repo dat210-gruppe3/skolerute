@@ -7,8 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using skolerute.GPS;
 using Xamarin.Forms;
-using Android.Locations;
-using Android.Views.Accessibility;
 
 namespace skolerute.Views
 {
@@ -45,7 +43,7 @@ namespace skolerute.Views
                 }   
             }
 
-            MessagingCenter.Subscribe<Location>(this, "locationUpdate", (args) =>
+            MessagingCenter.Subscribe<Coordinate>(this, "locationUpdate", (args) =>
             {
                 loadingNearbySchools.IsVisible = false;
                 loadingNearbySchools.IsRunning = false;
