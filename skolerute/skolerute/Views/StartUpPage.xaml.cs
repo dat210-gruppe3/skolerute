@@ -5,7 +5,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using skolerute.GPS;
 using Xamarin.Forms;
+using Android.Locations;
+using Android.Views.Accessibility;
 
 namespace skolerute.Views
 {
@@ -39,10 +42,32 @@ namespace skolerute.Views
                     WrappedListItems<School> temp = WrappedItems.First(item => item.Item.name == school);
                     temp.IsChecked = true;
                     temp.UnChecked = false;
-                }
+                }   
             }
 
+            MessagingCenter.Subscribe<Location>(this, "locationUpdate", (args) =>
+            {
+                loadingNearbySchools.IsVisible = false;
+                loadingNearbySchools.IsRunning = false;
+                schools.IsVisible = true;
+                schools.IsRefreshing = false;
+                schools.ItemsSource = GPS.GPSservice.GetNearbySchools(WrappedItems);
+            });
+
             //DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now);
+        }
+
+        private void PullRefresher()
+        {
+            if (Device.OS == TargetPlatform.Android)
+            {
+                DependencyService.Get<GPS.IGPSservice>().ConnectGps();
+            }
+
+            else
+            {
+                schools.ItemsSource = GPS.GPSservice.GetNearbySchools(WrappedItems);
+            }
         }
 
         private void GetClosest()
@@ -52,12 +77,20 @@ namespace skolerute.Views
 
             if (GetCoords.Text == "Vis nærmeste")
             {
-                //TODO sjekk om denne funker
+				GetCoords.Text = "Vis alle";
+                if (Device.OS == TargetPlatform.Android)
+                {
+                    schools.IsVisible = false;
+                    loadingNearbySchools.IsVisible = true;
+                    loadingNearbySchools.IsRunning = true;
+                    DependencyService.Get<GPS.IGPSservice>().ConnectGps();
+                }
+                else
+                {
                 List<WrappedListItems<School>> newWrappedItems = GPS.GPSservice.GetNearbySchools(WrappedItems);
                 if(newWrappedItems == null) { return; }
-
-                GetCoords.Text = "Vis alle";
                 schools.ItemsSource = newWrappedItems;
+                }
             }
             else
             {
