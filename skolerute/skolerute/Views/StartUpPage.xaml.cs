@@ -77,8 +77,7 @@ namespace skolerute.Views
 
             if (GetCoords.Text == "Vis nærmeste")
             {
-                GetCoords.Text = "Vis alle";              
-                //TODO sjekk om denne funker 
+				GetCoords.Text = "Vis alle";
                 if (Device.OS == TargetPlatform.Android)
                 {
                     schools.IsVisible = false;
@@ -86,10 +85,11 @@ namespace skolerute.Views
                     loadingNearbySchools.IsRunning = true;
                     DependencyService.Get<GPS.IGPSservice>().ConnectGps();
                 }
-
                 else
                 {
-                    schools.ItemsSource = GPS.GPSservice.GetNearbySchools(WrappedItems);
+                List<WrappedListItems<School>> newWrappedItems = GPS.GPSservice.GetNearbySchools(WrappedItems);
+                if(newWrappedItems == null) { return; }
+                schools.ItemsSource = newWrappedItems;
                 }
             }
             else
