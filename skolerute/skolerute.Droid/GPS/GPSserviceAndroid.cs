@@ -45,27 +45,24 @@ namespace skolerute.Droid.GPS
     {
         public void Dispose()
         {
-            //throw new NotImplementedException();
         }
 
         public void OnLocationChanged(Location location)
         {
-            MessagingCenter.Send(new Coordinate(location.Latitude,location.Longitude), "locationUpdate");
+            //MessagingCenter.Send(new Coordinate(location.Latitude,location.Longitude), "locationUpdate");
+            MessagingCenter.Send<string>("update","locationUpdate");
         }
 
         public void OnProviderDisabled(string provider)
         {
-            //throw new NotImplementedException();
         }
 
         public void OnProviderEnabled(string provider)
         {
-            //throw new NotImplementedException();
         }
 
         public void OnStatusChanged(string provider, [GeneratedEnum] Availability status, Bundle extras)
         {
-
         }
     }
 }
