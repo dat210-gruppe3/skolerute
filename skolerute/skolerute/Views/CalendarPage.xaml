@@ -66,6 +66,9 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
+                            <Grid.GestureRecognizers>
+                                  <PanGestureRecognizer PanUpdated="OnPanUpdated" />
+                            </Grid.GestureRecognizers>
 
                             <!-- weekdays -->
                             <StackLayout Grid.Row="0" Grid.Column="0">
