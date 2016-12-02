@@ -54,19 +54,14 @@ namespace skolerute.Views
             var cont = true;
             foreach (var group in a)
             {
+                if (!cont) { break; }
                 foreach (var item in group)
                 {
-                    try
+                    if (item.GetEndDate() >= DateTime.Now && cont)
                     {
-                        if (item.GetEndDate() >= DateTime.Now && cont)
-                        {
-                            lstView.ScrollTo(item, group, ScrollToPosition.Center, true);
-                            cont = false;
-                        }
-                    }
-                    catch (Exception)
-                    {
-
+                        lstView.ScrollTo(item, group, ScrollToPosition.Start, true);
+                        cont = false;
+                        break;
                     }
                 }
                 
