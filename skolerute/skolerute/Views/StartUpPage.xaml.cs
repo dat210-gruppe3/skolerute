@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using skolerute.GPS;
 using Xamarin.Forms;
 
 namespace skolerute.Views
@@ -20,8 +21,7 @@ namespace skolerute.Views
 
         protected override async void OnAppearing()
         {
-            base.OnAppearing();
-            
+            base.OnAppearing();                             
 
             List<School> allSchools = new List<School>();
 
@@ -39,10 +39,37 @@ namespace skolerute.Views
                     WrappedListItems<School> temp = WrappedItems.First(item => item.Item.name == school);
                     temp.IsChecked = true;
                     temp.UnChecked = false;
-                }
+                }   
             }
 
+            MessagingCenter.Subscribe<string>(this, "locationUpdate", (sender) =>
+            {
+                DisableNearbySchoolsActivityIndicator();
+                schools.ItemsSource = GPS.GPSservice.GetNearbySchools(WrappedItems);
+            });
+
             //DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now);
+        }
+
+
+        private void PullRefresher()
+        {
+            if (GetCoords.Text != "Vis nærmeste")
+            {
+                if (Device.OS == TargetPlatform.Android)
+                {
+                    DependencyService.Get<GPS.IGPSservice>().ConnectGps();
+                }
+
+                else
+                {
+                    List<WrappedListItems<School>> newWrappedItems = GPS.GPSservice.GetNearbySchools(WrappedItems);
+                    if (newWrappedItems == null) { return; }
+                    schools.ItemsSource = newWrappedItems;
+                    schools.IsRefreshing = false;
+                }           
+            }
+            else schools.IsRefreshing = false;
         }
 
         private void GetClosest()
@@ -51,13 +78,19 @@ namespace skolerute.Views
             //to school positions and displays these schools in the GUI school list.
 
             if (GetCoords.Text == "Vis nærmeste")
-            {
-                //TODO sjekk om denne funker
+            {			
+                if (Device.OS == TargetPlatform.Android)
+                {
+                    EnableNearbySchoolsActivityIndicator();
+                    DependencyService.Get<GPS.IGPSservice>().ConnectGps();
+                }
+                else
+                {
                 List<WrappedListItems<School>> newWrappedItems = GPS.GPSservice.GetNearbySchools(WrappedItems);
                 if(newWrappedItems == null) { return; }
-
-                GetCoords.Text = "Vis alle";
                 schools.ItemsSource = newWrappedItems;
+                }
+                GetCoords.Text = "Vis alle";
             }
             else
             {
@@ -236,6 +269,21 @@ namespace skolerute.Views
                 }
             }
             return list;
+        }
+
+        private void EnableNearbySchoolsActivityIndicator()
+        {
+            schools.IsVisible = false;
+            loadingNearbySchools.IsVisible = true;
+            loadingNearbySchools.IsRunning = true;
+        }
+
+        private void DisableNearbySchoolsActivityIndicator()
+        {
+            loadingNearbySchools.IsVisible = false;
+            loadingNearbySchools.IsRunning = false;
+            schools.IsVisible = true;
+            schools.IsRefreshing = false;
         }
     }
 }

@@ -4,6 +4,7 @@ namespace skolerute.GPS
 {
     public interface IGPSservice
     {
-         Coordinate GetGpsCoordinates();
+        Coordinate GetGpsCoordinates();
+        void ConnectGps();
     }
 }
