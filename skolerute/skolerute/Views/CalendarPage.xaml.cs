@@ -16,6 +16,8 @@ namespace skolerute.Views
     {
         static DateTime current;
         static List<School> favoriteSchools;
+        private static List<School> selectedSchools;
+        private static List<Picker> pickers;
 
         public bool isLoading;
 
@@ -23,13 +25,19 @@ namespace skolerute.Views
         {
             InitializeComponent();
 
+            // Setting some static variables
+            pickers = new List<Picker>();
+            pickers.Add(picker1);
+            pickers.Add(picker2);
+            pickers.Add(picker3);
+
             current = DateTime.Now;
 
             DisplayCalendar();
 
             ObservableCollection<string> favoriteSchoolNames = new ObservableCollection<string>();
             favoriteSchools = new List<School>();
-
+            selectedSchools = new List<School>();
             MessagingCenter.Subscribe<StartUpPage>(this, "newSchoolSelected", (sender) =>
             {
                 //TODO: Make this binding for better reusability
@@ -67,7 +75,11 @@ namespace skolerute.Views
                 await SettingsManager.SavePreferenceAsync("" + (favoriteSchools.Find(x => x.name.Contains(args)).ID), false);
                 favoriteSchools.Remove(favoriteSchools.Find(x => x.name.Contains(args)));
                 ResetAllIndicators();
+                SetLegends();
             });
+
+
+            SetLegends();
 
         }
 
@@ -102,6 +114,7 @@ namespace skolerute.Views
                     }
                     break;
             }
+
         }
 
         private void SetUpCalendar()
@@ -130,7 +143,7 @@ namespace skolerute.Views
         {
             SetUpCalendar();
             UpdateCalendarControls();
-            if (favoriteSchools != null && favoriteSchools.Count != 0)
+            if (selectedSchools != null && selectedSchools.Count != 0)
             {
                 ResetAllIndicators();
                 UpdateIndicators();
@@ -139,7 +152,7 @@ namespace skolerute.Views
 
         private void UpdateIndicators()
         {
-            List<List<CalendarDay>> freeDays = Calendar.GetAllRelevantCalendarDays(favoriteSchools, current);
+            List<List<CalendarDay>> freeDays = Calendar.GetAllRelevantCalendarDays(selectedSchools, current);
 
             int currentCalendarDayIndex = 0;
             foreach (var view in CalendarGrid.Children)
@@ -158,7 +171,8 @@ namespace skolerute.Views
                             if (freeDays[schoolIndex][currentCalendarDayIndex].IsFreeDay)
                             {
                                 indicator.Opacity = 1;
-                                indicator.Color = Constants.colors[schoolIndex];
+                                indicator.Color = GetCorrectColor(schoolIndex);
+
                             }
                             schoolIndex++;
                         }
@@ -171,6 +185,85 @@ namespace skolerute.Views
             }
         }
 
+        private Color GetCorrectColor(int i)
+        {
+            var children = Legend.Children;
+            if (i < 0 || i >= selectedSchools.Count) return Color.Fuchsia;
+            foreach (StackLayout child in children)
+            {
+                Picker picker = (Picker)child.Children.Last();
+                if (picker.SelectedIndex < 0 || picker.SelectedIndex >= picker.Items.Count) continue;
+                if (selectedSchools[i].name == picker.Items[picker.SelectedIndex])
+                    return child.Children.First().BackgroundColor;
+            }
+            return Color.Fuchsia;
+        }
+
+
+
+        private void SetLegends()
+        {
+            var i = 0;
+            foreach (StackLayout x in Legend.Children)
+            {
+                x.Children.First().BackgroundColor = Constants.colors[i];
+                i++;
+            }
+            SetPickers();
+        }
+
+        private void SetPickers()
+        {
+            //Clear pickers and add fresh list of schools
+            foreach (var picker in pickers)
+            {
+                picker.Items.Clear();
+            }
+            foreach (var school in  favoriteSchools)
+            {
+                foreach (var picker in pickers) picker.Items.Add(school.name);
+            }
+
+            // Populate pickers with previously selected schools, if any 
+            //**(Does not currently work when starting the app, only works when adding or removing schools from favorites list)
+            int i = 0;
+            foreach (var picker in pickers)
+            {
+                string pickername = "picker" + i;
+                var preferred = SettingsManager.GetPreference(pickername);
+                if (preferred != null && (string)preferred != "ignore")
+                {
+                    picker.SelectedIndex = picker.Items.IndexOf(preferred);
+
+                }
+                i++;
+            }
+        }
+
+        private async void OnSelect(object o, EventArgs e)
+        {
+            if (0 > ((Picker) o).SelectedIndex) return;
+            selectedSchools = new List<School>();
+            foreach (var school in favoriteSchools)
+            {
+                int i = 0;
+                foreach (var picker in pickers)
+                {
+                    if (picker.SelectedIndex >= 0)
+                    {
+                        if (picker.SelectedIndex < picker.Items.Count &&
+                            school.name == picker.Items[picker.SelectedIndex])
+                        {
+                            await SettingsManager.SavePreferenceAsync("picker" + i, school.name);
+                            selectedSchools.Add(school);
+                        }
+                    }
+                    i++;
+                }
+            }
+            DisplayCalendar();
+        }
+
         private void UpdateCalendarControls()
         {
             PrevImg.Opacity = current.Month != 8 ? 1 : 0.3;
@@ -178,31 +271,6 @@ namespace skolerute.Views
 
             MonthLabel.Text = Calendar.MonthToString(current.Month);
             YearLabel.Text = current.Year.ToString();
-        }
-
-        private void SetLegends()
-        {
-            var children = Legend.Children;
-            var i = 0;
-            foreach (var view in children)
-            {
-                var x = (StackLayout) view;
-                var box = x.Children.First() as BoxView;
-                var label = x.Children.Last() as Label;
-                if (i >= favoriteSchools.Count)
-                {
-                    x.Opacity = 0;
-                }
-                else
-                {
-                    var currentschool = favoriteSchools[i];
-                    label.Text = currentschool.name;
-                    box.Color = Constants.colors[i];
-                    x.Opacity = 1;
-                }
-
-                i++;
-            }
         }
 
         void ResetAllIndicators()

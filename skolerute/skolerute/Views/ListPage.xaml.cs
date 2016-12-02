@@ -29,7 +29,7 @@ namespace skolerute.Views
                     grouped = Calendar.AddSchoolToList(favoriteSchools);
 
                     lstView.ItemsSource = grouped;
-                    FindNext();
+                    //FindNext();
                 }
 
             });
@@ -41,16 +41,24 @@ namespace skolerute.Views
                 grouped.Clear();
                 grouped = Calendar.AddSchoolToList(favoriteSchools);
                 lstView.ItemsSource = grouped;
-                FindNext();
+                //FindNext();
             });
 
             InitializeComponent();
 
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            FindNext();
+        }
+
         private void FindNext()
         {
+            
             ObservableCollection<GroupedFreeDayModel> a = lstView.ItemsSource as ObservableCollection<GroupedFreeDayModel>;
+            if (a == null) return;
             var cont = true;
             foreach (var group in a)
             {
@@ -60,6 +68,7 @@ namespace skolerute.Views
                     {
                         if (item.GetEndDate() >= DateTime.Now && cont)
                         {
+                            lstView.ScrollTo(a[0][0], a[0], ScrollToPosition.Center, false);
                             lstView.ScrollTo(item, group, ScrollToPosition.Center, true);
                             cont = false;
                         }
