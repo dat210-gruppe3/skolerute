@@ -12,6 +12,10 @@ namespace skolerute.iOS.gps
 	{
 		CLAuthorizationStatus locAuthorized;
 
+		public void ConnectGps()
+		{
+		}
+
 		public Coordinate GetGpsCoordinates()
 		{
 			var locationManager = new CLLocationManager();
@@ -53,5 +57,6 @@ namespace skolerute.iOS.gps
 			}
 			return null;
 		}
+
 	}
 }

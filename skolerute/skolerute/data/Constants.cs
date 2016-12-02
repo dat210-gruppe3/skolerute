@@ -9,8 +9,8 @@ namespace skolerute.data
         public const int MaximumSelectedSchools = 6;
 
         // CSV Parser 
-		public const string URL = "http://open.stavanger.kommune.no/dataset/86d3fe44-111e-4d82-be5a-67a9dbfbfcbb/resource/3a27a8e9-5485-4c16-834c-108b86418818/download/skolerute-2016-17.csv";
-		public const string positionURL = "http://open.stavanger.kommune.no/dataset/8f8ac030-0d03-46e2-8eb7-844ee11a6203/resource/12f0d499-6474-4fe4-b457-db976e52cb37/download/skoler.csv";
+		public const string URL = "http://github.com/dat210-gruppe3/skolerute/raw/master/skolerute-2016-17.csv";
+		public const string positionURL = "http://github.com/dat210-gruppe3/skolerute/raw/master/skoler.csv";
 
         // Calendar
         public const int ShownCalendarDaysCount = 42;

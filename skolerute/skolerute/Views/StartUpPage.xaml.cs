@@ -57,15 +57,21 @@ namespace skolerute.Views
 
         private void PullRefresher()
         {
-            if (Device.OS == TargetPlatform.Android)
-            {
-                DependencyService.Get<GPS.IGPSservice>().ConnectGps();
-            }
+			if (GetCoords.Text != "Vis nærmeste")
+			{
+				if (Device.OS == TargetPlatform.Android)
+				{
+					DependencyService.Get<GPS.IGPSservice>().ConnectGps();
+				}
 
-            else
-            {
-                schools.ItemsSource = GPS.GPSservice.GetNearbySchools(WrappedItems);
-            }
+				else
+				{
+					List<WrappedListItems<School>> newWrappedItems = GPS.GPSservice.GetNearbySchools(WrappedItems);
+					if (newWrappedItems == null) { return; }
+					schools.ItemsSource = newWrappedItems;
+				}
+			}
+			schools.IsRefreshing = false;
         }
 
         private void GetClosest()
@@ -75,7 +81,6 @@ namespace skolerute.Views
 
             if (GetCoords.Text == "Vis nærmeste")
             {
-				GetCoords.Text = "Vis alle";
                 if (Device.OS == TargetPlatform.Android)
                 {
                     schools.IsVisible = false;
@@ -89,6 +94,7 @@ namespace skolerute.Views
                 if(newWrappedItems == null) { return; }
                 schools.ItemsSource = newWrappedItems;
                 }
+				GetCoords.Text = "Vis alle";
             }
             else
             {
