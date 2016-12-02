@@ -57,6 +57,7 @@ namespace skolerute.db
         public async Task RetrieveSchools()
         {
             var csv = await GetContent(Constants.URL);
+			var csv2 = await GetContent(Constants.positionURL);
             char[] delimiter = { '\r', '\n' };
             string[] rows = csv.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
             string[] cols = new string[5];
@@ -76,7 +77,7 @@ namespace skolerute.db
                         School school = new School(cols[1], null);
                         schools.Add(school);
 
-                        RetrievePosition(school).Wait();
+                        RetrievePosition(school, csv2)/*.Wait()*/;
                         connection.Insert(schools.Last());
                     }
                 }
@@ -109,42 +110,42 @@ namespace skolerute.db
             });
         }
 
-        public async Task StringParser()
-        {
-            var csv = await GetContent(Constants.URL);
-            char[] delimiter = { '\r', '\n' };
-            string[] rows = csv.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
-            string[] cols = new string[5];
-            List<School> schoolObjs = new List<School>();
+        //public async Task StringParser()
+        //{
+        //    var csv = await GetContent(Constants.URL);
+        //    char[] delimiter = { '\r', '\n' };
+        //    string[] rows = csv.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+        //    string[] cols = new string[5];
+        //    List<School> schoolObjs = new List<School>();
 
-            int j = 1;
-            while (j < rows.Length)
-            {
-                cols = Splitter(rows[j]);
-                string sch = cols[1];
+        //    int j = 1;
+        //    while (j < rows.Length)
+        //    {
+        //        cols = Splitter(rows[j]);
+        //        string sch = cols[1];
 
-                schoolObjs.Add(new School(cols[1], new List<CalendarDay>()));
+        //        schoolObjs.Add(new School(cols[1], new List<CalendarDay>()));
 
 
-                while (cols[1] == sch)
-                {
-                    InsertToCalAndSch(cols, schoolObjs);
-                    j++;
-                    if (j >= rows.Length) break;
-                    cols = Splitter(rows[j]);
-                }
+        //        while (cols[1] == sch)
+        //        {
+        //            InsertToCalAndSch(cols, schoolObjs);
+        //            j++;
+        //            if (j >= rows.Length) break;
+        //            cols = Splitter(rows[j]);
+        //        }
 
-                await database.InsertSingle(schoolObjs[schoolObjs.Count - 1]);
-            }
-            //await database.InsertList(schoolObjs);
-            //await database.InsertSingle(schoolObjs[schoolObjs.Count - 1]);
+        //        await database.InsertSingle(schoolObjs[schoolObjs.Count - 1]);
+        //    }
+        //    //await database.InsertList(schoolObjs);
+        //    //await database.InsertSingle(schoolObjs[schoolObjs.Count - 1]);
 
-            List<School> schoolsList = await database.GetSchools();
-            GC.KeepAlive(schoolsList);
-            schoolsList[23] = null;
+        //    List<School> schoolsList = await database.GetSchools();
+        //    GC.KeepAlive(schoolsList);
+        //    schoolsList[23] = null;
 
-            //TODO: error handling
-        }
+        //    //TODO: error handling
+        //}
 
 
         public async Task<String> GetContent(String url)
@@ -162,13 +163,12 @@ namespace skolerute.db
         }
 
 
-        public async Task RetrievePosition(School sch)
+        public /*async Task*/void RetrievePosition(School sch, string csv)
         {
-            var csv = await GetContent(Constants.positionURL);
+            //var csv = await GetContent(Constants.positionURL);
             char[] delimiter = { '\r', '\n' };
             string[] rows = csv.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
             string[] cols = new string[13];
-
             for (int i = 1; i < rows.Length; i++)
             {
                 cols = Splitter(rows[i]);

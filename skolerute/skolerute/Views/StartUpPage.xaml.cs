@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using skolerute.GPS;
 using Xamarin.Forms;
 
+
 namespace skolerute.Views
 {
     public partial class StartUpPage : ContentPage
@@ -218,30 +219,30 @@ namespace skolerute.Views
                 MessagingCenter.Send<StartUpPage, string>(this, "deleteSch", chSchool.Item.name);
             } else
             {
-                chSchool.IsChecked = true;
-                chSchool.UnChecked = false;
+				
+				try {
+					chSchool.IsChecked = true;
+					chSchool.UnChecked = false;
 
-                if (SettingsManager.GetPreference("i") == null)
-                {
-                    await SettingsManager.SavePreferenceAsync("i", true);
-                    foreach (School x in WrappedItems.Select(item => item.Item).ToList())
-                    {
-                        await SettingsManager.SavePreferenceAsync(x.ID.ToString(), false);
-                    }
-                    await SettingsManager.SavePreferenceAsync(school.ID.ToString(), true);
-                }
-                else
-                {
-                    await SettingsManager.SavePreferenceAsync(school.ID.ToString(), true);
-                }
+					db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
+					db.CSVParser parser = new db.CSVParser(Constants.URL, database);
+					await parser.RetrieveCalendar(school);
 
-                MessagingCenter.Send(this, "newSchoolSelected");
-                db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
-                db.CSVParser parser = new db.CSVParser(Constants.URL, database);
+	                if (SettingsManager.GetPreference("i") == null)
+	                {
+	                    await SettingsManager.SavePreferenceAsync("i", true);
+	                    foreach (School x in WrappedItems.Select(item => item.Item).ToList())
+	                    {
+	                        await SettingsManager.SavePreferenceAsync(x.ID.ToString(), false);
+	                    }
+	                    await SettingsManager.SavePreferenceAsync(school.ID.ToString(), true);
+	                }
+	                else
+	                {
+	                    await SettingsManager.SavePreferenceAsync(school.ID.ToString(), true);
+	                }
 
-                try
-                {
-                    await parser.RetrieveCalendar(school);
+	                MessagingCenter.Send(this, "newSchoolSelected");
                     MessagingCenter.Send(this, "choosenSch", school);
                 }
                 catch (System.Net.WebException exception)

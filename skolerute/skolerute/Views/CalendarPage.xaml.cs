@@ -66,7 +66,7 @@ namespace skolerute.Views
                 favoriteSchoolNames.Remove(args);
                 await SettingsManager.SavePreferenceAsync("" + (favoriteSchools.Find(x => x.name.Contains(args)).ID), false);
                 favoriteSchools.Remove(favoriteSchools.Find(x => x.name.Contains(args)));
-                ResetAllIndicators();
+				DisplayCalendar();
             });
 
         }
@@ -81,10 +81,11 @@ namespace skolerute.Views
                     break;
 
                 case GestureStatus.Completed:
-                    if (translation == 0)
+					//decrease sensitivity
+					if (Math.Round(translation/100) == 0)
                     {
                     }
-                    else if (translation > 0)
+                    else if (translation < 0)
                     {
                         if (current.Month != 6)
                         {

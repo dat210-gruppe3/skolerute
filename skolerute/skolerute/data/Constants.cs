@@ -9,8 +9,8 @@ namespace skolerute.data
         public const int MaximumSelectedSchools = 6;
 
         // CSV Parser 
-		public const string URL = "http://github.com/dat210-gruppe3/skolerute/raw/master/skolerute-2016-17.csv";
-		public const string positionURL = "http://github.com/dat210-gruppe3/skolerute/raw/master/skoler.csv";
+		public const string URL = "https://github.com/danielbarati/test/raw/master/skolerute-2016-17.csv";
+		public const string positionURL = "https://github.com/danielbarati/test/raw/master/skoler.csv";
 
         // Calendar
         public const int ShownCalendarDaysCount = 42;
