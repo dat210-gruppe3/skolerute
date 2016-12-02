@@ -1,94 +1,98 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using skolerute.data;
+using NUnit.Core;
 
 namespace UnitTests.Calendar
 {
     [TestFixture]
-    class MonthToStringTest
+    public class MonthToStringTest
     {
         [Test]
-        public void JanuaryToString()
+        public void JanuaryTest()
         {
             Assert.AreEqual("Januar", skolerute.data.Calendar.MonthToString(1));
         }
 
         [Test]
-        public void FebruaryToString()
+        public void FebuaryTest()
         {
             Assert.AreEqual("Februar", skolerute.data.Calendar.MonthToString(2));
         }
 
         [Test]
-        public void MarsToString()
+        public void MarchTest()
         {
             Assert.AreEqual("Mars", skolerute.data.Calendar.MonthToString(3));
         }
 
         [Test]
-        public void AprilToString()
+        public void AprilTest()
         {
             Assert.AreEqual("April", skolerute.data.Calendar.MonthToString(4));
         }
 
         [Test]
-        public void MayToString()
+        public void MayTest()
         {
-            Assert.AreEqual("Mai", skolerute.data.Calendar.MonthToString(5)); 
-            
+            Assert.AreEqual("Mai", skolerute.data.Calendar.MonthToString(5));
         }
 
         [Test]
-        public void JuneToString()
+        public void JuneTest()
         {
-            Assert.AreEqual("Juni", skolerute.data.Calendar.MonthToString(6)); 
-            
+            Assert.AreEqual("Juni", skolerute.data.Calendar.MonthToString(6));
         }
 
         [Test]
-        public void JulyToString()
+        public void JulyTest()
         {
-            Assert.AreEqual("Juli", skolerute.data.Calendar.MonthToString(7)); 
-            
+            Assert.AreEqual("Juli", skolerute.data.Calendar.MonthToString(7));
         }
 
         [Test]
-        public void AugustToString()
+        public void AugustTest()
         {
-            Assert.AreEqual("August", skolerute.data.Calendar.MonthToString(8)); 
-            
+            Assert.AreEqual("August", skolerute.data.Calendar.MonthToString(8));
         }
 
         [Test]
-        public void SeptemberToString()
+        public void SeptemberTest()
         {
-            Assert.AreEqual("September", skolerute.data.Calendar.MonthToString(9)); 
-            
+            Assert.AreEqual("September", skolerute.data.Calendar.MonthToString(9));
         }
 
         [Test]
-        public void OctoberToString()
+        public void OctoberTest()
         {
-            Assert.AreEqual("Oktober", skolerute.data.Calendar.MonthToString(10)); 
-            
+            Assert.AreEqual("Oktober", skolerute.data.Calendar.MonthToString(10));
         }
 
         [Test]
-        public void NovemberToString()
+        public void NovemberTest()
         {
-            Assert.AreEqual("November", skolerute.data.Calendar.MonthToString(11)); 
-            
+            Assert.AreEqual("November", skolerute.data.Calendar.MonthToString(11));
         }
 
         [Test]
-        public void DecemberToString()
+        public void DecemberTest()
         {
-            Assert.AreEqual("Desember", skolerute.data.Calendar.MonthToString(12)); 
-            
+            Assert.AreEqual("Desember", skolerute.data.Calendar.MonthToString(12));
+        }
+
+        [Test]
+        public void OutOfRangeUpperTest()
+        {
+            Assert.Catch<IndexOutOfRangeException>(() => skolerute.data.Calendar.MonthToString(13));
+        }
+
+        [Test]
+        public void OutOfRangeLowerTest()
+        {
+            Assert.Catch<IndexOutOfRangeException>(() => skolerute.data.Calendar.MonthToString(0));
         }
     }
 }
