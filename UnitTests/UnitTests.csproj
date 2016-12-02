@@ -86,9 +86,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Calendar\GetRelevantFreeDaysTest.cs" />
+    <Compile Include="Calendar\GetAllRelevantCalendarDaysTest.cs" />
+    <Compile Include="Calendar\GetFirstRelevantDateTimeTest.cs" />
+    <Compile Include="Calendar\GetWeekNumberTest.cs" />
+    <Compile Include="Calendar\MonthToStringTest.cs" />
     <Compile Include="StartUpPage\CoordinateDistanceTest.cs" />
-    <Compile Include="Calendar\DayOfWeekTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
