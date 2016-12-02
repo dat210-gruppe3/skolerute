@@ -415,19 +415,19 @@
                         <StackLayout Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalOptions="Center">
                             <BoxView x:Name="box1" BackgroundColor="Lime" Rotation="45" HeightRequest="5" WidthRequest="5" HorizontalOptions="Center"
                                      VerticalOptions="Center"/>
-                          <Picker x:Name="picker1" SelectedIndexChanged="OnSelect"></Picker>
+                          <Picker Title="Velg skole" x:Name="picker1" SelectedIndexChanged="OnSelect"></Picker>
                           <!-- <Label Text="Lenden skole og resusrserser" LineBreakMode="TailTruncation" AutomationId="legendLabel1"/>-->
                         </StackLayout>
                         <StackLayout Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalOptions="Center">
                             <BoxView x:Name="box2" BackgroundColor="Lime" Rotation="45" HeightRequest="5" WidthRequest="5"
                                      HorizontalOptions="Center" VerticalOptions="Center" />
-                          <Picker x:Name="picker2" SelectedIndexChanged="OnSelect"></Picker>
+                          <Picker Title="Velg Skole" x:Name="picker2" SelectedIndexChanged="OnSelect"></Picker>
                           <!--<Label Text="Lenden skole og resusrserser" LineBreakMode="TailTruncation" AutomationId="legendLabel2"/>-->
                         </StackLayout>
                         <StackLayout Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalOptions="Center">
                             <BoxView x:Name="box3" BackgroundColor="Lime" Rotation="45" HeightRequest="5" WidthRequest="5"
                                      HorizontalOptions="Center" VerticalOptions="Center" />
-                          <Picker x:Name="picker3" SelectedIndexChanged="OnSelect"></Picker>
+                          <Picker Title="Velg Skole" x:Name="picker3" SelectedIndexChanged="OnSelect"></Picker>
                           <!--<Label Text="Lenden skole og resusrserser" LineBreakMode="TailTruncation" AutomationId="legendLabel3"/>-->
                         </StackLayout>
                     </Grid>
