@@ -12,44 +12,32 @@ using Android.Locations;
 using Xamarin.Forms;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using skolerute.Views;
 
 [assembly: Xamarin.Forms.Dependency(typeof(skolerute.Droid.GPS.GPSserviceAndroid))]
 namespace skolerute.Droid.GPS
 {
     class GPSserviceAndroid : Java.Lang.Object, IGPSservice
     {
-        public Coordinate GetGpsCoordinates()
+
+        LocationManager mgr = (LocationManager)Forms.Context.GetSystemService(Context.LocationService);
+
+        LocationListener locationListener = new LocationListener();    
+
+        public void ConnectGps()
         {
-            LocationManager mgr = (LocationManager)Forms.Context.GetSystemService(Context.LocationService);
-
-            LocationListener locationListener = new LocationListener();
-
             string bestProvider = mgr.GetBestProvider(new Criteria(), true);
 
-            mgr.RequestSingleUpdate(bestProvider,locationListener,null);
+            mgr.RequestSingleUpdate(bestProvider, locationListener, null);
+        }
 
-            try
-            {   
-                Location location = mgr.GetLastKnownLocation(bestProvider);
+        public Coordinate GetGpsCoordinates()
+        {
+            string bestProvider = mgr.GetBestProvider(new Criteria(), true);
 
-                if (location == null)
-                {
-                    Toast.MakeText(Forms.Context, "Fikk ingen lokasjon, prøv igjen", ToastLength.Short).Show();
-                    return null;
-                }
+            var position = mgr.GetLastKnownLocation(bestProvider);
 
-                if (location.Provider == "network") Toast.MakeText(Forms.Context, "GPS ikke på, oppgitt avstand er tilnærmet", ToastLength.Short).Show();
-
-                return new Coordinate(location.Latitude, location.Longitude);
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.StackTrace);
-                // TODO: Error handling here
-            }
-
-            return null;
+            return new Coordinate(position.Latitude,position.Longitude);
         }
     }
 
@@ -57,27 +45,24 @@ namespace skolerute.Droid.GPS
     {
         public void Dispose()
         {
-            //throw new NotImplementedException();
         }
 
         public void OnLocationChanged(Location location)
         {
-
+            //MessagingCenter.Send(new Coordinate(location.Latitude,location.Longitude), "locationUpdate");
+            MessagingCenter.Send<string>("update","locationUpdate");
         }
 
         public void OnProviderDisabled(string provider)
         {
-            //throw new NotImplementedException();
         }
 
         public void OnProviderEnabled(string provider)
         {
-            //throw new NotImplementedException();
         }
 
         public void OnStatusChanged(string provider, [GeneratedEnum] Availability status, Bundle extras)
         {
-
         }
     }
 }

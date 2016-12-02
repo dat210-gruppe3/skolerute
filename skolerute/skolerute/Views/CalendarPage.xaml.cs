@@ -78,7 +78,43 @@ namespace skolerute.Views
                 SetLegends();
             });
 
+
             SetLegends();
+
+        }
+
+        double translation = 0;
+        void OnPanUpdated(object sender, PanUpdatedEventArgs e)
+        {
+            switch (e.StatusType)
+            {
+                case GestureStatus.Running:
+                    translation = e.TotalX;
+                    break;
+
+                case GestureStatus.Completed:
+                    if (translation == 0)
+                    {
+                    }
+                    else if (translation > 0)
+                    {
+                        if (current.Month != 6)
+                        {
+                            current = current.AddMonths(1);
+                            DisplayCalendar();
+                        }
+                    }
+                    else
+                    {
+                        if (current.Month != 8)
+                        {
+                            current = current.AddMonths(-1);
+                            DisplayCalendar();
+                        }
+                    }
+                    break;
+            }
+
         }
 
         private void SetUpCalendar()
