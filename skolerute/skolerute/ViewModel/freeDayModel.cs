@@ -23,18 +23,19 @@ namespace skolerute
                 //return Convert.ToDateTime(splittedDate[1].Trim());
             }
             return DateTime.Parse(Comment.Trim(), culture, System.Globalization.DateTimeStyles.AssumeLocal);
-            //return Convert.ToDateTime(Comment.Trim());
         }
 
 		public DateTime GetStartDate()
 		{
-			if (Comment.Contains("-"))
-			{
-				string[] splittedDate = Comment.Split('-');
-				return Convert.ToDateTime(splittedDate[0].Trim());
-			}
-			return Convert.ToDateTime(Comment.Trim());
-		}
+            IFormatProvider culture = new System.Globalization.CultureInfo("nb-NO");
+            if (Comment.Contains("-"))
+            {
+                string[] splittedDate = Comment.Split('-');
+                return DateTime.Parse(splittedDate[0].Trim(), culture, System.Globalization.DateTimeStyles.AssumeLocal);
+                //return Convert.ToDateTime(splittedDate[1].Trim());
+            }
+            return DateTime.Parse(Comment.Trim(), culture, System.Globalization.DateTimeStyles.AssumeLocal);
+        }
 
 		public TimeSpan GetDateInterval()
 		{
