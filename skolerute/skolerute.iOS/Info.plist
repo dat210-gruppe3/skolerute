@@ -17,8 +17,6 @@
 	</array>
 	<key>MinimumOSVersion</key>
 	<string>6.0</string>
-	<key>CFBundleDisplayName</key>
-	<string>skolerute</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.yourcompany.skolerute</string>
 	<key>CFBundleVersion</key>
@@ -51,9 +49,9 @@
 	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This application is requesting location data.</string>
-	<key>CFBundleName</key>
-	<string>skolerute</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>Skoleruter vil ha tilgang til dine kalendere</string>
+	<key>CFBundleName</key>
+	<string>Skolerute</string>
 </dict>
 </plist>
