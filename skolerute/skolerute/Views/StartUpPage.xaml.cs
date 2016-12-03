@@ -84,11 +84,11 @@ namespace skolerute.Views
                 if(newWrappedItems == null) { return; }
                 schools.ItemsSource = newWrappedItems;
                 }
-                GetCoords.Text = "Vis alle";
+                GetCoords.Text = "Sorter alfabetisk";
             }
             else
             {
-                GetCoords.Text = "Vis nærmeste";
+                GetCoords.Text = "Sorter etter nærmeste";
                 schools.IsPullToRefreshEnabled = false;
                 foreach (WrappedListItems<School> item in WrappedItems)
                 {
