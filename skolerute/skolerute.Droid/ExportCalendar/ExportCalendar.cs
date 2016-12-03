@@ -125,6 +125,9 @@ namespace skolerute.Droid.ExportCalendar
 
                     // HACK: To avoid deleting all events in a calendar we check for a string that will always be in the title
                     // for our calendar events
+
+                    if (currentTitle == null) return;
+
                     if (currentTitle.Contains("- Skolerute"))
                     {
                         Forms.Context.ContentResolver.Delete(ContentUris.WithAppendedId(eventsUri, currentId), null, null);
