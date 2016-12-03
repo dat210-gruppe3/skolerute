@@ -22,7 +22,7 @@
       <SearchBar x:Name="searchSchool" Placeholder="Søk etter skoler" TextChanged="TextChanged" SearchButtonPressed="TextChanged"
                  AutomationId="schoolSearchField"/>
       <ActivityIndicator x:Name="loadingNearbySchools" IsVisible="false" Color="Gray"></ActivityIndicator>
-        <ListView x:Name="schools" SeparatorVisibility="None" ItemSelected="OnSelection" IsPullToRefreshEnabled="true" Refreshing="PullRefresher"
+        <ListView x:Name="schools" SeparatorVisibility="None" ItemSelected="OnSelection" IsPullToRefreshEnabled="false" Refreshing="PullRefresher"
                   AutomationId="allSchoolsList">
             <ListView.ItemTemplate>
                 <DataTemplate>
