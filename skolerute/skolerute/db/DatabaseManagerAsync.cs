@@ -87,6 +87,22 @@ namespace skolerute.db
         {
             await connection.InsertOrReplaceWithChildrenAsync(obj);
         }
+
+		public async Task DropSchools()
+		{
+			await connection.DropTableAsync<School>();
+		}
+
+		public async Task DropCalendars()
+		{
+			await connection.DropTableAsync<CalendarDay>();
+		}
+
+		public async Task DropAll()
+		{
+			await DropSchools();
+			await DropCalendars();
+		}
     }
 }
 

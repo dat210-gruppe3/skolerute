@@ -2,6 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using Xamarin.Forms;
+using skolerute.data;
+
 namespace skolerute.notifications
 {
 	public class NotificationUtils
@@ -10,14 +12,13 @@ namespace skolerute.notifications
 		{
 		}
 
-		public static void SendNotifications(ObservableCollection<GroupedFreeDayModel> freeDayGroups, int daysBeforeNotification)
+		public static void SendNotifications(List<School> favoriteSchools)
 		{
-			List<DateTime> startDateList = new List<DateTime>();
+			ObservableCollection<GroupedFreeDayModel> freeDayGroups = Calendar.AddSchoolToList(favoriteSchools);
 			foreach (var item in freeDayGroups)
 			{
-				//startDateList.Add(item[0].GetStartDate());
 				string text = "Det nærmer seg fri for ";
-				text += item.Count == 1 ? " alle favorittskoler." : item.Count + " skoler.";
+				text += item.Count == 1 ? "alle favorittskoler." : item.Count + " skoler.";
 
 				DateTime startDate = DateTime.MaxValue;
 				foreach (var school in item)
@@ -26,7 +27,7 @@ namespace skolerute.notifications
 				}
 				startDate = startDate.AddHours(12);
 				if (startDate < DateTime.Now) continue;
-				DateTime dateOfnotification = startDate.AddDays(-daysBeforeNotification);
+				DateTime dateOfnotification = startDate.AddDays(-7);
 				DependencyService.Get<INotification>().SendCalendarNotification("Skolerute", text, dateOfnotification);
 			}
 		}
