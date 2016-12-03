@@ -9,6 +9,8 @@ using System.Globalization;
 using skolerute.ExportCalendar;
 using skolerute.utils;
 using Calendar = skolerute.data.Calendar;
+using skolerute.notifications;
+
 
 namespace skolerute.Views
 {
@@ -65,6 +67,9 @@ namespace skolerute.Views
                     LoadingIndicator.IsVisible = isLoading;
                     NextImg.IsEnabled = !isLoading;
                     PrevImg.IsEnabled = !isLoading;
+
+					DependencyService.Get<INotification>().RemoveCalendarNotification();
+					NotificationUtils.SendNotifications(favoriteSchools);
                 }
 			});
 
@@ -74,8 +79,13 @@ namespace skolerute.Views
                 favoriteSchoolNames.Remove(args);
                 await SettingsManager.SavePreferenceAsync("" + (favoriteSchools.Find(x => x.name.Contains(args)).ID), false);
                 favoriteSchools.Remove(favoriteSchools.Find(x => x.name.Contains(args)));
-                ResetAllIndicators();
+
+				DisplayCalendar();
+                //ResetAllIndicators();
                 SetLegends();
+
+				DependencyService.Get<INotification>().RemoveCalendarNotification();
+				NotificationUtils.SendNotifications(favoriteSchools);
             });
 
 
@@ -93,10 +103,11 @@ namespace skolerute.Views
                     break;
 
                 case GestureStatus.Completed:
-                    if (translation == 0)
+					//decrease sensitivity
+					if (Math.Round(translation/100) == 0)
                     {
                     }
-                    else if (translation > 0)
+                    else if (translation < 0)
                     {
                         if (current.Month != 6)
                         {

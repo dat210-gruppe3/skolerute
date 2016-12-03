@@ -17,7 +17,7 @@
                 <StackLayout Padding="0" Spacing="0" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                              AbsoluteLayout.LayoutFlags="All">
                     <Label x:Name="YearLabel" Font="5" WidthRequest="110" Text="År" FontSize="Large"
-                           HorizontalOptions="Center"
+                           HorizontalOptions="Center" 
                            HorizontalTextAlignment="Center" VerticalTextAlignment="Center" AutomationId="yearLabel" />
 
                     <!--ImageButtons to iterate forward or backward by months-->
@@ -72,7 +72,7 @@
 
                             <!-- weekdays -->
                             <StackLayout Grid.Row="0" Grid.Column="0">
-                                <Label Text="Uke" HorizontalTextAlignment="Center" Opacity="0.5" />
+                                <Label Text="U" HorizontalTextAlignment="Center" Opacity="0.5" />
                             </StackLayout>
                             <StackLayout Grid.Row="0" Grid.Column="1">
                                 <Label Text="Man" HorizontalTextAlignment="Center" />

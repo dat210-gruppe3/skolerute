@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using skolerute.GPS;
 using Xamarin.Forms;
 
+
 namespace skolerute.Views
 {
     public partial class StartUpPage : ContentPage
@@ -44,7 +45,7 @@ namespace skolerute.Views
 
             MessagingCenter.Subscribe<string>(this, "locationUpdate", (sender) =>
             {
-                DisableNearbySchoolsActivityIndicator();
+                NearbySchoolsActivityIndicator(false);
                 schools.ItemsSource = GPS.GPSservice.GetNearbySchools(WrappedItems);
             });
 
@@ -56,10 +57,7 @@ namespace skolerute.Views
         {
             if (GetCoords.Text != "Vis nærmeste")
             {
-                if (Device.OS == TargetPlatform.Android)
-                {
-                    DependencyService.Get<GPS.IGPSservice>().ConnectGps();
-                }
+                if (Device.OS == TargetPlatform.Android) DependencyService.Get<GPS.IGPSservice>().ConnectGps();
 
                 else
                 {
@@ -78,10 +76,11 @@ namespace skolerute.Views
             //to school positions and displays these schools in the GUI school list.
 
             if (GetCoords.Text == "Vis nærmeste")
+
             {			
                 if (Device.OS == TargetPlatform.Android)
                 {
-                    EnableNearbySchoolsActivityIndicator();
+                    NearbySchoolsActivityIndicator(true);
                     DependencyService.Get<GPS.IGPSservice>().ConnectGps();
                 }
                 else
@@ -90,6 +89,7 @@ namespace skolerute.Views
                 if(newWrappedItems == null) { return; }
                 schools.ItemsSource = newWrappedItems;
                 }
+
                 GetCoords.Text = "Vis alle";
             }
             else
@@ -216,30 +216,30 @@ namespace skolerute.Views
                 MessagingCenter.Send<StartUpPage, string>(this, "deleteSch", chSchool.Item.name);
             } else
             {
-                chSchool.IsChecked = true;
-                chSchool.UnChecked = false;
+				
+				try {
+					chSchool.IsChecked = true;
+					chSchool.UnChecked = false;
 
-                if (SettingsManager.GetPreference("i") == null)
-                {
-                    await SettingsManager.SavePreferenceAsync("i", true);
-                    foreach (School x in WrappedItems.Select(item => item.Item).ToList())
-                    {
-                        await SettingsManager.SavePreferenceAsync(x.ID.ToString(), false);
-                    }
-                    await SettingsManager.SavePreferenceAsync(school.ID.ToString(), true);
-                }
-                else
-                {
-                    await SettingsManager.SavePreferenceAsync(school.ID.ToString(), true);
-                }
+					db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
+					db.CSVParser parser = new db.CSVParser(Constants.URL, database);
+					await parser.RetrieveCalendar(school);
 
-                MessagingCenter.Send(this, "newSchoolSelected");
-                db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
-                db.CSVParser parser = new db.CSVParser(Constants.URL, database);
+	                if (SettingsManager.GetPreference("i") == null)
+	                {
+	                    await SettingsManager.SavePreferenceAsync("i", true);
+	                    foreach (School x in WrappedItems.Select(item => item.Item).ToList())
+	                    {
+	                        await SettingsManager.SavePreferenceAsync(x.ID.ToString(), false);
+	                    }
+	                    await SettingsManager.SavePreferenceAsync(school.ID.ToString(), true);
+	                }
+	                else
+	                {
+	                    await SettingsManager.SavePreferenceAsync(school.ID.ToString(), true);
+	                }
 
-                try
-                {
-                    await parser.RetrieveCalendar(school);
+	                MessagingCenter.Send(this, "newSchoolSelected");
                     MessagingCenter.Send(this, "choosenSch", school);
                 }
                 catch (System.Net.WebException exception)
@@ -271,19 +271,12 @@ namespace skolerute.Views
             return list;
         }
 
-        private void EnableNearbySchoolsActivityIndicator()
+        private void NearbySchoolsActivityIndicator(bool state)
         {
-            schools.IsVisible = false;
-            loadingNearbySchools.IsVisible = true;
-            loadingNearbySchools.IsRunning = true;
-        }
-
-        private void DisableNearbySchoolsActivityIndicator()
-        {
-            loadingNearbySchools.IsVisible = false;
-            loadingNearbySchools.IsRunning = false;
-            schools.IsVisible = true;
-            schools.IsRefreshing = false;
+            loadingNearbySchools.IsVisible = state;
+            loadingNearbySchools.IsRunning = state;
+            schools.IsVisible = !state;
+            schools.IsRefreshing = state;
         }
     }
 }

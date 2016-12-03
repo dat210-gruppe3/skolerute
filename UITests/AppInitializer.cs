@@ -19,6 +19,7 @@ namespace UITests
 
             return ConfigureApp
                 .iOS
+				//.EnableLocalScreenshots() //ERROR: access to path is denied
                 .StartApp();
         }
     }

@@ -7,5 +7,4 @@
 	<local:StartUpPage/>
   <local:CalendarPage/>
 	<local:ListPage/>
-  <local:SettingsPage/>
 </TabbedPage>
