@@ -103,6 +103,7 @@ namespace skolerute.db
 			await DropSchools();
 			await DropCalendars();
 		}
+
     }
 }
 

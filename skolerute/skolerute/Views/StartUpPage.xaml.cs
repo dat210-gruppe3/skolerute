@@ -217,6 +217,11 @@ namespace skolerute.Views
 					db.CSVParser parser = new db.CSVParser(Constants.URL, database);
 					await parser.RetrieveCalendar(school);
 
+					if (school.calendar.Count() < 365) 
+					{
+						throw new System.Net.WebException();
+					}
+
 					if (SettingsManager.GetPreference("i") == null)
 					{
 						await SettingsManager.SavePreferenceAsync("i", true);
@@ -236,6 +241,10 @@ namespace skolerute.Views
 				}
 				catch (System.Net.WebException exception)
 				{
+					chSchool.IsChecked = false;
+					chSchool.UnChecked = true;
+					db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
+					await database.DeleteSchool(school.ID);
 					await DisplayAlert("Problem med internett", "Kunne ikke laste ned skoleruten, prøv igjen senere", "Ok");
 				}
 			}
