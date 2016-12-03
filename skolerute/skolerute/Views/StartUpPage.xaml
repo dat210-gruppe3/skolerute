@@ -31,9 +31,8 @@
                       <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="30" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/> 
                       </Grid.ColumnDefinitions>
-                      <!-- TODO replace placeholder image -->
                       <Image Grid.Column="0" Source="{extensions:ImageResource skolerute.Resources.checkbox.png}" 
                              Margin="5" IsVisible="{Binding IsChecked}" />
                       <Image Grid.Column="0" Source="{extensions:ImageResource skolerute.Resources.box1.png}" 

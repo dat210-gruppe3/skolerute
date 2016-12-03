@@ -80,9 +80,10 @@ namespace skolerute.Views
                 await SettingsManager.SavePreferenceAsync("" + (favoriteSchools.Find(x => x.name.Contains(args)).ID), false);
                 favoriteSchools.Remove(favoriteSchools.Find(x => x.name.Contains(args)));
 
-				DisplayCalendar();
-                //ResetAllIndicators();
                 SetLegends();
+                DisplayCalendar();
+                //ResetAllIndicators();
+
 
 				DependencyService.Get<INotification>().RemoveCalendarNotification();
 				NotificationUtils.SendNotifications(favoriteSchools);
@@ -154,9 +155,9 @@ namespace skolerute.Views
         {
             SetUpCalendar();
             UpdateCalendarControls();
+            ResetAllIndicators();
             if (selectedSchools != null && selectedSchools.Count != 0)
-            {
-                ResetAllIndicators();
+            {    
                 UpdateIndicators();
             }        
         }
