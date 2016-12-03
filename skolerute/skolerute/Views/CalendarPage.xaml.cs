@@ -52,41 +52,45 @@ namespace skolerute.Views
             
             MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
 			{
+				lock (favoriteSchools) {
+					if (!favoriteSchoolNames.Contains(args.name))
+					{
+						favoriteSchools.Add(args);
+						favoriteSchoolNames.Add(args.name);
 
-                if (!favoriteSchoolNames.Contains(args.name))
-                {
-                    favoriteSchools.Add(args);
-                    favoriteSchoolNames.Add(args.name);
+						DisplayCalendar();
+						SetLegends();
 
-                    DisplayCalendar();
-                    SetLegends();
+						//TODO: Make this binding for better reusability
+						isLoading = false;
+						LoadingIndicator.IsRunning = isLoading;
+						LoadingIndicator.IsVisible = isLoading;
+						NextImg.IsEnabled = !isLoading;
+						PrevImg.IsEnabled = !isLoading;
 
-                    //TODO: Make this binding for better reusability
-                    isLoading = false;
-                    LoadingIndicator.IsRunning = isLoading;
-                    LoadingIndicator.IsVisible = isLoading;
-                    NextImg.IsEnabled = !isLoading;
-                    PrevImg.IsEnabled = !isLoading;
-
-					DependencyService.Get<INotification>().RemoveCalendarNotification();
-					NotificationUtils.SendNotifications(favoriteSchools);
-                }
+						DependencyService.Get<INotification>().RemoveCalendarNotification();
+						NotificationUtils.SendNotifications(favoriteSchools);
+					}
+				}
 			});
 
 
-            MessagingCenter.Subscribe<StartUpPage, string>(this, "deleteSch", async(sender, args) =>
+            MessagingCenter.Subscribe<StartUpPage, string>(this, "deleteSch", /*async*/(sender, args) =>
             {
-                favoriteSchoolNames.Remove(args);
-                await SettingsManager.SavePreferenceAsync("" + (favoriteSchools.Find(x => x.name.Contains(args)).ID), false);
-                favoriteSchools.Remove(favoriteSchools.Find(x => x.name.Contains(args)));
+				lock (favoriteSchools)
+				{
+					favoriteSchoolNames.Remove(args);
+					//await SettingsManager.SavePreferenceAsync("" + (favoriteSchools.Find(x => x.name.Contains(args)).ID), false);
+					favoriteSchools.Remove(favoriteSchools.Find(x => x.name.Contains(args)));
 
-                SetLegends();
-                DisplayCalendar();
-                //ResetAllIndicators();
+					SetLegends();
+					DisplayCalendar();
+					//ResetAllIndicators();
 
 
-				DependencyService.Get<INotification>().RemoveCalendarNotification();
-				NotificationUtils.SendNotifications(favoriteSchools);
+					DependencyService.Get<INotification>().RemoveCalendarNotification();
+					NotificationUtils.SendNotifications(favoriteSchools);
+				}
             });
 
 
@@ -200,7 +204,7 @@ namespace skolerute.Views
         private Color GetCorrectColor(int i)
         {
             var children = Legend.Children;
-            if (i < 0 || i >= selectedSchools.Count) return Color.Fuchsia;
+			if (i < 0 || i >= selectedSchools.Count) return Color.Transparent;
             foreach (StackLayout child in children)
             {
                 Picker picker = (Picker)child.Children.Last();
@@ -208,7 +212,7 @@ namespace skolerute.Views
                 if (selectedSchools[i].name == picker.Items[picker.SelectedIndex])
                     return child.Children.First().BackgroundColor;
             }
-            return Color.Fuchsia;
+			return Color.Transparent;
         }
 
 
@@ -252,27 +256,25 @@ namespace skolerute.Views
             }
         }
 
-        private async void OnSelect(object o, EventArgs e)
-        {
-            if (0 > ((Picker) o).SelectedIndex) return;
-            selectedSchools = new List<School>();
-            foreach (var school in favoriteSchools)
-            {
-                int i = 0;
-                foreach (var picker in pickers)
-                {
-                    if (picker.SelectedIndex >= 0)
-                    {
-                        if (picker.SelectedIndex < picker.Items.Count &&
-                            school.name == picker.Items[picker.SelectedIndex])
-                        {
-                            await SettingsManager.SavePreferenceAsync("picker" + i, school.name);
-                            selectedSchools.Add(school);
-                        }
-                    }
-                    i++;
-                }
-            }
+		private async void OnSelect(object o, EventArgs e)
+		{
+			if (0 > ((Picker)o).SelectedIndex) return;
+			selectedSchools = new List<School>();
+				foreach (var school in favoriteSchools)
+				{
+					int i = 0;
+					foreach (var picker in pickers)
+					{
+						if (picker.SelectedIndex >= 0)
+						{
+							if (school.name == picker.Items[picker.SelectedIndex])
+							{
+								selectedSchools.Add(school);
+							}
+						}
+						i++;
+					}
+				}
             DisplayCalendar();
         }
 

@@ -192,19 +192,9 @@ namespace skolerute.Views
 			string skolenavn = "";
 			School school = null;
 
-			if ((e.SelectedItem).GetType() == typeof(string))
-			{
-				skolenavn = (string)(e.SelectedItem);
-				int index = skolenavn.IndexOf(':');
-				skolenavn = skolenavn.Remove(index, (skolenavn.Length) - index);
-				school = WrappedItems.Find(y => y.Item.name == skolenavn).Item;
-			}
-			else
-			{
-				WrappedListItems<School> item = (WrappedListItems<School>)e.SelectedItem;
-				school = item.Item;
-				skolenavn = school.name;
-			}
+			WrappedListItems<School> selectedSch = (WrappedListItems<School>)e.SelectedItem;
+			school = selectedSch.Item;
+			skolenavn = school.name;
 
 			// Get calendar for chosen school
 			WrappedListItems<School> chSchool = WrappedItems.Find(item => item.Item.name == skolenavn);
@@ -212,6 +202,7 @@ namespace skolerute.Views
 			{
 				chSchool.IsChecked = false;
 				chSchool.UnChecked = true;
+				await SettingsManager.SavePreferenceAsync("" + chSchool.Item.ID, false);
 				MessagingCenter.Send<StartUpPage, string>(this, "deleteSch", chSchool.Item.name);
 			}
 			else
