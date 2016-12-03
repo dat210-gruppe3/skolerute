@@ -247,11 +247,10 @@ namespace skolerute.Views
             foreach (var picker in pickers)
             {
                 string pickername = "picker" + i;
-                var preferred = SettingsManager.GetPreference(pickername);
+                string preferred = (string)SettingsManager.GetPreference(pickername);
                 if (preferred != null && (string)preferred != "ignore")
                 {
                     picker.SelectedIndex = picker.Items.IndexOf(preferred);
-
                 }
                 i++;
             }
