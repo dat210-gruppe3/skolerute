@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="skolerute.Views.StartUpPage"
+             xmlns:extensions="clr-namespace:skolerute.Extensions;assembly=skolerute"
              Title="Hovedside"
              Icon="search.png">
 	<ContentPage.Padding>
@@ -33,9 +34,9 @@
                         <ColumnDefinition Width="*"/>
                       </Grid.ColumnDefinitions>
                       <!-- TODO replace placeholder image -->
-                      <Image Grid.Column="0" Source="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Check_Box_Noun_project_10759.svg/200px-Check_Box_Noun_project_10759.svg.png" 
+                      <Image Grid.Column="0" Source="{extensions:ImageResource skolerute.Resources.checkbox.png}" 
                              Margin="5" IsVisible="{Binding IsChecked}" />
-                      <Image Grid.Column="0" Source="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Ic_check_box_outline_blank_48px.svg/200px-Ic_check_box_outline_blank_48px.svg.png" 
+                      <Image Grid.Column="0" Source="{extensions:ImageResource skolerute.Resources.box1.png}" 
                              Margin="5" IsVisible="{Binding UnChecked}" />
                       <Label Grid.Column="1" Margin="5" Text="{Binding Item.name}" />
                       <Label Grid.Column="2" Margin="5" Text="{Binding Distance}" IsVisible="{Binding DistanceVisible}" />
