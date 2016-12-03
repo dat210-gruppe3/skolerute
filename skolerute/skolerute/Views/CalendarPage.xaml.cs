@@ -269,7 +269,8 @@ namespace skolerute.Views
 						{
 							if (school.name == picker.Items[picker.SelectedIndex])
 							{
-								selectedSchools.Add(school);
+                                await SettingsManager.SavePreferenceAsync("picker"+i, school.name);
+                                selectedSchools.Add(school);
 							}
 						}
 						i++;

@@ -9,7 +9,6 @@ namespace skolerute.Droid.notifications
 {
     public class AndroidReminderSercvice : INotification 
     {
-
         public void SendCalendarNotification(string title, string description, DateTime triggerTime)
         {
             Intent alarmIntent = new Intent(Forms.Context, typeof(AlarmReciever));
@@ -19,8 +18,9 @@ namespace skolerute.Droid.notifications
             PendingIntent pendingIntent = PendingIntent.GetBroadcast(Forms.Context, 0, alarmIntent, PendingIntentFlags.CancelCurrent);
             AlarmManager alarmManager = (AlarmManager)Forms.Context.GetSystemService(Context.AlarmService);
 
-            // TODO: Set trigger time to the input trigger time, this is a demo which triggers after 5 seconds
-            alarmManager.Set(AlarmType.ElapsedRealtime, SystemClock.ElapsedRealtime() + 10 * 1000, pendingIntent);
+            long millis = (long)(triggerTime - DateTime.Now).TotalMilliseconds;
+            long futureInMillis = SystemClock.ElapsedRealtime() + millis;
+            alarmManager.Set(AlarmType.ElapsedRealtime, futureInMillis, pendingIntent);
         }
 
 		public void RemoveCalendarNotification()
