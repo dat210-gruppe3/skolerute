@@ -87,7 +87,7 @@ namespace skolerute.data
                     //Handle uncommented freedays
                     else if (skole.calendar[i].IsFreeDay && skole.calendar[i].Comment == "")
                     {
-                        FreeDayGroup = new GroupedFreeDayModel() { LongName = "Fri", ShortName = "" };
+                        FreeDayGroup = new GroupedFreeDayModel() { LongName = "Fri", ShortName = "", Date = skole.calendar[i].Date };
                     }
                     //Handle other types of freedays
                     else if (skole.calendar[i].IsFreeDay)
