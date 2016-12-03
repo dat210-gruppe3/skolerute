@@ -72,7 +72,7 @@
 
                             <!-- weekdays -->
                             <StackLayout Grid.Row="0" Grid.Column="0">
-                                <Label Text="Uke" HorizontalTextAlignment="Center" Opacity="0.5" LineBreakMode="NoWrap" />
+                                <Label Text="Uke" HorizontalTextAlignment="Center" Opacity="0.5" LineBreakMode="NoWrap"/>
                             </StackLayout>
                             <StackLayout Grid.Row="0" Grid.Column="1">
                                 <Label Text="Man" HorizontalTextAlignment="Center" />
