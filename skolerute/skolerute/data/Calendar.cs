@@ -67,11 +67,15 @@ namespace skolerute.data
                     bool singleDay = false;
                     bool startSummer = false;
                     bool endSummer = false;
+					string holidayName = "";
+					if(skole.calendar[i].Comment != "") {
+                    	holidayName = skole.calendar[i].Comment[0].ToString().ToUpper() + skole.calendar[i].Comment.Remove(0, 1);
+					}
 
                     //Start of calendar is in the second half of the summer vacation
                     if (i == 0) {
                         endSummer = true;
-                        FreeDayGroup = new GroupedFreeDayModel() { LongName = "Slutten av sommerferien", ShortName = "" };
+                        FreeDayGroup = new GroupedFreeDayModel() { LongName = "Siste dag i sommerferien", ShortName = "" };
                     }
                     //Ignore weekends
                     else if (skole.calendar[i].Date.DayOfWeek == System.DayOfWeek.Saturday || skole.calendar[i].Date.DayOfWeek == System.DayOfWeek.Sunday)
@@ -81,18 +85,17 @@ namespace skolerute.data
                     //Handle vacations
                     else if (skole.calendar[i].Comment.Substring(Math.Max(0, skole.calendar[i].Comment.Length - 5)) == "ferie")
                     {
-                        FreeDayGroup = new GroupedFreeDayModel() { LongName = skole.calendar[i].Comment, ShortName = "" };
+                        FreeDayGroup = new GroupedFreeDayModel() { LongName = holidayName.Trim(), ShortName = "" };
                     }
                     //Handle uncommented freedays
                     else if (skole.calendar[i].IsFreeDay && skole.calendar[i].Comment == "")
                     {
-                        FreeDayGroup = new GroupedFreeDayModel() { LongName = "Fri", ShortName = "" };
-                        //singleDay = true;
+						FreeDayGroup = new GroupedFreeDayModel() { LongName = "Fri", ShortName = "" };
                     }
                     //Handle other types of freedays
                     else if (skole.calendar[i].IsFreeDay)
                     {
-                        FreeDayGroup = new GroupedFreeDayModel() { LongName = skole.calendar[i].Comment, ShortName = "", Date = skole.calendar[i].Date };
+                        FreeDayGroup = new GroupedFreeDayModel() { LongName = holidayName.Trim(), ShortName = "", Date = skole.calendar[i].Date };
                         singleDay = true;
                     }
 
@@ -165,27 +168,6 @@ namespace skolerute.data
                     }
                 }
             }
-			/*
-            for (int i = 0; i < grouped.Count; i++)
-            {
-                //Check if current freeperiod is not the same for all schools
-                if (grouped[i].Any(o => o.Comment != grouped[i][0].Comment))
-                {
-                    continue;
-                }
-                string tempDate = grouped[i][0].Comment;
-                grouped[i].Clear();
-
-                FreeDayModel model = new FreeDayModel() { Name = "Alle valgte skoler", Comment = tempDate };
-
-                // Turn text grey if the holiday done
-                if (model.GetEndDate() < today)
-                {
-                    model.TextColor = "#808080";
-                }
-
-                grouped[i].Add(model);
-            }*/
             grouped = grouped.OrderBy(o => o[0].GetStartDate()).ToList();
             return new ObservableCollection<GroupedFreeDayModel>(grouped);
             //return grouped;

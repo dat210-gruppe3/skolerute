@@ -112,7 +112,7 @@ namespace skolerute.Views
 
                 case GestureStatus.Completed:
 					//decrease sensitivity
-					if (Math.Round(translation/100) == 0)
+					if (Math.Round(translation) == 0)
                     {
                     }
                     else if (translation < 0)
@@ -273,8 +273,7 @@ namespace skolerute.Views
 							await SettingsManager.SavePreferenceAsync("picker" + i, school.name);
 						    selectedSchools.Add(school);
 						}
-					}
-					
+					}			
 				}
                 i++;
             }
