@@ -21,6 +21,7 @@ namespace skolerute.GPS
                 School x = item.Item;
                 item.DistanceVisible = true;
                 item.Distance = gpsCoordinates.HaversineDistance(x.latitude, x.longitude);
+                item.Distance = Math.Round(item.Distance, 1);
             }
 
             List<WrappedListItems<School>> newWrappedItems = WrappedItems.OrderBy(o => o.Distance).ToList();

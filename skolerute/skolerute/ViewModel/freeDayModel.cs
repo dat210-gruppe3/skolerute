@@ -25,8 +25,8 @@ namespace skolerute
             return DateTime.Parse(Comment.Trim(), culture, System.Globalization.DateTimeStyles.AssumeLocal);
         }
 
-		public DateTime GetStartDate()
-		{
+        public DateTime GetStartDate()
+        {
             IFormatProvider culture = new System.Globalization.CultureInfo("nb-NO");
             if (Comment.Contains("-"))
             {
@@ -37,7 +37,7 @@ namespace skolerute
             return DateTime.Parse(Comment.Trim(), culture, System.Globalization.DateTimeStyles.AssumeLocal);
         }
 
-		public TimeSpan GetDateInterval()
+        public TimeSpan GetDateInterval()
 		{
 			return GetEndDate().Subtract(GetStartDate());
 		}
@@ -48,6 +48,6 @@ namespace skolerute
 	{
 		public string LongName { get; set; }
 		public string ShortName { get; set; }
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
 	}
 }
