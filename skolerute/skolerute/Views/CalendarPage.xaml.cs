@@ -226,6 +226,7 @@ namespace skolerute.Views
         private void SetPickers()
         {
             //Clear pickers and add fresh list of schools
+            if (favoriteSchools.Count == 0 || favoriteSchools == null) selectedSchools.Clear();
             foreach (var picker in pickers)
             {
                 picker.Items.Clear();
