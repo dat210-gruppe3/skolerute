@@ -240,12 +240,10 @@ namespace skolerute.Views
 					MessagingCenter.Send(this, "newSchoolSelected");
 					MessagingCenter.Send(this, "choosenSch", school);
 				}
-				catch (System.Net.WebException exception)
+				catch (Exception exception)
 				{
 					chSchool.IsChecked = false;
 					chSchool.UnChecked = true;
-					db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
-					await database.DeleteSchool(school.ID);
 					await DisplayAlert("Problem med internett", "Kunne ikke laste ned skoleruten, prøv igjen senere", "Ok");
 				}
 			}

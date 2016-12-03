@@ -165,7 +165,7 @@ namespace skolerute.data
                     }
                 }
             }
-
+			/*
             for (int i = 0; i < grouped.Count; i++)
             {
                 //Check if current freeperiod is not the same for all schools
@@ -185,7 +185,7 @@ namespace skolerute.data
                 }
 
                 grouped[i].Add(model);
-            }
+            }*/
             grouped = grouped.OrderBy(o => o[0].GetStartDate()).ToList();
             return new ObservableCollection<GroupedFreeDayModel>(grouped);
             //return grouped;

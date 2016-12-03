@@ -38,7 +38,7 @@
                       <Image Grid.Column="0" Source="{extensions:ImageResource skolerute.Resources.checkboxfalse.png}" 
                              Margin="5" IsVisible="{Binding UnChecked}" />
                       <Label Grid.Column="1" Margin="5" Text="{Binding Item.name}" />
-                      <Label Grid.Column="2" Margin="5" Text="{Binding Distance, StringFormat='{0} km'} " IsVisible="{Binding DistanceVisible}" />
+                      <Label Grid.Column="2" Margin="5" Text="{Binding Distance, StringFormat='{0} km'} " IsVisible="{Binding DistanceVisible}" XAlign="End"/>
                     </Grid>
                   </ViewCell>       
                 </DataTemplate>

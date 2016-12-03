@@ -7,6 +7,7 @@ using System.Net;
 using System.Threading.Tasks;
 using skolerute.data;
 using SQLiteNetExtensions.Extensions;
+using System.Threading;
 
 namespace skolerute.db
 {
