@@ -14,10 +14,10 @@ namespace skolerute.Views
 {
     public partial class CalendarPage : ContentPage
     {
-        static DateTime current;
-        static List<School> favoriteSchools;
-        private static List<School> selectedSchools;
-        private static List<Picker> pickers;
+        private DateTime current;
+        private List<School> favoriteSchools;
+        private List<School> selectedSchools;
+        private List<Picker> pickers;
 
         public bool isLoading;
 
