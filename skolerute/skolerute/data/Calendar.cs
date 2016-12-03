@@ -11,7 +11,7 @@ namespace skolerute.data
         public static DateTime GetFirstRelevantDateTime(DateTime selectedDate)
         {
             DateTime firstDateInMonth = new DateTime(selectedDate.Year, selectedDate.Month, 1);
-            
+
             // Need this special case because the weeks start on Sunday in America 
             if (firstDateInMonth.DayOfWeek == DayOfWeek.Sunday) return firstDateInMonth.AddDays(-6);
 
@@ -20,9 +20,9 @@ namespace skolerute.data
 
         public static List<List<CalendarDay>> GetAllRelevantCalendarDays(List<School> schools, DateTime selectedDate)
         {
-            if(schools == null || schools.Count == 0 || schools.First() == null) return null;
+            if (schools == null || schools.Count == 0 || schools.First() == null) return null;
             DateTime startDate = GetFirstRelevantDateTime(selectedDate);
-            
+
             int startIndex = schools.First().calendar.FindIndex(day => day.Date.DayOfYear == startDate.DayOfYear);
 
             List<List<CalendarDay>> schoolsCalendarList = new List<List<CalendarDay>>();
@@ -54,96 +54,91 @@ namespace skolerute.data
 
         public static ObservableCollection<GroupedFreeDayModel> AddSchoolToList(List<School> skoler)
         {
-            GroupedFreeDayModel FreeDayGroup = null;
-            ObservableCollection<GroupedFreeDayModel> grouped = new ObservableCollection<GroupedFreeDayModel>();
-            string dateInterval = "";
+            List<GroupedFreeDayModel> grouped = new List<GroupedFreeDayModel>();
             DateTime today = DateTime.Now;
 
             foreach (School skole in skoler)
             {
                 for (int i = 0; i < skole.calendar.Count; i++)
                 {
-                    CalendarDay currentDay = skole.calendar[i];
-                    FreeDayGroup = null;
+                    GroupedFreeDayModel FreeDayGroup = null;
+                    DateTime startDate = skole.calendar[i].Date;
+                    string dateInterval = "";
+                    bool singleDay = false;
+                    bool startSummer = false;
+                    bool endSummer = false;
+
+                    //Start of calendar is in the second half of the summer vacation
+                    if (i == 0) {
+                        endSummer = true;
+                        FreeDayGroup = new GroupedFreeDayModel() { LongName = "Slutten av sommerferien", ShortName = "" };
+                    }
                     //Ignore weekends
-                    if (skole.calendar[i].Date.DayOfWeek == System.DayOfWeek.Saturday || skole.calendar[i].Date.DayOfWeek == System.DayOfWeek.Sunday)
+                    else if (skole.calendar[i].Date.DayOfWeek == System.DayOfWeek.Saturday || skole.calendar[i].Date.DayOfWeek == System.DayOfWeek.Sunday)
                     {
-                        i++;
+                        continue;
                     }
                     //Handle vacations
-                    else if (currentDay.Comment.Substring(Math.Max(0, currentDay.Comment.Length - 5)) == "ferie")
+                    else if (skole.calendar[i].Comment.Substring(Math.Max(0, skole.calendar[i].Comment.Length - 5)) == "ferie")
                     {
-                        FreeDayGroup = new GroupedFreeDayModel() { LongName = currentDay.Comment, ShortName = "" };
-                        DateTime startDate = skole.calendar[i].Date;
-
-                        if (i + 1 < skole.calendar.Count)
-                        {
-                            while (skole.calendar[i].IsFreeDay)
-                            {
-                                i++;
-
-                                if (i >= skole.calendar.Count - 1)
-                                {
-                                    break;
-                                }
-                            }
-                        }
-
-                        DateTime endDate = skole.calendar[i].Date;
-                        dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year
-                            + " - " + endDate.Day + "/" + endDate.Month + "/" + endDate.Year;
-                        //dateInterval = startDate.ToString("dd/MM/yy") + " - " + endDate.ToString("dd/MM/yy");
+                        FreeDayGroup = new GroupedFreeDayModel() { LongName = skole.calendar[i].Comment, ShortName = "" };
                     }
-                    //Handle summer vacation
+                    //Handle uncommented freedays
                     else if (skole.calendar[i].IsFreeDay && skole.calendar[i].Comment == "")
                     {
-                        FreeDayGroup = new GroupedFreeDayModel() { LongName = "Sommerferie", ShortName = "" };
-                        DateTime startDate = skole.calendar[i].Date;
-
-                        if (i + 1 < skole.calendar.Count)
-                        {
-                            while (skole.calendar[i].IsFreeDay)
-                            {
-                                i++;
-
-                                if (i >= skole.calendar.Count - 1)
-                                {
-                                    break;
-                                }
-                            }
-                        }
-
-                        DateTime endDate = skole.calendar[i].Date;
-                        //Check if end of dataset is reached
-                        if (i == skole.calendar.Count - 1)
-                        {
-                            FreeDayGroup.LongName = "Starten av sommerferien";
-                            dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year;
-                            //dateInterval = startDate.ToString("dd/MM/yy");
-                        }
-                        else
-                        {
-                            FreeDayGroup.LongName = "Slutten av sommerferien";
-                            dateInterval = endDate.Day + "/" + endDate.Month + "/" + endDate.Year;
-                            //dateInterval = startDate.ToString("dd/MM/yy");
-                        }
+                        FreeDayGroup = new GroupedFreeDayModel() { LongName = "Fri", ShortName = "" };
+                        //singleDay = true;
                     }
                     //Handle other types of freedays
                     else if (skole.calendar[i].IsFreeDay)
                     {
-                        string currentComment = skole.calendar[i].Comment;
-                        DateTime startDate = skole.calendar[i].Date;
-                        dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year;
-                        //dateInterval = startDate.ToString("dd/MM/yy");
-                        FreeDayGroup = new GroupedFreeDayModel() { LongName = skole.calendar[i].Comment, ShortName = "", Date = dateInterval };
+                        FreeDayGroup = new GroupedFreeDayModel() { LongName = skole.calendar[i].Comment, ShortName = "", Date = skole.calendar[i].Date };
+                        singleDay = true;
                     }
 
                     if (FreeDayGroup != null)
                     {
+                        if(singleDay)
+                        {
+                            dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year;
+                        } else
+                        {
+                            if (i + 1 < skole.calendar.Count)
+                            {
+                                while (skole.calendar[i + 1].IsFreeDay)
+                                {
+                                    i++;
+
+                                    if (i >= skole.calendar.Count - 1)
+                                    {
+                                        FreeDayGroup.LongName = "Starten av sommerferien";
+                                        //startDate = skole.calendar[i].Date;
+                                        startSummer = true;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            DateTime endDate = skole.calendar[i].Date;
+
+                            if (startSummer)
+                            {
+                                dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year;
+                            } else if(endSummer)
+                            {
+                                dateInterval = endDate.Day + "/" + endDate.Month + "/" + endDate.Year;
+                            } else
+                            {   
+                                dateInterval = startDate.Day + "/" + startDate.Month + "/" + startDate.Year
+                                    + " - " + endDate.Day + "/" + endDate.Month + "/" + endDate.Year;
+                            }
+
+                        }
+
                         //Check if group is already created and add to it if it is
                         bool foundGroup = false;
                         FreeDayModel model = new FreeDayModel() { Name = skole.name, Comment = dateInterval };
-                        
+
                         // Turn text grey if the holiday done
                         if (model.GetEndDate() < today)
                         {
@@ -152,7 +147,7 @@ namespace skolerute.data
 
                         foreach (GroupedFreeDayModel group in grouped)
                         {
-                            if (FreeDayGroup.LongName == group.LongName && FreeDayGroup.Date == group.Date)
+                            if (FreeDayGroup.LongName == group.LongName && FreeDayGroup.Date.DayOfYear == group.Date.DayOfYear)
                             {
                                 //group.Add(new FreeDayModel() { Name = skole.name, Comment = dateInterval });
                                 group.Add(model);
@@ -191,7 +186,9 @@ namespace skolerute.data
 
                 grouped[i].Add(model);
             }
-            return grouped;
+            grouped = grouped.OrderBy(o => o[0].GetStartDate()).ToList();
+            return new ObservableCollection<GroupedFreeDayModel>(grouped);
+            //return grouped;
         }
 
     }

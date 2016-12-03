@@ -55,7 +55,7 @@ namespace skolerute.Views
 
         private void PullRefresher()
         {
-            if (GetCoords.Text != "Vis nærmeste")
+            if (GetCoords.Text != "Sorter etter nærmeste")
             {
                 if (Device.OS == TargetPlatform.Android) DependencyService.Get<GPS.IGPSservice>().ConnectGps();
 
@@ -75,7 +75,7 @@ namespace skolerute.Views
             //Called in xaml if button to get closest schools is pressed. Gets user global position and compares it
             //to school positions and displays these schools in the GUI school list.
 
-            if (GetCoords.Text == "Vis nærmeste")
+            if (GetCoords.Text == "Sorter etter nærmeste")
 
             {			
                 if (Device.OS == TargetPlatform.Android)
@@ -90,11 +90,11 @@ namespace skolerute.Views
                 schools.ItemsSource = newWrappedItems;
                 }
 
-                GetCoords.Text = "Vis alle";
+                GetCoords.Text = "Sorter alfabetisk";
             }
             else
             {
-                GetCoords.Text = "Vis nærmeste";
+                GetCoords.Text = "Sorter etter nærmeste";
                 foreach(WrappedListItems<School> item in WrappedItems)
                 {
                     item.DistanceVisible = false;
