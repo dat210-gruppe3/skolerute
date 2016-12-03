@@ -9,6 +9,8 @@ using System.Globalization;
 using skolerute.ExportCalendar;
 using skolerute.utils;
 using Calendar = skolerute.data.Calendar;
+using skolerute.notifications;
+
 
 namespace skolerute.Views
 {
@@ -65,6 +67,9 @@ namespace skolerute.Views
                     LoadingIndicator.IsVisible = isLoading;
                     NextImg.IsEnabled = !isLoading;
                     PrevImg.IsEnabled = !isLoading;
+
+					DependencyService.Get<INotification>().RemoveCalendarNotification();
+					NotificationUtils.SendNotifications(favoriteSchools);
                 }
 			});
 
@@ -78,6 +83,9 @@ namespace skolerute.Views
 				DisplayCalendar();
                 //ResetAllIndicators();
                 SetLegends();
+
+				DependencyService.Get<INotification>().RemoveCalendarNotification();
+				NotificationUtils.SendNotifications(favoriteSchools);
             });
 
 
