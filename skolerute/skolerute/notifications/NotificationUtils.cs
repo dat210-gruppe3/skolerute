@@ -18,7 +18,7 @@ namespace skolerute.notifications
 			foreach (var item in freeDayGroups)
 			{
 				string text = "Det nærmer seg fri for ";
-				text += item.Count == 1 ? " alle favorittskoler." : item.Count + " skoler.";
+				text += item.Count == 1 ? "alle favorittskoler." : item.Count + " skoler.";
 
 				DateTime startDate = DateTime.MaxValue;
 				foreach (var school in item)
