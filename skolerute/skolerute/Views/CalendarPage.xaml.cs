@@ -16,10 +16,10 @@ namespace skolerute.Views
 {
     public partial class CalendarPage : ContentPage
     {
-        static DateTime current;
-        static List<School> favoriteSchools;
-        private static List<School> selectedSchools;
-        private static List<Picker> pickers;
+        private DateTime current;
+        private List<School> favoriteSchools;
+        private List<School> selectedSchools;
+        private List<Picker> pickers;
 
         public bool isLoading;
 
@@ -57,6 +57,8 @@ namespace skolerute.Views
 					{
 						favoriteSchools.Add(args);
 						favoriteSchoolNames.Add(args.name);
+					    favoriteSchools = favoriteSchools.OrderBy(s => s.name).ToList();
+
 
 						DisplayCalendar();
 						SetLegends();
@@ -82,8 +84,9 @@ namespace skolerute.Views
 					favoriteSchoolNames.Remove(args);
 					//await SettingsManager.SavePreferenceAsync("" + (favoriteSchools.Find(x => x.name.Contains(args)).ID), false);
 					favoriteSchools.Remove(favoriteSchools.Find(x => x.name.Contains(args)));
+                    favoriteSchools = favoriteSchools.OrderBy(s => s.name).ToList();
 
-					SetLegends();
+                    SetLegends();
 					DisplayCalendar();
 					//ResetAllIndicators();
 
@@ -215,8 +218,6 @@ namespace skolerute.Views
 			return Color.Transparent;
         }
 
-
-
         private void SetLegends()
         {
             var i = 0;
@@ -248,7 +249,7 @@ namespace skolerute.Views
             {
                 string pickername = "picker" + i;
                 string preferred = (string)SettingsManager.GetPreference(pickername);
-                if (preferred != null && (string)preferred != "ignore")
+                if (preferred != null)
                 {
                     picker.SelectedIndex = picker.Items.IndexOf(preferred);
                 }
@@ -260,21 +261,22 @@ namespace skolerute.Views
 		{
 			if (0 > ((Picker)o).SelectedIndex) return;
 			selectedSchools = new List<School>();
-				foreach (var school in favoriteSchools)
+            int i = 0;
+            foreach (var picker in pickers)
+            {
+				foreach  (var school in favoriteSchools)
 				{
-					int i = 0;
-					foreach (var picker in pickers)
+					if (picker.SelectedIndex >= 0)
 					{
-						if (picker.SelectedIndex >= 0)
+						if (school.name == picker.Items[picker.SelectedIndex])
 						{
-							if (school.name == picker.Items[picker.SelectedIndex])
-							{
-								selectedSchools.Add(school);
-							}
+							await SettingsManager.SavePreferenceAsync("picker" + i, school.name);
+						    selectedSchools.Add(school);
 						}
-						i++;
-					}
+					}			
 				}
+                i++;
+            }
             DisplayCalendar();
         }
 
