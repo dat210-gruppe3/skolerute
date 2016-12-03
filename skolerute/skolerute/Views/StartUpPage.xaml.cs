@@ -53,54 +53,49 @@ namespace skolerute.Views
 
 
 		private void PullRefresher()
-		{
-			if (GetCoords.Text != "Vis nærmeste")
-			{
-				if (Device.OS == TargetPlatform.Android) DependencyService.Get<GPS.IGPSservice>().ConnectGps();
+        {
+            if (Device.OS == TargetPlatform.Android) DependencyService.Get<GPS.IGPSservice>().ConnectGps();
 
-				else
-				{
-					List<WrappedListItems<School>> newWrappedItems = GPS.GPSservice.GetNearbySchools(WrappedItems);
-					if (newWrappedItems == null) { return; }
-					schools.ItemsSource = newWrappedItems;
-					schools.IsRefreshing = false;
-				}
-			}
-			else schools.IsRefreshing = false;
-		}
+            else
+            {
+                List<WrappedListItems<School>> newWrappedItems = GPS.GPSservice.GetNearbySchools(WrappedItems);
+                if (newWrappedItems == null) return;
+                schools.ItemsSource = newWrappedItems;
+                schools.IsRefreshing = false;
+            }
+        }
 
 		private void GetClosest()
-		{
-			//Called in xaml if button to get closest schools is pressed. Gets user global position and compares it
-			//to school positions and displays these schools in the GUI school list.
-
-			if (GetCoords.Text == "Vis nærmeste")
-
-			{
-				if (Device.OS == TargetPlatform.Android)
-				{
-					NearbySchoolsActivityIndicator(true);
-					DependencyService.Get<GPS.IGPSservice>().ConnectGps();
-				}
-				else
-				{
-					List<WrappedListItems<School>> newWrappedItems = GPS.GPSservice.GetNearbySchools(WrappedItems);
-					if (newWrappedItems == null) { return; }
-					schools.ItemsSource = newWrappedItems;
-				}
-
-				GetCoords.Text = "Vis alle";
-			}
-			else
-			{
-				GetCoords.Text = "Vis nærmeste";
-				foreach (WrappedListItems<School> item in WrappedItems)
-				{
-					item.DistanceVisible = false;
-				}
-				schools.ItemsSource = WrappedItems;
-			}
-		}
+        {
+            //Called in xaml if button to get closest schools is pressed. Gets user global position and compares it
+            //to school positions and displays these schools in the GUI school list.
+            if (GetCoords.Text == "Vis nærmeste")
+            {
+                schools.IsPullToRefreshEnabled = true;
+                if (Device.OS == TargetPlatform.Android)
+                {
+                    NearbySchoolsActivityIndicator(true);
+                    DependencyService.Get<GPS.IGPSservice>().ConnectGps();
+                }
+                else
+                {
+                List<WrappedListItems<School>> newWrappedItems = GPS.GPSservice.GetNearbySchools(WrappedItems);
+                if(newWrappedItems == null) { return; }
+                schools.ItemsSource = newWrappedItems;
+                }
+                GetCoords.Text = "Vis alle";
+            }
+            else
+            {
+                GetCoords.Text = "Vis nærmeste";
+                schools.IsPullToRefreshEnabled = false;
+                foreach (WrappedListItems<School> item in WrappedItems)
+                {
+                    item.DistanceVisible = false;
+                }
+                schools.ItemsSource = WrappedItems;
+            }
+        }
 
 		private void TextChanged(Object o, EventArgs e)
 		{
