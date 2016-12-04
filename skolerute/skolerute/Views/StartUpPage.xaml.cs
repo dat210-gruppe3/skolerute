@@ -21,6 +21,17 @@ namespace skolerute.Views
 		    isFirstTime = true;
 		}
 
+	    protected override void OnDisappearing()
+	    {
+	        List<School> schools = new List<School>();
+	        schools.AddRange(from item in WrappedItems where item.IsChecked select item.Item);
+
+	        if (schools.Count != 0)
+	        {
+                MessagingCenter.Send(this, "listChanged", schools);
+            }
+        }
+
 		protected override async void OnAppearing()
 		{
 			base.OnAppearing();
@@ -28,24 +39,12 @@ namespace skolerute.Views
 			//TODO: fjern test
 			//DependencyService.Get<notifications.INotification>().SendCalendarNotification("Skolerute", "Det nærmer seg fri for alle favorittskoler.", DateTime.Now.AddSeconds(5));
 
-			List<School> allSchools = new List<School>();
-
 			if (schools.ItemsSource == null)
 			{
 				await GetListContent();
 			}
 
-			if (isFirstTime && SettingsManager.GetPreference("i") != null && (bool)SettingsManager.GetPreference("i"))
-			{
-				ObservableCollection<string> mySchools = await GetFavSchools();
-				foreach (string school in mySchools)
-				{
-					WrappedListItems<School> temp = WrappedItems.First(item => item.Item.name == school);
-					temp.IsChecked = true;
-					temp.UnChecked = false;
-				}
-			    isFirstTime = false;
-			}
+		    if (isFirstTime) await GetFavSchools();
 
 			MessagingCenter.Subscribe<string>(this, "locationUpdate", (sender) =>
 			{
@@ -228,8 +227,6 @@ namespace skolerute.Views
 					{
 						await SettingsManager.SavePreferenceAsync(school.ID.ToString(), true);
 					}
-
-					MessagingCenter.Send(this, "listChanged", WrappedItems.Select(item => item.Item).ToList());
 				}
 				catch (System.Net.WebException)
 				{
@@ -240,9 +237,8 @@ namespace skolerute.Views
 			((ListView)sender).SelectedItem = null;
 		}
 
-		private async Task<ObservableCollection<string>> GetFavSchools()
+		private async Task GetFavSchools()
 		{
-			ObservableCollection<string> list = new ObservableCollection<string>();
 			db.DatabaseManagerAsync db = new db.DatabaseManagerAsync();
 
 			School x;
@@ -251,13 +247,11 @@ namespace skolerute.Views
 				x = WrappedItems[i].Item;
 				if ((bool)SettingsManager.GetPreference(x.ID.ToString()))
 				{
-					School currentschool = await db.GetSchool(x.ID);
-					currentschool.calendar = await db.GetOnlyCalendar(x.ID);
-					list.Add(currentschool.name);
-					MessagingCenter.Send(this, "listChanged", WrappedItems.Select(item => item.Item).ToList());
+					WrappedItems[i].Item = await db.GetSchool(x.ID);
+                    WrappedItems[i].Item.calendar = await db.GetOnlyCalendar(x.ID);
+				    WrappedItems[i].IsChecked = true;
 				}
 			}
-			return list;
 		}
 
 		private void NearbySchoolsActivityIndicator(bool state)

@@ -59,10 +59,6 @@ namespace skolerute.Views
                     NotificationUtils.SendNotifications(favoriteSchools);
                 }
             });
-
-            if (isFirstTime)
-            {
-            }
         }
 
         double translation = 0;
@@ -157,14 +153,13 @@ namespace skolerute.Views
 
                     int schoolIndex = 0;
                     if (indicatorContainer != null)
-                        foreach (var view1 in indicatorContainer.Children)
+                        foreach (var indicator in indicatorContainer.Children)
                         {
-                            if (schoolIndex >= freeDays.Count) break;
-                            var indicator = (BoxView) view1;
+                            if (freeDays == null || schoolIndex >= freeDays.Count) break;
                             if (freeDays[schoolIndex][currentCalendarDayIndex].IsFreeDay)
                             {
                                 indicator.Opacity = 1;
-                                indicator.Color = GetCorrectColor(schoolIndex);
+                                ((BoxView)indicator).Color = GetCorrectColor(schoolIndex);
                             }
                             schoolIndex++;
                         }

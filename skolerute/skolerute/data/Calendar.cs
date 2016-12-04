@@ -20,7 +20,7 @@ namespace skolerute.data
 
         public static List<List<CalendarDay>> GetAllRelevantCalendarDays(List<School> schools, DateTime selectedDate)
         {
-            if (schools == null || schools.Count == 0 || schools.First() == null) return null;
+            if (schools == null || schools.Count == 0 || schools.First() == null || schools.First().calendar == null) return null;
             DateTime startDate = GetFirstRelevantDateTime(selectedDate);
 
             int startIndex = schools.First().calendar.FindIndex(day => day.Date.DayOfYear == startDate.DayOfYear);
