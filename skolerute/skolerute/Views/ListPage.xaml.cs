@@ -17,18 +17,20 @@ namespace skolerute.Views
         List<School> favoriteSchools = new List<School>();
         List<string> favoriteSchoolNames = new List<string>();
         DateTime today = DateTime.Now;
+        bool listUpdated = false;
 
         public ListPage()
         {
             MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
             {
                 if (!favoriteSchoolNames.Contains(args.name))
-                {
+                {  
                     favoriteSchools.Add(args);
                     favoriteSchoolNames.Add(args.name);
-                    grouped = Calendar.AddSchoolToList(favoriteSchools);
+                    listUpdated = true;
+                    //grouped = Calendar.AddSchoolToList(favoriteSchools);
 
-                    lstView.ItemsSource = grouped;
+                    //lstView.ItemsSource = grouped;
                     //FindNext();
                 }
 
@@ -38,9 +40,10 @@ namespace skolerute.Views
             {
                 favoriteSchools.Remove(favoriteSchools.Find(x => x.name.Contains(args)));
                 favoriteSchoolNames.Remove(args);
-                grouped.Clear();
-                grouped = Calendar.AddSchoolToList(favoriteSchools);
-                lstView.ItemsSource = grouped;
+                listUpdated = true;
+                //grouped.Clear();
+                //grouped = Calendar.AddSchoolToList(favoriteSchools);
+                //lstView.ItemsSource = grouped;
                 //FindNext();
             });
 
@@ -51,6 +54,14 @@ namespace skolerute.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
+
+            if(listUpdated)
+            {
+                grouped = Calendar.AddSchoolToList(favoriteSchools);
+                lstView.ItemsSource = grouped;
+                listUpdated = false;
+            }
+
             FindNext();
         }
 
