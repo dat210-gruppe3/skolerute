@@ -4,6 +4,7 @@ using System.Linq;
 using skolerute.data;
 using Xamarin.Forms;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using skolerute.ExportCalendar;
 using skolerute.utils;
 using Calendar = skolerute.data.Calendar;
@@ -18,6 +19,8 @@ namespace skolerute.Views
         private List<School> favoriteSchools;
         private List<School> selectedSchools;
         private List<Picker> pickers;
+        private bool listHasChanged;
+        private bool isFirstTime;
 
         public CalendarPage()
         {
@@ -31,57 +34,35 @@ namespace skolerute.Views
 
             current = DateTime.Now;
 
-            DisplayCalendar();
-
-            ObservableCollection<string> favoriteSchoolNames = new ObservableCollection<string>();
             favoriteSchools = new List<School>();
             selectedSchools = new List<School>();
-            
-            MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
-			{
-				lock (favoriteSchools) {
-					if (!favoriteSchoolNames.Contains(args.name))
-					{
-						favoriteSchools.Add(args);
-						favoriteSchoolNames.Add(args.name);
-					    favoriteSchools = favoriteSchools.OrderBy(s => s.name).ToList();
+            isFirstTime = true;
 
-
-						DisplayCalendar();
-						SetLegends();
-
-						DependencyService.Get<INotification>().RemoveCalendarNotification();
-						NotificationUtils.SendNotifications(favoriteSchools);
-					}
-				}
-			});
-
-
-            MessagingCenter.Subscribe<StartUpPage, string>(this, "deleteSch", /*async*/(sender, args) =>
+            MessagingCenter.Subscribe<StartUpPage, List<School>>(this, "listChanged", (sender, args) =>
             {
-				lock (favoriteSchools)
-				{
-					favoriteSchoolNames.Remove(args);
-					//await SettingsManager.SavePreferenceAsync("" + (favoriteSchools.Find(x => x.name.Contains(args)).ID), false);
-					favoriteSchools.Remove(favoriteSchools.Find(x => x.name.Contains(args)));
-                    favoriteSchools = favoriteSchools.OrderBy(s => s.name).ToList();
+                lock (favoriteSchools)
+                {
+                    favoriteSchools = args.OrderBy(school => school.name).ToList();
 
                     SetLegends();
-					DisplayCalendar();
-					//ResetAllIndicators();
+                    SetPickers();
 
+                    listHasChanged = true;
 
-					DependencyService.Get<INotification>().RemoveCalendarNotification();
-					NotificationUtils.SendNotifications(favoriteSchools);
-				}
+                    if (isFirstTime)
+                    {
+                        SetSavedPickerValues();
+                        isFirstTime = false;
+                    }
+
+                    DependencyService.Get<INotification>().RemoveCalendarNotification();
+                    NotificationUtils.SendNotifications(favoriteSchools);
+                }
             });
-
-
-            SetLegends();
-
         }
 
         double translation = 0;
+
         void OnPanUpdated(object sender, PanUpdatedEventArgs e)
         {
             switch (e.StatusType)
@@ -91,8 +72,8 @@ namespace skolerute.Views
                     break;
 
                 case GestureStatus.Completed:
-					//decrease sensitivity
-					if (Math.Round(translation) == 0)
+                    //decrease sensitivity
+                    if (Math.Round(translation) == 0)
                     {
                     }
                     else if (translation < 0)
@@ -113,7 +94,16 @@ namespace skolerute.Views
                     }
                     break;
             }
+        }
 
+        protected override void OnAppearing()
+        {
+            if (listHasChanged)
+            {
+                DisplayCalendar();
+                SetLegends();
+                listHasChanged = false;
+            }
         }
 
         private void SetUpCalendar()
@@ -144,9 +134,9 @@ namespace skolerute.Views
             UpdateCalendarControls();
             ResetAllIndicators();
             if (selectedSchools != null && selectedSchools.Count != 0)
-            {    
+            {
                 UpdateIndicators();
-            }        
+            }
         }
 
         private void UpdateIndicators()
@@ -163,15 +153,13 @@ namespace skolerute.Views
 
                     int schoolIndex = 0;
                     if (indicatorContainer != null)
-                        foreach (var view1 in indicatorContainer.Children)
+                        foreach (var indicator in indicatorContainer.Children)
                         {
-                            if(schoolIndex >= freeDays.Count) break;
-                            var indicator = (BoxView) view1;
+                            if (freeDays == null || schoolIndex >= freeDays.Count) break;
                             if (freeDays[schoolIndex][currentCalendarDayIndex].IsFreeDay)
                             {
                                 indicator.Opacity = 1;
-                                indicator.Color = GetCorrectColor(schoolIndex);
-
+                                ((BoxView)indicator).Color = GetCorrectColor(schoolIndex);
                             }
                             schoolIndex++;
                         }
@@ -187,15 +175,15 @@ namespace skolerute.Views
         private Color GetCorrectColor(int i)
         {
             var children = Legend.Children;
-			if (i < 0 || i >= selectedSchools.Count) return Color.Transparent;
+            if (i < 0 || i >= selectedSchools.Count) return Color.Transparent;
             foreach (StackLayout child in children)
             {
-                Picker picker = (Picker)child.Children.Last();
+                Picker picker = (Picker) child.Children.Last();
                 if (picker.SelectedIndex < 0 || picker.SelectedIndex >= picker.Items.Count) continue;
                 if (selectedSchools[i].name == picker.Items[picker.SelectedIndex])
                     return child.Children.First().BackgroundColor;
             }
-			return Color.Transparent;
+            return Color.Transparent;
         }
 
         private void SetLegends()
@@ -206,7 +194,20 @@ namespace skolerute.Views
                 x.Children.First().BackgroundColor = Constants.colors[i];
                 i++;
             }
-            SetPickers();
+        }
+
+        private void SetSavedPickerValues()
+        {
+            for (int i = 0; i < pickers.Count; i++)
+            {
+                var picker = pickers[i];
+                string pickername = "picker" + i;
+                string preferred = (string)SettingsManager.GetPreference(pickername);
+                if (preferred != null)
+                {
+                    picker.SelectedIndex = picker.Items.IndexOf(preferred);
+                }
+            }
         }
 
         private void SetPickers()
@@ -217,19 +218,17 @@ namespace skolerute.Views
             {
                 picker.Items.Clear();
             }
-            foreach (var school in  favoriteSchools)
+            foreach (var school in favoriteSchools)
             {
                 foreach (var picker in pickers) picker.Items.Add(school.name);
             }
-
-            // Populate pickers with previously selected schools, if any 
-            //**(Does not currently work when starting the app, only works when adding or removing schools from favorites list)
+            
             int i = 0;
             foreach (var picker in pickers)
             {
                 string pickername = "picker" + i;
                 string preferred = (string)SettingsManager.GetPreference(pickername);
-                if (preferred != null)
+                if (preferred != null && (string)preferred != "ignore")
                 {
                     picker.SelectedIndex = picker.Items.IndexOf(preferred);
                 }
@@ -237,27 +236,34 @@ namespace skolerute.Views
             }
         }
 
-		private async void OnSelect(object o, EventArgs e)
-		{
-			if (0 > ((Picker)o).SelectedIndex) return;
-			selectedSchools = new List<School>();
+        private void OnSelect(object o, EventArgs e)
+        {
+            if (0 > ((Picker) o).SelectedIndex) return;
+            selectedSchools = new List<School>();
             int i = 0;
-            foreach (var picker in pickers)
+            lock (favoriteSchools)
             {
-				foreach  (var school in favoriteSchools)
-				{
-					if (picker.SelectedIndex >= 0)
-					{
-						if (school.name == picker.Items[picker.SelectedIndex])
-						{
-							await SettingsManager.SavePreferenceAsync("picker" + i, school.name);
-						    selectedSchools.Add(school);
-						}
-					}			
-				}
-                i++;
+                foreach (var picker in pickers)
+                {
+                    foreach (var school in favoriteSchools)
+                    {
+                        if (picker.SelectedIndex >= 0)
+                        {
+                            if (school.name == picker.Items[picker.SelectedIndex])
+                            {
+                                Task.Run(
+                                    async () =>
+                                    {
+                                        await SettingsManager.SavePreferenceAsync("picker" + i, school.name);
+                                    });
+                                selectedSchools.Add(school);
+                            }
+                        }
+                    }
+                    i++;
+                }
+                DisplayCalendar();
             }
-            DisplayCalendar();
         }
 
         private void UpdateCalendarControls()
@@ -283,6 +289,7 @@ namespace skolerute.Views
                 }
             }
         }
+
         void NextMonth(object o, EventArgs e)
         {
             if (current.Month != 6)
@@ -299,9 +306,9 @@ namespace skolerute.Views
                 current = current.AddMonths(-1);
                 DisplayCalendar();
             }
-        }     
+        }
 
-        
+
         /*
          * The reason why this method contains device specific code is because of the permission system for ios when asking for permission.
          * It would not wait for the user to give or deny permission, and therefore return. It then calls an anonymous method when an answer is
@@ -311,9 +318,9 @@ namespace skolerute.Views
          * Xamarin comes to the rescue, making it easy to display an action sheet for both platforms, although we only use it for android
          * in this case. This is the explanation as to why this handler is a little messy.
          * */
+
         private async void ExportCalendarButtonClicked(object sender, EventArgs e)
         {
-
             if (Device.OS == TargetPlatform.iOS)
             {
                 DependencyService.Get<IExportCalendar>()

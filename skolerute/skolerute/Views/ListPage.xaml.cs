@@ -13,32 +13,37 @@ namespace skolerute.Views
         List<School> favoriteSchools = new List<School>();
         List<string> favoriteSchoolNames = new List<string>();
         DateTime today = DateTime.Now;
+        bool listUpdated = false;
 
         public ListPage()
         {
-            MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
+            MessagingCenter.Subscribe<StartUpPage, List<School>>(this, "listChanged", (sender, args) =>
             {
-                if (!favoriteSchoolNames.Contains(args.name))
-                {
-                    favoriteSchools.Add(args);
-                    favoriteSchoolNames.Add(args.name);
-                    grouped = Calendar.AddSchoolToList(favoriteSchools);
+                //if (!favoriteSchoolNames.Contains(args.name))
+                //{  
+                favoriteSchools = args;
+                    //favoriteSchoolNames.Add(args.name);
+                listUpdated = true;
+                    //grouped = Calendar.AddSchoolToList(favoriteSchools);
 
-                    lstView.ItemsSource = grouped;
+                    //lstView.ItemsSource = grouped;
                     //FindNext();
-                }
+                //}
 
             });
 
+            /*
             MessagingCenter.Subscribe<StartUpPage, string>(this, "deleteSch", (sender, args) =>
             {
-                favoriteSchools.Remove(favoriteSchools.Find(x => x.name.Contains(args)));
+                //favoriteSchools.Remove(favoriteSchools.Find(x => x.name.Contains(args)));
                 favoriteSchoolNames.Remove(args);
-                grouped.Clear();
-                grouped = Calendar.AddSchoolToList(favoriteSchools);
-                lstView.ItemsSource = grouped;
+                listUpdated = true;
+                //grouped.Clear();
+                //grouped = Calendar.AddSchoolToList(favoriteSchools);
+                //lstView.ItemsSource = grouped;
                 //FindNext();
             });
+            */
 
             InitializeComponent();
 
@@ -47,6 +52,14 @@ namespace skolerute.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
+
+            if(listUpdated)
+            {
+                grouped = Calendar.AddSchoolToList(favoriteSchools);
+                lstView.ItemsSource = grouped;
+                listUpdated = false;
+            }
+
             FindNext();
         }
 

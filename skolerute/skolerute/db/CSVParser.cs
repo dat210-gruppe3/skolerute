@@ -7,6 +7,8 @@ using System.Net;
 using System.Threading.Tasks;
 using skolerute.data;
 using SQLiteNetExtensions.Extensions;
+using System.Threading;
+using System.Diagnostics;
 
 namespace skolerute.db
 {
@@ -110,53 +112,16 @@ namespace skolerute.db
             });
         }
 
-        //public async Task StringParser()
-        //{
-        //    var csv = await GetContent(Constants.URL);
-        //    char[] delimiter = { '\r', '\n' };
-        //    string[] rows = csv.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
-        //    string[] cols = new string[5];
-        //    List<School> schoolObjs = new List<School>();
-
-        //    int j = 1;
-        //    while (j < rows.Length)
-        //    {
-        //        cols = Splitter(rows[j]);
-        //        string sch = cols[1];
-
-        //        schoolObjs.Add(new School(cols[1], new List<CalendarDay>()));
-
-
-        //        while (cols[1] == sch)
-        //        {
-        //            InsertToCalAndSch(cols, schoolObjs);
-        //            j++;
-        //            if (j >= rows.Length) break;
-        //            cols = Splitter(rows[j]);
-        //        }
-
-        //        await database.InsertSingle(schoolObjs[schoolObjs.Count - 1]);
-        //    }
-        //    //await database.InsertList(schoolObjs);
-        //    //await database.InsertSingle(schoolObjs[schoolObjs.Count - 1]);
-
-        //    List<School> schoolsList = await database.GetSchools();
-        //    GC.KeepAlive(schoolsList);
-        //    schoolsList[23] = null;
-
-        //    //TODO: error handling
-        //}
-
-
         public async Task<String> GetContent(String url)
         {
-
 			if (Constants.skoleruterCSV != null && url == Constants.URL)
 			{
 				return Constants.skoleruterCSV;
 			}
 			else {
 				WebRequest request = WebRequest.Create(url);
+
+				Timeout(request, 15000);
 
 				HttpWebResponse response = await request.GetResponseAsync() as HttpWebResponse;
 
@@ -175,10 +140,15 @@ namespace skolerute.db
 			}
         }
 
-
-        public /*async Task*/void RetrievePosition(School sch, string csv)
+        public async void Timeout(WebRequest request, int timeUntilTimeout)
         {
-            //var csv = await GetContent(Constants.positionURL);
+            await Task.Delay(timeUntilTimeout);
+            request.Abort();
+        }
+
+
+        public void RetrievePosition(School sch, string csv)
+        {
             char[] delimiter = { '\r', '\n' };
             string[] rows = csv.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
             string[] cols = new string[13];
