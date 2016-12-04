@@ -13,10 +13,12 @@ namespace skolerute.Views
     public partial class StartUpPage : ContentPage
 	{
 		List<WrappedListItems<School>> WrappedItems = new List<WrappedListItems<School>>();
+	    private bool isFirstTime;
 
 		public StartUpPage()
 		{
 			InitializeComponent();
+		    isFirstTime = true;
 		}
 
 		protected override async void OnAppearing()
@@ -24,16 +26,16 @@ namespace skolerute.Views
 			base.OnAppearing();
 
 			//TODO: fjern test
-			DependencyService.Get<notifications.INotification>().SendCalendarNotification("Skolerute", "Det nærmer seg fri for alle favorittskoler.", DateTime.Now.AddSeconds(5));
+			//DependencyService.Get<notifications.INotification>().SendCalendarNotification("Skolerute", "Det nærmer seg fri for alle favorittskoler.", DateTime.Now.AddSeconds(5));
 
 			List<School> allSchools = new List<School>();
 
 			if (schools.ItemsSource == null)
 			{
-				allSchools = await GetListContent();
+				await GetListContent();
 			}
 
-			if (SettingsManager.GetPreference("i") != null && (bool)SettingsManager.GetPreference("i"))
+			if (isFirstTime && SettingsManager.GetPreference("i") != null && (bool)SettingsManager.GetPreference("i"))
 			{
 				ObservableCollection<string> mySchools = await GetFavSchools();
 				foreach (string school in mySchools)
@@ -42,6 +44,7 @@ namespace skolerute.Views
 					temp.IsChecked = true;
 					temp.UnChecked = false;
 				}
+			    isFirstTime = false;
 			}
 
 			MessagingCenter.Subscribe<string>(this, "locationUpdate", (sender) =>
@@ -49,8 +52,6 @@ namespace skolerute.Views
 				NearbySchoolsActivityIndicator(false);
 				schools.ItemsSource = GPS.GPSservice.GetNearbySchools(WrappedItems);
 			});
-
-			//DependencyService.Get<notifications.INotification>().SendCalendarNotification("title", "desc", DateTime.Now);
 		}
 
 
@@ -72,7 +73,6 @@ namespace skolerute.Views
             //Called in xaml if button to get closest schools is pressed. Gets user global position and compares it
             //to school positions and displays these schools in the GUI school list.
             if (GetCoords.Text == "Nærmeste")
-
             {			
                 schools.IsPullToRefreshEnabled = true;
                 if (Device.OS == TargetPlatform.Android)
@@ -136,7 +136,7 @@ namespace skolerute.Views
 			}
 		}
 
-		private async Task<List<School>> GetListContent()
+		private async Task GetListContent()
 		{
 			db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
 
@@ -152,7 +152,6 @@ namespace skolerute.Views
 					database.CreateNewDatabase();
 					skolerute.db.CSVParser parser = new db.CSVParser(Constants.URL, database);
 
-					// TODO: Try and catch this line
 					await parser.RetrieveSchools();
 					await progressBar.ProgressTo(0.7, 250, Easing.Linear);
 				}
@@ -165,14 +164,12 @@ namespace skolerute.Views
 				GetCoords.IsEnabled = true;
 				WrappedItems = allSchools.Select(item => new WrappedListItems<School>() { Item = item, IsChecked = false, UnChecked = true, Distance = 0, DistanceVisible = false }).ToList();
 				schools.ItemsSource = WrappedItems;
-				return allSchools;
 			}
 			catch (System.Net.WebException)
 			{
 				await DisplayAlert("Internett problemer", "Kunne ikke hente ned skolene, prøv igjen senere.", "Ok");
 				await database.DropAll();
 				progressBar.IsVisible = false;
-				return null;
 			}
 			catch (Exception e)
 			{
@@ -180,7 +177,6 @@ namespace skolerute.Views
 				await database.DropAll();
 				progressBar.IsVisible = false;
 				System.Diagnostics.Debug.WriteLine(e);
-				return null;
 			}
 		}
 
@@ -210,7 +206,6 @@ namespace skolerute.Views
 			}
 			else
 			{
-
 				try
 				{
 					chSchool.IsChecked = true;
@@ -234,9 +229,9 @@ namespace skolerute.Views
 						await SettingsManager.SavePreferenceAsync(school.ID.ToString(), true);
 					}
 
-					MessagingCenter.Send(this, "choosenSch", school);
+					MessagingCenter.Send(this, "listChanged", WrappedItems.Select(item => item.Item).ToList());
 				}
-				catch (System.Net.WebException exception)
+				catch (System.Net.WebException)
 				{
 					await DisplayAlert("Problem med internett", "Kunne ikke laste ned skoleruten, prøv igjen senere", "Ok");
 				}
@@ -259,7 +254,7 @@ namespace skolerute.Views
 					School currentschool = await db.GetSchool(x.ID);
 					currentschool.calendar = await db.GetOnlyCalendar(x.ID);
 					list.Add(currentschool.name);
-					MessagingCenter.Send<StartUpPage, School>(this, "choosenSch", currentschool);
+					MessagingCenter.Send(this, "listChanged", WrappedItems.Select(item => item.Item).ToList());
 				}
 			}
 			return list;
