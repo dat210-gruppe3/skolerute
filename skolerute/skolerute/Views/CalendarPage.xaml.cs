@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using skolerute.ExportCalendar;
 using skolerute.utils;
 using Calendar = skolerute.data.Calendar;
-using skolerute.notifications;
 
 
 namespace skolerute.Views
@@ -31,6 +30,8 @@ namespace skolerute.Views
             pickers.Add(picker1);
             pickers.Add(picker2);
             pickers.Add(picker3);
+			SetLegends();
+			DisplayCalendar();
 
             current = DateTime.Now;
 
@@ -54,9 +55,6 @@ namespace skolerute.Views
                         SetSavedPickerValues();
                         isFirstTime = false;
                     }
-
-                    DependencyService.Get<INotification>().RemoveCalendarNotification();
-                    NotificationUtils.SendNotifications(favoriteSchools);
                 }
             });
         }

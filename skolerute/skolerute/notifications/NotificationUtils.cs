@@ -14,6 +14,7 @@ namespace skolerute.notifications
 
 		public static void SendNotifications(List<School> favoriteSchools)
 		{
+			DependencyService.Get<INotification>().RemoveCalendarNotification();
 			ObservableCollection<GroupedFreeDayModel> freeDayGroups = Calendar.AddSchoolToList(favoriteSchools);
 			foreach (var item in freeDayGroups)
 			{

@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using skolerute.notifications;
 
 
 namespace skolerute.Views
@@ -25,11 +26,11 @@ namespace skolerute.Views
 	    {
 	        List<School> schools = new List<School>();
 	        schools.AddRange(from item in WrappedItems where item.IsChecked select item.Item);
-
 	        if (schools.Count != 0)
 	        {
                 MessagingCenter.Send(this, "listChanged", schools);
             }
+			NotificationUtils.SendNotifications(schools);
         }
 
 		protected override async void OnAppearing()
@@ -169,7 +170,7 @@ namespace skolerute.Views
 			}
 			catch (Exception e)
 			{
-				await DisplayActionSheet("Feil", "En feil oppstod, prøv igjen.", "Ok");
+				await DisplayAlert("Feil", "En feil oppstod, prøv igjen.", "Ok");
 				await database.DropAll();
 				progressBar.IsVisible = false;
 				System.Diagnostics.Debug.WriteLine(e);
@@ -244,7 +245,7 @@ namespace skolerute.Views
 			for (int i = 0; i < WrappedItems.Count; i++)
 			{
 				x = WrappedItems[i].Item;
-				if ((bool)SettingsManager.GetPreference(x.ID.ToString()))
+				if (SettingsManager.GetPreference(x.ID.ToString()) != null && (bool)SettingsManager.GetPreference(x.ID.ToString()))
 				{
 					WrappedItems[i].Item = await db.GetSchool(x.ID);
                     WrappedItems[i].Item.calendar = await db.GetOnlyCalendar(x.ID);
