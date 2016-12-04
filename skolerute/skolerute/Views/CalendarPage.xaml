@@ -7,447 +7,436 @@
              xmlns:extensions="clr-namespace:skolerute.Extensions;assembly=skolerute"
              Title="Kalender"
              Icon="calendar.png">
-	<ContentPage.Padding>
+    <ContentPage.Padding>
         <OnPlatform x:TypeArguments="Thickness"
                     iOS="0, 20, 0, 0" />
     </ContentPage.Padding>
     <ContentPage.Content>
         <ScrollView x:Name="thescrolleview" HorizontalOptions="CenterAndExpand" AutomationId="CalendarScrollView">
-            <AbsoluteLayout HorizontalOptions="CenterAndExpand" VerticalOptions="FillAndExpand">
-                <StackLayout Padding="0" Spacing="0" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
-                             AbsoluteLayout.LayoutFlags="All">
-                    <Label x:Name="YearLabel" Font="5" WidthRequest="110" Text="År" FontSize="Large"
-                           HorizontalOptions="Center" 
-                           HorizontalTextAlignment="Center" VerticalTextAlignment="Center" AutomationId="yearLabel" />
+            <StackLayout Padding="0" Spacing="5">
+              <StackLayout>
+                <Label x:Name="YearLabel" Font="5" WidthRequest="110" Text="År" FontSize="Large"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center" AutomationId="yearLabel" />
 
-                    <!--ImageButtons to iterate forward or backward by months-->
-                    <StackLayout x:Name="MonthSelect" Orientation="Horizontal" HorizontalOptions="Center">
-                        <Image x:Name="PrevImg" BindingContext="this"
-                               IsEnabled="{Binding isLoading}"
-                               Source="{extensions:ImageResource skolerute.Resources.arrow.png}"
-                               AutomationId="previousMonthButton">
-                            <Image.GestureRecognizers>
-                                <TapGestureRecognizer x:Name="Prev" Tapped="PrevMonth" />
-                            </Image.GestureRecognizers>
-                        </Image>
-                        <Label x:Name="MonthLabel" Font="5" WidthRequest="110" Text="Måned" FontSize="Large"
-                               HorizontalOptions="Center" HorizontalTextAlignment="Center"
-                               VerticalTextAlignment="Center"
-                               VerticalOptions="FillAndExpand" AutomationId="monthLabel" />
-                        <Image x:Name="NextImg" BindingContext="this" Rotation="180" RotationX="180"
-                               IsEnabled="{Binding isLoading}"
-                               Source="{extensions:ImageResource skolerute.Resources.arrow.png}"
-                               AutomationId="nextMonthButton">
-                            <Image.GestureRecognizers>
-                                <TapGestureRecognizer x:Name="Next" Tapped="NextMonth" />
-                            </Image.GestureRecognizers>
-                        </Image>
-                    </StackLayout>
-                    <StackLayout>
-                        <Grid x:Name="CalendarGrid" Margin="0" Padding="0" RowSpacing="0" ColumnSpacing="0"
-                              HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand"
-                              AutomationId="calendarGrid">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="0.5*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.GestureRecognizers>
-                                  <PanGestureRecognizer PanUpdated="OnPanUpdated" />
-                            </Grid.GestureRecognizers>
+                <!--ImageButtons to iterate forward or backward by months-->
+                <StackLayout x:Name="MonthSelect" Orientation="Horizontal" HorizontalOptions="Center">
+                    <Image x:Name="PrevImg" BindingContext="this"
+                           Source="{extensions:ImageResource skolerute.Resources.arrow.png}"
+                           AutomationId="previousMonthButton">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer x:Name="Prev" Tapped="PrevMonth" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label x:Name="MonthLabel" Font="5" WidthRequest="110" Text="Måned" FontSize="Large"
+                           HorizontalOptions="Center" HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center"
+                           VerticalOptions="FillAndExpand" AutomationId="monthLabel" />
+                    <Image x:Name="NextImg" BindingContext="this" Rotation="180" RotationX="180"
+                           Source="{extensions:ImageResource skolerute.Resources.arrow.png}"
+                           AutomationId="nextMonthButton">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer x:Name="Next" Tapped="NextMonth" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                </StackLayout>
+              </StackLayout>
+                <StackLayout>
+                    <Grid x:Name="CalendarGrid" Margin="0" Padding="0" RowSpacing="0" ColumnSpacing="0"
+                          HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand"
+                          AutomationId="calendarGrid">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.5*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.GestureRecognizers>
+                            <PanGestureRecognizer PanUpdated="OnPanUpdated" />
+                        </Grid.GestureRecognizers>
 
-                            <!-- weekdays -->
-                            <StackLayout Grid.Row="0" Grid.Column="0">
-                                <Label Text="Uke" HorizontalTextAlignment="Center" Opacity="0.5" LineBreakMode="NoWrap"/>
-                            </StackLayout>
-                            <StackLayout Grid.Row="0" Grid.Column="1">
-                                <Label Text="Man" HorizontalTextAlignment="Center" />
-                            </StackLayout>
-                            <StackLayout Grid.Row="0" Grid.Column="2">
-                                <Label Text="Tirs" HorizontalTextAlignment="Center" />
-                            </StackLayout>
-                            <StackLayout Grid.Row="0" Grid.Column="3">
-                                <Label Text="Ons" HorizontalTextAlignment="Center" />
-                            </StackLayout>
-                            <StackLayout Grid.Row="0" Grid.Column="4">
-                                <Label Text="Tors" HorizontalTextAlignment="Center" />
-                            </StackLayout>
-                            <StackLayout Grid.Row="0" Grid.Column="5">
-                                <Label Text="Fre" HorizontalTextAlignment="Center" />
-                            </StackLayout>
-                            <StackLayout Grid.Row="0" Grid.Column="6">
-                                <Label Text="Lør" HorizontalTextAlignment="Center" Opacity="0.5" />
-                            </StackLayout>
-                            <StackLayout Grid.Row="0" Grid.Column="7">
-                                <Label Text="Søn" HorizontalTextAlignment="Center" TextColor="Red" Opacity="0.5" />
-                            </StackLayout>
+                        <!-- weekdays -->
+                        <StackLayout Grid.Row="0" Grid.Column="0">
+                            <Label Text="Uke" HorizontalTextAlignment="Center" Opacity="0.5" LineBreakMode="NoWrap" />
+                        </StackLayout>
+                        <StackLayout Grid.Row="0" Grid.Column="1">
+                            <Label Text="Man" HorizontalTextAlignment="Center" />
+                        </StackLayout>
+                        <StackLayout Grid.Row="0" Grid.Column="2">
+                            <Label Text="Tirs" HorizontalTextAlignment="Center" />
+                        </StackLayout>
+                        <StackLayout Grid.Row="0" Grid.Column="3">
+                            <Label Text="Ons" HorizontalTextAlignment="Center" />
+                        </StackLayout>
+                        <StackLayout Grid.Row="0" Grid.Column="4">
+                            <Label Text="Tors" HorizontalTextAlignment="Center" />
+                        </StackLayout>
+                        <StackLayout Grid.Row="0" Grid.Column="5">
+                            <Label Text="Fre" HorizontalTextAlignment="Center" />
+                        </StackLayout>
+                        <StackLayout Grid.Row="0" Grid.Column="6">
+                            <Label Text="Lør" HorizontalTextAlignment="Center" Opacity="0.5" />
+                        </StackLayout>
+                        <StackLayout Grid.Row="0" Grid.Column="7">
+                            <Label Text="Søn" HorizontalTextAlignment="Center" TextColor="Red" Opacity="0.5" />
+                        </StackLayout>
 
-                            <!-- Week1 -->
-                            <StackLayout Grid.Row="1" Grid.Column="0" ClassId="WeekNumber">
-                                <Label Text="1" Opacity="0.5" HorizontalTextAlignment="Center" />
+                        <!-- Week1 -->
+                        <StackLayout Grid.Row="1" Grid.Column="0" ClassId="WeekNumber">
+                            <Label Text="1" Opacity="0.5" HorizontalTextAlignment="Center" />
+                        </StackLayout>
+                        <StackLayout Grid.Row="1" Grid.Column="1" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="1" Grid.Column="1" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="1" Grid.Column="2" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="1" Grid.Column="2" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="1" Grid.Column="3" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="1" Grid.Column="3" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="1" Grid.Column="4" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="1" Grid.Column="4" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="1" Grid.Column="5" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="1" Grid.Column="5" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
-                            </StackLayout>
-                            <StackLayout Grid.Row="1" Grid.Column="6" ClassId="WeekendDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
-                            </StackLayout>
-                            <StackLayout Grid.Row="1" Grid.Column="7" ClassId="WeekendDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
-                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="1" Grid.Column="6" ClassId="WeekendDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
+                        </StackLayout>
+                        <StackLayout Grid.Row="1" Grid.Column="7" ClassId="WeekendDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
+                        </StackLayout>
 
 
-                            <!-- Week2 -->
-                            <StackLayout Grid.Row="2" Grid.Column="0" ClassId="WeekNumber">
-                                <Label Text="1" Opacity="0.5" HorizontalTextAlignment="Center" />
+                        <!-- Week2 -->
+                        <StackLayout Grid.Row="2" Grid.Column="0" ClassId="WeekNumber">
+                            <Label Text="1" Opacity="0.5" HorizontalTextAlignment="Center" />
+                        </StackLayout>
+                        <StackLayout Grid.Row="2" Grid.Column="1" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="2" Grid.Column="1" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="2" Grid.Column="2" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="2" Grid.Column="2" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="2" Grid.Column="3" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="2" Grid.Column="3" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="2" Grid.Column="4" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="2" Grid.Column="4" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="2" Grid.Column="5" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="2" Grid.Column="5" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
-                            </StackLayout>
-                            <StackLayout Grid.Row="2" Grid.Column="6" ClassId="WeekendDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
-                            </StackLayout>
-                            <StackLayout Grid.Row="2" Grid.Column="7" ClassId="WeekendDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
-                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="2" Grid.Column="6" ClassId="WeekendDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
+                        </StackLayout>
+                        <StackLayout Grid.Row="2" Grid.Column="7" ClassId="WeekendDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
+                        </StackLayout>
 
-                            <!-- Week3 -->
-                            <StackLayout Grid.Row="3" Grid.Column="0" ClassId="WeekNumber">
-                                <Label Text="1" Opacity="0.5" HorizontalTextAlignment="Center" />
+                        <!-- Week3 -->
+                        <StackLayout Grid.Row="3" Grid.Column="0" ClassId="WeekNumber">
+                            <Label Text="1" Opacity="0.5" HorizontalTextAlignment="Center" />
+                        </StackLayout>
+                        <StackLayout Grid.Row="3" Grid.Column="1" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="3" Grid.Column="1" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="3" Grid.Column="2" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="3" Grid.Column="2" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="3" Grid.Column="3" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="3" Grid.Column="3" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="3" Grid.Column="4" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="3" Grid.Column="4" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="3" Grid.Column="5" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="3" Grid.Column="5" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
-                            </StackLayout>
-                            <StackLayout Grid.Row="3" Grid.Column="6" ClassId="WeekendDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
-                            </StackLayout>
-                            <StackLayout Grid.Row="3" Grid.Column="7" ClassId="WeekendDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
-                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="3" Grid.Column="6" ClassId="WeekendDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
+                        </StackLayout>
+                        <StackLayout Grid.Row="3" Grid.Column="7" ClassId="WeekendDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
+                        </StackLayout>
 
-                            <!-- Week4 -->
-                            <StackLayout Grid.Row="4" Grid.Column="0" ClassId="WeekNumber">
-                                <Label Text="1" Opacity="0.5" HorizontalTextAlignment="Center" />
+                        <!-- Week4 -->
+                        <StackLayout Grid.Row="4" Grid.Column="0" ClassId="WeekNumber">
+                            <Label Text="1" Opacity="0.5" HorizontalTextAlignment="Center" />
+                        </StackLayout>
+                        <StackLayout Grid.Row="4" Grid.Column="1" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="4" Grid.Column="1" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="4" Grid.Column="2" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="4" Grid.Column="2" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="4" Grid.Column="3" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="4" Grid.Column="3" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="4" Grid.Column="4" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="4" Grid.Column="4" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="4" Grid.Column="5" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="4" Grid.Column="5" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
-                            </StackLayout>
-                            <StackLayout Grid.Row="4" Grid.Column="6" ClassId="WeekendDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
-                            </StackLayout>
-                            <StackLayout Grid.Row="4" Grid.Column="7" ClassId="WeekendDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
-                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="4" Grid.Column="6" ClassId="WeekendDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
+                        </StackLayout>
+                        <StackLayout Grid.Row="4" Grid.Column="7" ClassId="WeekendDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
+                        </StackLayout>
 
-                            <!--Week 5-->
-                            <StackLayout Grid.Row="5" Grid.Column="0" ClassId="WeekNumber">
-                                <Label Text="1" Opacity="0.5" HorizontalTextAlignment="Center" />
+                        <!--Week 5-->
+                        <StackLayout Grid.Row="5" Grid.Column="0" ClassId="WeekNumber">
+                            <Label Text="1" Opacity="0.5" HorizontalTextAlignment="Center" />
+                        </StackLayout>
+                        <StackLayout Grid.Row="5" Grid.Column="1" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="5" Grid.Column="1" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="5" Grid.Column="2" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="5" Grid.Column="2" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="5" Grid.Column="3" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="5" Grid.Column="3" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="5" Grid.Column="4" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="5" Grid.Column="4" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="5" Grid.Column="5" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="5" Grid.Column="5" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
-                            </StackLayout>
-                            <StackLayout Grid.Row="5" Grid.Column="6" ClassId="WeekendDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
-                            </StackLayout>
-                            <StackLayout Grid.Row="5" Grid.Column="7" ClassId="WeekendDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
-                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="5" Grid.Column="6" ClassId="WeekendDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
+                        </StackLayout>
+                        <StackLayout Grid.Row="5" Grid.Column="7" ClassId="WeekendDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
+                        </StackLayout>
 
-                            <!--Week 6-->
-                            <StackLayout Grid.Row="6" Grid.Column="0" ClassId="WeekNumber">
-                                <Label Text="1" Opacity="0.5" HorizontalTextAlignment="Center" />
+                        <!--Week 6-->
+                        <StackLayout Grid.Row="6" Grid.Column="0" ClassId="WeekNumber">
+                            <Label Text="1" Opacity="0.5" HorizontalTextAlignment="Center" />
+                        </StackLayout>
+                        <StackLayout Grid.Row="6" Grid.Column="1" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="6" Grid.Column="1" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="6" Grid.Column="2" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="6" Grid.Column="2" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="6" Grid.Column="3" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="6" Grid.Column="3" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="6" Grid.Column="4" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="6" Grid.Column="4" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Row="6" Grid.Column="5" ClassId="WeekDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" />
+                            <StackLayout Spacing="3">
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
+                                <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
                             </StackLayout>
-                            <StackLayout Grid.Row="6" Grid.Column="5" ClassId="WeekDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" />
-                                <StackLayout Spacing="3">
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                    <BoxView WidthRequest="1" HeightRequest="3" Opacity="0" />
-                                </StackLayout>
-                            </StackLayout>
-                            <StackLayout Grid.Row="6" Grid.Column="6" ClassId="WeekendDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
-                            </StackLayout>
-                            <StackLayout Grid.Row="6" Grid.Column="7" ClassId="WeekendDay">
-                                <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
-                            </StackLayout>
-                        </Grid>
-                    </StackLayout>
-            <!--Calendar Legends-->
-                <StackLayout IsVisible="true" Orientation="Vertical" HorizontalOptions="CenterAndExpand" Padding="10, 0, 10, 10">
+                        </StackLayout>
+                        <StackLayout Grid.Row="6" Grid.Column="6" ClassId="WeekendDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
+                        </StackLayout>
+                        <StackLayout Grid.Row="6" Grid.Column="7" ClassId="WeekendDay">
+                            <Label Text="1" HorizontalTextAlignment="Center" Opacity="0.5" />
+                        </StackLayout>
+                    </Grid>
+                </StackLayout>
+                <!--Calendar Legends-->
+                <StackLayout IsVisible="true" Orientation="Vertical" HorizontalOptions="CenterAndExpand"
+                             Padding="10, 0, 10, 10">
+                  <Label Text="Fridager for:" HorizontalOptions="Center"/>
                     <Grid x:Name="Legend">
                         <Grid.RowDefinitions>
-                          <RowDefinition Height="*" />
-                          <RowDefinition Height="*" />
-                          <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <StackLayout Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalOptions="Center">
-                            <BoxView x:Name="box1" BackgroundColor="Lime" Rotation="45" HeightRequest="5" WidthRequest="5" HorizontalOptions="Center"
-                                     VerticalOptions="Center"/>
-                          <Picker Title="Velg skole" x:Name="picker1" SelectedIndexChanged="OnSelect"></Picker>
-                          <!-- <Label Text="Lenden skole og resusrserser" LineBreakMode="TailTruncation" AutomationId="legendLabel1"/>-->
+                            <BoxView x:Name="box1" BackgroundColor="Lime" Rotation="45" HeightRequest="5"
+                                     WidthRequest="5" HorizontalOptions="Center"
+                                     VerticalOptions="Center" />
+                            <Picker Title="Velg skole" x:Name="picker1" SelectedIndexChanged="OnSelect" />
                         </StackLayout>
                         <StackLayout Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalOptions="Center">
-                            <BoxView x:Name="box2" BackgroundColor="Lime" Rotation="45" HeightRequest="5" WidthRequest="5"
+                            <BoxView x:Name="box2" BackgroundColor="Lime" Rotation="45" HeightRequest="5"
+                                     WidthRequest="5"
                                      HorizontalOptions="Center" VerticalOptions="Center" />
-                          <Picker Title="Velg Skole" x:Name="picker2" SelectedIndexChanged="OnSelect"></Picker>
-                          <!--<Label Text="Lenden skole og resusrserser" LineBreakMode="TailTruncation" AutomationId="legendLabel2"/>-->
+                            <Picker Title="Velg Skole" x:Name="picker2" SelectedIndexChanged="OnSelect" />
                         </StackLayout>
                         <StackLayout Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalOptions="Center">
-                            <BoxView x:Name="box3" BackgroundColor="Lime" Rotation="45" HeightRequest="5" WidthRequest="5"
+                            <BoxView x:Name="box3" BackgroundColor="Lime" Rotation="45" HeightRequest="5"
+                                     WidthRequest="5"
                                      HorizontalOptions="Center" VerticalOptions="Center" />
-                          <Picker Title="Velg Skole" x:Name="picker3" SelectedIndexChanged="OnSelect"></Picker>
-                          <!--<Label Text="Lenden skole og resusrserser" LineBreakMode="TailTruncation" AutomationId="legendLabel3"/>-->
+                            <Picker Title="Velg Skole" x:Name="picker3" SelectedIndexChanged="OnSelect" />
                         </StackLayout>
                     </Grid>
                 </StackLayout>
-              <Button Clicked="ExportCalendarButtonClicked" Text="Eksporter kalender" />
+                <Button Clicked="ExportCalendarButtonClicked" Text="Eksporter kalender" />
             </StackLayout>
-                <ActivityIndicator
-                    x:Name="LoadingIndicator"
-                    BindingContext="this"
-                    IsVisible="{Binding isLoading}"
-                    IsRunning="{Binding isLoading}"
-                    HorizontalOptions="CenterAndExpand"
-                    VerticalOptions="CenterAndExpand"
-                    AbsoluteLayout.LayoutBounds="0.5, 0.5, 0.5, 0.5"
-                    AbsoluteLayout.LayoutFlags="All"
-                    AutomationId="CalendarLoadingIndicator" />
-            </AbsoluteLayout>
         </ScrollView>
     </ContentPage.Content>
 </ContentPage>

@@ -1,12 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Linq;
 using Xamarin.Forms;
 using skolerute.data;
-using Xamarin.Forms.Internals;
-using Xamarin.Forms.Xaml;
 using Calendar = skolerute.data.Calendar;
 
 namespace skolerute.Views

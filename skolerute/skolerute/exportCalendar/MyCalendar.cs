@@ -1,5 +1,3 @@
-using System.Runtime.InteropServices.ComTypes;
-
 namespace skolerute.ExportCalendar
 {
     public class MyCalendar

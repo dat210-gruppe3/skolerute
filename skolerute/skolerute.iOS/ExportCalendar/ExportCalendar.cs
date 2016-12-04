@@ -2,13 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using AVFoundation;
 using EventKit;
-using EventKitUI;
 using Foundation;
 using skolerute.ExportCalendar;
 using UIKit;
@@ -16,7 +10,6 @@ using Xamarin.Forms.Platform.iOS;
 using Xamarin.Forms;
 
 [assembly: Xamarin.Forms.Dependency(typeof(skolerute.iOS.ExportCalendar.ExportCalendar))]
-
 namespace skolerute.iOS.ExportCalendar
 {
     public class ExportCalendar : IExportCalendar

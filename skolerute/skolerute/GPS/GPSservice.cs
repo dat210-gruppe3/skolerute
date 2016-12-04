@@ -1,10 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using skolerute.data;
-using System.Text;
 using Xamarin.Forms;
-using System.Threading.Tasks;
 
 namespace skolerute.GPS
 {

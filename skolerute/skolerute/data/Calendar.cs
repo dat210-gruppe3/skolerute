@@ -69,7 +69,6 @@ namespace skolerute.data
                     bool endSummerVacation = false;
                     string holidayName = ToTitle(skole.calendar[i].Comment);
 
-
                     //Start of calendar is in the second half of the summer vacation
                     if (i == 0) {
                         endSummerVacation = true;
