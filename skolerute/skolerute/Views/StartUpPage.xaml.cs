@@ -20,8 +20,8 @@ namespace skolerute.Views
 			InitializeComponent();
 		    isFirstTime = true;
 		}
-
-	    protected override void OnDisappearing()
+        
+	    private void SendSchools()
 	    {
 	        List<School> schools = new List<School>();
 	        schools.AddRange(from item in WrappedItems where item.IsChecked select item.Item);
@@ -201,7 +201,8 @@ namespace skolerute.Views
 				chSchool.IsChecked = false;
 				chSchool.UnChecked = true;
 				await SettingsManager.SavePreferenceAsync("" + chSchool.Item.ID, false);
-				MessagingCenter.Send(this, "deleteSch", chSchool.Item.name);
+                //MessagingCenter.Send(this, "deleteSch", chSchool.Item.name);
+                SendSchools();
 			}
 			else
 			{
@@ -227,7 +228,8 @@ namespace skolerute.Views
 					{
 						await SettingsManager.SavePreferenceAsync(school.ID.ToString(), true);
 					}
-				}
+                    SendSchools();
+                }
 				catch (System.Net.WebException)
 				{
 					await DisplayAlert("Problem med internett", "Kunne ikke laste ned skoleruten, prøv igjen senere", "Ok");
@@ -252,7 +254,8 @@ namespace skolerute.Views
 				    WrappedItems[i].IsChecked = true;
 				}
 			}
-		}
+            SendSchools();
+        }
 
 		private void NearbySchoolsActivityIndicator(bool state)
 		{
