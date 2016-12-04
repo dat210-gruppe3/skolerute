@@ -11,6 +11,7 @@ namespace skolerute.data
         // CSV Parser 
 		public const string URL = "https://github.com/danielbarati/test/raw/master/skolerute-2016-17.csv";
 		public const string positionURL = "https://github.com/danielbarati/test/raw/master/skoler.csv";
+		public static string skoleruterCSV;
 
         // Calendar
         public const int ShownCalendarDaysCount = 42;

@@ -150,16 +150,29 @@ namespace skolerute.db
 
         public async Task<String> GetContent(String url)
         {
-            WebRequest request = WebRequest.Create(url);
 
-            HttpWebResponse response = await request.GetResponseAsync() as HttpWebResponse;
+			if (Constants.skoleruterCSV != null && url == Constants.URL)
+			{
+				return Constants.skoleruterCSV;
+			}
+			else {
+				WebRequest request = WebRequest.Create(url);
 
-            if (response != null && response.StatusCode == HttpStatusCode.OK)
-            {
-                StreamReader stream = new StreamReader(response.GetResponseStream());
-                return stream.ReadToEnd();
-            }
-            throw new WebException("Could not interact with \n" + Constants.URL);
+				HttpWebResponse response = await request.GetResponseAsync() as HttpWebResponse;
+
+				if (response != null && response.StatusCode == HttpStatusCode.OK)
+				{
+					StreamReader stream = new StreamReader(response.GetResponseStream());
+					if (url == Constants.URL)
+					{
+						Constants.skoleruterCSV = stream.ReadToEnd();
+						return Constants.skoleruterCSV;
+					}
+					return stream.ReadToEnd();
+
+				}
+				throw new WebException("Could not interact with \n" + Constants.URL);
+			}
         }
 
 
