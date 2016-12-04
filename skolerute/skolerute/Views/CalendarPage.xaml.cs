@@ -4,6 +4,7 @@ using System.Linq;
 using skolerute.data;
 using Xamarin.Forms;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using skolerute.ExportCalendar;
 using skolerute.utils;
 using Calendar = skolerute.data.Calendar;
@@ -18,6 +19,7 @@ namespace skolerute.Views
         private List<School> favoriteSchools;
         private List<School> selectedSchools;
         private List<Picker> pickers;
+        private bool listHasChanged = false;
 
         public CalendarPage()
         {
@@ -30,8 +32,6 @@ namespace skolerute.Views
             pickers.Add(picker3);
 
             current = DateTime.Now;
-
-            DisplayCalendar();
 
             ObservableCollection<string> favoriteSchoolNames = new ObservableCollection<string>();
             favoriteSchools = new List<School>();
@@ -46,9 +46,10 @@ namespace skolerute.Views
 						favoriteSchoolNames.Add(args.name);
 					    favoriteSchools = favoriteSchools.OrderBy(s => s.name).ToList();
 
+                        SetLegends();
+                        SetPickers();
 
-						DisplayCalendar();
-						SetLegends();
+                        listHasChanged = true;
 
 						DependencyService.Get<INotification>().RemoveCalendarNotification();
 						NotificationUtils.SendNotifications(favoriteSchools);
@@ -62,14 +63,14 @@ namespace skolerute.Views
 				lock (favoriteSchools)
 				{
 					favoriteSchoolNames.Remove(args);
-					//await SettingsManager.SavePreferenceAsync("" + (favoriteSchools.Find(x => x.name.Contains(args)).ID), false);
+
 					favoriteSchools.Remove(favoriteSchools.Find(x => x.name.Contains(args)));
                     favoriteSchools = favoriteSchools.OrderBy(s => s.name).ToList();
 
                     SetLegends();
-					DisplayCalendar();
-					//ResetAllIndicators();
+                    SetPickers();
 
+                    listHasChanged = true;
 
 					DependencyService.Get<INotification>().RemoveCalendarNotification();
 					NotificationUtils.SendNotifications(favoriteSchools);
@@ -77,7 +78,17 @@ namespace skolerute.Views
             });
 
 
-            SetLegends();
+            int i = 0;
+            foreach (var picker in pickers)
+            {
+                string pickername = "picker" + i;
+                string preferred = (string)SettingsManager.GetPreference(pickername);
+                if (preferred != null)
+                {
+                    picker.SelectedIndex = picker.Items.IndexOf(preferred);
+                }
+                i++;
+            }
 
         }
 
@@ -114,6 +125,16 @@ namespace skolerute.Views
                     break;
             }
 
+        }
+
+        protected override void OnAppearing()
+        {
+            if (listHasChanged)
+            {
+                DisplayCalendar();
+                SetLegends();
+                listHasChanged = false;
+            }
         }
 
         private void SetUpCalendar()
@@ -213,52 +234,38 @@ namespace skolerute.Views
         {
             //Clear pickers and add fresh list of schools
             if (favoriteSchools.Count == 0 || favoriteSchools == null) selectedSchools.Clear();
-            foreach (var picker in pickers)
-            {
-                picker.Items.Clear();
-            }
             foreach (var school in  favoriteSchools)
             {
                 foreach (var picker in pickers) picker.Items.Add(school.name);
             }
-
-            // Populate pickers with previously selected schools, if any 
-            //**(Does not currently work when starting the app, only works when adding or removing schools from favorites list)
-            int i = 0;
-            foreach (var picker in pickers)
-            {
-                string pickername = "picker" + i;
-                string preferred = (string)SettingsManager.GetPreference(pickername);
-                if (preferred != null)
-                {
-                    picker.SelectedIndex = picker.Items.IndexOf(preferred);
-                }
-                i++;
-            }
         }
 
-		private async void OnSelect(object o, EventArgs e)
+		private void OnSelect(object o, EventArgs e)
 		{
 			if (0 > ((Picker)o).SelectedIndex) return;
 			selectedSchools = new List<School>();
             int i = 0;
-            foreach (var picker in pickers)
-            {
-				foreach  (var school in favoriteSchools)
-				{
-					if (picker.SelectedIndex >= 0)
-					{
-						if (school.name == picker.Items[picker.SelectedIndex])
-						{
-							await SettingsManager.SavePreferenceAsync("picker" + i, school.name);
-						    selectedSchools.Add(school);
-						}
-					}			
-				}
-                i++;
-            }
-            DisplayCalendar();
-        }
+		    lock (favoriteSchools)
+		    {
+		        foreach (var picker in pickers)
+		        {
+		            foreach (var school in favoriteSchools)
+		            {
+		                if (picker.SelectedIndex >= 0)
+		                {
+		                    if (school.name == picker.Items[picker.SelectedIndex])
+		                    {
+
+		                        Task.Run(async () => { await SettingsManager.SavePreferenceAsync("picker" + i, school.name);});
+		                        selectedSchools.Add(school);
+		                    }
+		                }
+		            }
+		            i++;
+		        }
+		        DisplayCalendar();
+		    }
+		}
 
         private void UpdateCalendarControls()
         {
