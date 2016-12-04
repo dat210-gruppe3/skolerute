@@ -1,17 +1,14 @@
 using System;
-using UserNotifications;
 using Xamarin.Forms.Platform.iOS;
-using Foundation;
 using UIKit;
 using Xamarin.Forms;
-using skolerute.utils;
 using skolerute.notifications;
 
 
 [assembly: Dependency(typeof(skolerute.iOS.Notification))]
 namespace skolerute.iOS
 {
-	public class Notification : INotification
+    public class Notification : INotification
 	{
 		//https://github.com/xamarin/ios-samples/blob/master/LocalNotifications/Notifications/AppDelegate.cs
 		//https://developer.xamarin.com/guides/ios/application_fundamentals/notifications/local_notifications_in_ios_walkthrough/

@@ -5,13 +5,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using skolerute.GPS;
 using Xamarin.Forms;
 
 
 namespace skolerute.Views
 {
-	public partial class StartUpPage : ContentPage
+    public partial class StartUpPage : ContentPage
 	{
 		List<WrappedListItems<School>> WrappedItems = new List<WrappedListItems<School>>();
 
@@ -69,7 +68,7 @@ namespace skolerute.Views
         {
             //Called in xaml if button to get closest schools is pressed. Gets user global position and compares it
             //to school positions and displays these schools in the GUI school list.
-            if (GetCoords.Text == "Sorter etter nærmeste")
+            if (GetCoords.Text == "Nærmeste")
 
             {			
                 schools.IsPullToRefreshEnabled = true;
@@ -84,11 +83,11 @@ namespace skolerute.Views
                 if(newWrappedItems == null) { return; }
                 schools.ItemsSource = newWrappedItems;
                 }
-                GetCoords.Text = "Sorter alfabetisk";
+                GetCoords.Text = "Alfabetisk";
             }
             else
             {
-                GetCoords.Text = "Sorter etter nærmeste";
+                GetCoords.Text = "Nærmeste";
                 schools.IsPullToRefreshEnabled = false;
                 foreach (WrappedListItems<School> item in WrappedItems)
                 {
@@ -204,7 +203,7 @@ namespace skolerute.Views
 				chSchool.IsChecked = false;
 				chSchool.UnChecked = true;
 				await SettingsManager.SavePreferenceAsync("" + chSchool.Item.ID, false);
-				MessagingCenter.Send<StartUpPage, string>(this, "deleteSch", chSchool.Item.name);
+				MessagingCenter.Send(this, "deleteSch", chSchool.Item.name);
 			}
 			else
 			{
@@ -217,11 +216,6 @@ namespace skolerute.Views
 					db.DatabaseManagerAsync database = new db.DatabaseManagerAsync();
 					db.CSVParser parser = new db.CSVParser(Constants.URL, database);
 					await parser.RetrieveCalendar(school);
-
-					if (school.calendar.Count() < 365) 
-					{
-						throw new System.Net.WebException();
-					}
 
 					if (SettingsManager.GetPreference("i") == null)
 					{
@@ -237,13 +231,10 @@ namespace skolerute.Views
 						await SettingsManager.SavePreferenceAsync(school.ID.ToString(), true);
 					}
 
-					MessagingCenter.Send(this, "newSchoolSelected");
 					MessagingCenter.Send(this, "choosenSch", school);
 				}
-				catch (Exception exception)
+				catch (System.Net.WebException exception)
 				{
-					chSchool.IsChecked = false;
-					chSchool.UnChecked = true;
 					await DisplayAlert("Problem med internett", "Kunne ikke laste ned skoleruten, prøv igjen senere", "Ok");
 				}
 			}
