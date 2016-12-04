@@ -23,6 +23,9 @@ namespace skolerute.Views
 		{
 			base.OnAppearing();
 
+			//TODO: fjern test
+			DependencyService.Get<notifications.INotification>().SendCalendarNotification("Skolerute", "Det nærmer seg fri for alle favorittskoler.", DateTime.Now.AddSeconds(5));
+
 			List<School> allSchools = new List<School>();
 
 			if (schools.ItemsSource == null)
