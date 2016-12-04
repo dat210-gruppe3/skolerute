@@ -121,7 +121,7 @@ namespace skolerute.db
 			else {
 				WebRequest request = WebRequest.Create(url);
 
-				Timeout(request, 15000);
+				Timeout(request, 60000);
 
 				HttpWebResponse response = await request.GetResponseAsync() as HttpWebResponse;
 
