@@ -29,8 +29,9 @@ namespace skolerute.Views
 	        if (schools.Count != 0)
 	        {
                 MessagingCenter.Send(this, "listChanged", schools);
+				NotificationUtils.SendNotifications(schools);
             }
-			NotificationUtils.SendNotifications(schools);
+			DependencyService.Get<INotification>().RemoveCalendarNotification();
         }
 
 		protected override async void OnAppearing()
