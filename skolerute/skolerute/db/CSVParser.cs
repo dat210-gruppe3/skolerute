@@ -7,6 +7,8 @@ using System.Net;
 using System.Threading.Tasks;
 using skolerute.data;
 using SQLiteNetExtensions.Extensions;
+using System.Threading;
+using System.Diagnostics;
 
 namespace skolerute.db
 {
@@ -152,6 +154,8 @@ namespace skolerute.db
         {
             WebRequest request = WebRequest.Create(url);
 
+            Timeout(request, 15000);
+
             HttpWebResponse response = await request.GetResponseAsync() as HttpWebResponse;
 
             if (response != null && response.StatusCode == HttpStatusCode.OK)
@@ -160,6 +164,12 @@ namespace skolerute.db
                 return stream.ReadToEnd();
             }
             throw new WebException("Could not interact with \n" + Constants.URL);
+        }
+
+        public async void Timeout(WebRequest request, int timeUntilTimeout)
+        {
+            await Task.Delay(timeUntilTimeout);
+            request.Abort();
         }
 
 
