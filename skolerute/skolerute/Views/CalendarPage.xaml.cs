@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Collections;
 using skolerute.data;
 using Xamarin.Forms;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using skolerute.ExportCalendar;
 using skolerute.utils;
 using Calendar = skolerute.data.Calendar;
@@ -20,8 +18,6 @@ namespace skolerute.Views
         private List<School> favoriteSchools;
         private List<School> selectedSchools;
         private List<Picker> pickers;
-
-        public bool isLoading;
 
         public CalendarPage()
         {
@@ -40,15 +36,6 @@ namespace skolerute.Views
             ObservableCollection<string> favoriteSchoolNames = new ObservableCollection<string>();
             favoriteSchools = new List<School>();
             selectedSchools = new List<School>();
-            MessagingCenter.Subscribe<StartUpPage>(this, "newSchoolSelected", (sender) =>
-            {
-                //TODO: Make this binding for better reusability
-                isLoading = true;
-                LoadingIndicator.IsRunning = isLoading;
-                LoadingIndicator.IsVisible = isLoading;
-                NextImg.IsEnabled = !isLoading;
-                PrevImg.IsEnabled = !isLoading;
-            });
             
             MessagingCenter.Subscribe<StartUpPage, School>(this, "choosenSch", (sender, args) =>
 			{
@@ -62,13 +49,6 @@ namespace skolerute.Views
 
 						DisplayCalendar();
 						SetLegends();
-
-						//TODO: Make this binding for better reusability
-						isLoading = false;
-						LoadingIndicator.IsRunning = isLoading;
-						LoadingIndicator.IsVisible = isLoading;
-						NextImg.IsEnabled = !isLoading;
-						PrevImg.IsEnabled = !isLoading;
 
 						DependencyService.Get<INotification>().RemoveCalendarNotification();
 						NotificationUtils.SendNotifications(favoriteSchools);
