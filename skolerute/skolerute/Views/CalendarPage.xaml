@@ -13,7 +13,8 @@
     </ContentPage.Padding>
     <ContentPage.Content>
         <ScrollView x:Name="thescrolleview" HorizontalOptions="CenterAndExpand" AutomationId="CalendarScrollView">
-            <StackLayout Padding="0" Spacing="3">
+            <StackLayout Padding="0" Spacing="7">
+              <StackLayout>
                 <Label x:Name="YearLabel" Font="5" WidthRequest="110" Text="År" FontSize="Large"
                        HorizontalOptions="Center"
                        HorizontalTextAlignment="Center" VerticalTextAlignment="Center" AutomationId="yearLabel" />
@@ -39,6 +40,7 @@
                         </Image.GestureRecognizers>
                     </Image>
                 </StackLayout>
+              </StackLayout>
                 <StackLayout>
                     <Grid x:Name="CalendarGrid" Margin="0" Padding="0" RowSpacing="0" ColumnSpacing="0"
                           HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand"
