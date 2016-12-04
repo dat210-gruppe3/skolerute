@@ -214,16 +214,25 @@ namespace skolerute.Views
         {
             //Clear pickers and add fresh list of schools
             if (favoriteSchools.Count == 0 || favoriteSchools == null) selectedSchools.Clear();
-            List<string> schoolNames = favoriteSchools.Select(school => school.name).ToList();
             foreach (var picker in pickers)
             {
-                foreach (string name in schoolNames)
+                picker.Items.Clear();
+            }
+            foreach (var school in favoriteSchools)
+            {
+                foreach (var picker in pickers) picker.Items.Add(school.name);
+            }
+            
+            int i = 0;
+            foreach (var picker in pickers)
+            {
+                string pickername = "picker" + i;
+                string preferred = (string)SettingsManager.GetPreference(pickername);
+                if (preferred != null && (string)preferred != "ignore")
                 {
-                    if (!picker.Items.Contains(name))
-                    {
-                        picker.Items.Add(name);
-                    }
+                    picker.SelectedIndex = picker.Items.IndexOf(preferred);
                 }
+                i++;
             }
         }
 
