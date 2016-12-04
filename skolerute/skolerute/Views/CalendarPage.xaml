@@ -13,7 +13,7 @@
     </ContentPage.Padding>
     <ContentPage.Content>
         <ScrollView x:Name="thescrolleview" HorizontalOptions="CenterAndExpand" AutomationId="CalendarScrollView">
-            <StackLayout Padding="0" Spacing="7">
+            <StackLayout Padding="0" Spacing="5">
               <StackLayout>
                 <Label x:Name="YearLabel" Font="5" WidthRequest="110" Text="År" FontSize="Large"
                        HorizontalOptions="Center"
